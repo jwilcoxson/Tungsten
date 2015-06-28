@@ -33,124 +33,117 @@ namespace S7Backup
 
         }
 
-        private void writeWldFile(s7Cpu cpu)
+        private void saveWldFile(s7Cpu cpu)
         {
-            using (System.IO.FileStream fs = System.IO.File.Create(@"C:\Users\Joe\My Documents\S7PROG.WLD"))
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "WLD files (*.WLD)|*.WLD|All files (*.*)|*.*";
+            dialog.FileName = "S7PROG.WLD";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
-                foreach (s7CpuOB ob in cpu.OB)
+                System.IO.Stream fs;
+                if ((fs = dialog.OpenFile()) != null)
                 {
-                    foreach (byte b in ob.data)
+                    foreach (s7CpuBlock block in cpu.blocks)
                     {
-                        fs.WriteByte(b);
+                        if (block.data != null)
+                            fs.Write(block.data, 0, block.data.Length);
                     }
+                    fs.Close();
                 }
             }
-        }
 
+        }
+        
+        private void writeLog (string text)
+        {
+            txtConsole.AppendText(text);
+            txtConsole.AppendText(System.Environment.NewLine);
+            Console.WriteLine(text);
+            Console.WriteLine(System.Environment.NewLine);
+        }
         private void printCpuBlocks(s7Cpu cpu)
         {
-            Console.WriteLine("Print CPU Blocks");
-            foreach(s7CpuOB ob in cpu.OB)
+            foreach(s7CpuBlock block in cpu.blocks)
             {
-                printBlock(ob);
-            }
-            foreach(s7CpuFC fc in cpu.FC)
-            {
-                printBlock(fc);
-            }
-            foreach (s7CpuFB fb in cpu.FB)
-            {
-                printBlock(fb);
-            }
-            foreach (s7CpuDB db in cpu.DB)
-            {
-                printBlock(db);
-            }
-            foreach (s7CpuSFC sfc in cpu.SFC)
-            {
-                printBlock(sfc);
-            }
-            foreach (s7CpuSFB sfb in cpu.SFB)
-            {
-                printBlock(sfb);
-            }
-            foreach (s7CpuSDB sdb in cpu.SDB)
-            {
-                printBlock(sdb);
+                printBlock(block);
             }
         }
 
         private void printBlock(s7CpuBlock block)
         {
-            Console.WriteLine(block.blockType + block.blockNumber.ToString());
-            Console.WriteLine("Name:\t" + block.name);
-            Console.WriteLine("Family:\t" + block.family);
-            Console.WriteLine("Author:\t" + block.author);
-            Console.WriteLine("Load Size:\t" + block.loadSize);
+            writeLog(block.blockType + block.blockNumber.ToString());
+            writeLog("Name:\t" + block.name);
+            writeLog("Family:\t" + block.family);
+            writeLog("Author:\t" + block.author);
+            writeLog("Load Size:\t" + block.loadSize);
         }
 
         private void connectCpu()
         {
-            //TODO: Remove this
-            int result = 0;
+            btnDisconnect.Enabled = true;
+            btnConnect.Enabled = false;
 
             MyClient = new S7Client();
-            MyClient.ConnectTo(txtIpAddress.Text, 0, 2);
-
-            S7Client.S7OrderCode oc = new S7Client.S7OrderCode();
-            MyClient.GetOrderCode(ref oc);
             
-            S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
-            MyClient.GetCpuInfo(ref ci);
-            
-            S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
-            MyClient.ListBlocks(ref bl);
+            int connectResult = MyClient.ConnectTo(txtIpAddress.Text, 0, 2);
 
-            foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
+            if (connectResult == 0)
             {
-                ushort[] blockList = new ushort[0x2000];
-                int blockCount = blockList.Length;
-                MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
-                Console.WriteLine("Found " + blockCount + " blocks of type " + blockType); 
-                for (int i = 0; i < blockCount; i++)
+                writeLog("Connected to CPU at IP Address " + txtIpAddress.Text);
+                S7Client.S7OrderCode oc = new S7Client.S7OrderCode();
+                int orderCodeResult = MyClient.GetOrderCode(ref oc);
+
+                if (orderCodeResult == 0)
                 {
-                    S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
-                    MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
+                    MyCpu.orderCode = new s7OrderCode(oc);
+                    writeLog("CPU Order Code:\t" + MyCpu.orderCode.code);
 
-                    byte[] buffer = new byte[4096];
-                    int bufferSize = buffer.Length;
 
-                    MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
+                    S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
+                    int cpuInfoResult = MyClient.GetCpuInfo(ref ci);
 
-                    byte[] data = new byte[bufferSize];
-                    Array.Copy(buffer, data, data.Length);
-                  
-                    MyCpu.addCpuBlock(blockInfo, data);
+                    if (cpuInfoResult == 0)
+                    {
+                        
+                        MyCpu.cpuInfo = new s7CpuInfo(ci);
+                        writeLog("CPU Serial Number:\t" + MyCpu.cpuInfo.serialNumber);
+
+                        S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
+                        int listBLocksResult = MyClient.ListBlocks(ref bl);
+
+                        if (listBLocksResult == 0)
+                        {
+                            writeLog("OB Count:\t" + bl.OBCount);
+                            writeLog("FC Count:\t" + bl.FCCount);
+                            writeLog("FB Count:\t" + bl.FBCount);
+                            writeLog("DB Count:\t" + bl.DBCount);
+                            writeLog("SFC Count:\t" + bl.SFCCount);
+                            writeLog("SFB Count:\t" + bl.SFBCount);
+                            writeLog("SDB Count:\t" + bl.SDBCount);
+
+                        }
+                        else //Failed to List Blocks
+                        {
+
+                        }
+                    }
+                    else //Failed to get CPU Info
+                    {
+
+                    }
+                }
+                else //Failed to get Order Code
+                {
+
                 }
             }
-
-            // Successfully connected to CPU
-            if (result == 0)
+            else //Failed to connect to CPU
             {
-                btnDisconnect.Enabled = true;
-                btnConnect.Enabled = false;
-                MyCpu.orderCode = new s7OrderCode(oc);
-                MyCpu.cpuInfo = new s7CpuInfo(ci);
-                txtConsole.AppendText("CPU Order Code:\t" + MyCpu.orderCode.code);
-                txtConsole.AppendText(System.Environment.NewLine);
-                txtConsole.AppendText("CPU Serial Number:\t" + MyCpu.cpuInfo.serialNumber);
-                txtConsole.AppendText(System.Environment.NewLine);
-                printCpuBlocks(MyCpu);
-                writeWldFile(MyCpu);
-            }
 
-            //Error Connecting to CPU
-            else
-            {
-                txtConsole.AppendText("Error Code:\t" + result.ToString());
-                txtConsole.AppendText(System.Environment.NewLine);
             }
-          
         }
 
         private void disconnectCpu()
@@ -161,9 +154,42 @@ namespace S7Backup
             btnDisconnect.Enabled = false;
         }
 
+        private void uploadCpu()
+        {
+            foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
+            {
+                ushort[] blockList = new ushort[0x2000];
+                int blockCount = blockList.Length;
+                MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
+                for (int i = 0; i < blockCount; i++)
+                {
+                    S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
+                    MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
+
+                    byte[] buffer = new byte[4096];
+                    int bufferSize = 0;
+                    
+                    if (blockType == s7BlockType.SFC || blockType == s7BlockType.SFB)
+                        MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
+
+                    byte[] data = new byte[bufferSize];
+                    Array.Copy(buffer, data, data.Length);
+
+                    MyCpu.addCpuBlock(blockInfo, data);
+                    TreeNode node = new TreeNode(blockType + blockInfo.BlkNumber.ToString());
+                    TreeNode[] result = treeView1.Nodes[0].Nodes[1].Nodes.Find("nde" + blockType, false);
+                    result[0].Nodes.Add(node);
+                }
+            }
+
+            printCpuBlocks(MyCpu);
+            treeView1.ExpandAll();
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             connectCpu();
+            uploadCpu();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -171,5 +197,32 @@ namespace S7Backup
             disconnectCpu();
         }
 
+        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveWldFile(MyCpu);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MyClient.Connected())
+                disconnectCpu();
+            Application.Exit();
+        }
+
+        private void block_Click(object sender, EventArgs e)
+        {
+            BlockInfo bi = new BlockInfo(MyCpu.blocks[0]);
+            bi.Show();
+        }
+
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode tn = ((TreeView)sender).SelectedNode;
+            if (tn.Parent.Parent.Name == "ndeBlocks")
+            {
+                BlockInfo bi = new BlockInfo(MyCpu.blocks.Find(x => (x.blockType.ToString() + x.blockNumber.ToString()) == tn.Text));
+                bi.Show();
+            }
+        }
     }
 }

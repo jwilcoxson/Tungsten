@@ -28,6 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Station Info");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("OB");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("FC");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("FB");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("DB");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("SFC");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("SFB");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("SDB");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Blocks", new System.Windows.Forms.TreeNode[] {
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8});
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("System Status");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Station", new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode9,
+            treeNode10});
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.txtIpAddress = new System.Windows.Forms.TextBox();
@@ -35,13 +56,21 @@
             this.txtConsole = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mMCFileWLDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2 = new System.Windows.Forms.Label();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(118, 40);
+            this.btnConnect.Location = new System.Drawing.Point(387, 117);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(120, 23);
             this.btnConnect.TabIndex = 0;
@@ -52,7 +81,7 @@
             // btnDisconnect
             // 
             this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Location = new System.Drawing.Point(244, 40);
+            this.btnDisconnect.Location = new System.Drawing.Point(387, 146);
             this.btnDisconnect.Name = "btnDisconnect";
             this.btnDisconnect.Size = new System.Drawing.Size(120, 23);
             this.btnDisconnect.TabIndex = 1;
@@ -62,7 +91,7 @@
             // 
             // txtIpAddress
             // 
-            this.txtIpAddress.Location = new System.Drawing.Point(12, 40);
+            this.txtIpAddress.Location = new System.Drawing.Point(281, 117);
             this.txtIpAddress.Name = "txtIpAddress";
             this.txtIpAddress.Size = new System.Drawing.Size(100, 20);
             this.txtIpAddress.TabIndex = 2;
@@ -71,21 +100,21 @@
             // lblIpAddress
             // 
             this.lblIpAddress.AutoSize = true;
-            this.lblIpAddress.Location = new System.Drawing.Point(9, 24);
+            this.lblIpAddress.Location = new System.Drawing.Point(278, 101);
             this.lblIpAddress.Name = "lblIpAddress";
-            this.lblIpAddress.Size = new System.Drawing.Size(58, 13);
+            this.lblIpAddress.Size = new System.Drawing.Size(81, 13);
             this.lblIpAddress.TabIndex = 3;
-            this.lblIpAddress.Text = "IP Address";
+            this.lblIpAddress.Text = "PLC IP Address";
             // 
             // txtConsole
             // 
             this.txtConsole.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtConsole.Location = new System.Drawing.Point(12, 69);
+            this.txtConsole.Location = new System.Drawing.Point(475, 319);
             this.txtConsole.Multiline = true;
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
             this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(587, 367);
+            this.txtConsole.Size = new System.Drawing.Size(425, 176);
             this.txtConsole.TabIndex = 4;
             // 
             // menuStrip1
@@ -94,29 +123,116 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(611, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(912, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.quitToolStripMenuItem});
+            this.newToolStripMenuItem,
+            this.openToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
             // 
-            // quitToolStripMenuItem
+            // newToolStripMenuItem
             // 
-            this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(97, 22);
-            this.quitToolStripMenuItem.Text = "Quit";
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.newToolStripMenuItem.Text = "New";
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.openToolStripMenuItem.Text = "Open";
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.saveToolStripMenuItem.Text = "Save";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mMCFileWLDToolStripMenuItem,
+            this.exportToolStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
+            this.toolStripMenuItem1.Text = "Memory Card File";
+            // 
+            // mMCFileWLDToolStripMenuItem
+            // 
+            this.mMCFileWLDToolStripMenuItem.Name = "mMCFileWLDToolStripMenuItem";
+            this.mMCFileWLDToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.mMCFileWLDToolStripMenuItem.Text = "Import...";
+            // 
+            // exportToolStripMenuItem
+            // 
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.exportToolStripMenuItem.Text = "Export...";
+            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(373, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(0, 13);
+            this.label2.TabIndex = 8;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Location = new System.Drawing.Point(12, 27);
+            this.treeView1.Name = "treeView1";
+            treeNode1.Name = "ndeStationInfo";
+            treeNode1.Text = "Station Info";
+            treeNode2.Name = "ndeOB";
+            treeNode2.Text = "OB";
+            treeNode3.Name = "ndeFC";
+            treeNode3.Text = "FC";
+            treeNode4.Name = "ndeFB";
+            treeNode4.Text = "FB";
+            treeNode5.Name = "ndeDB";
+            treeNode5.Text = "DB";
+            treeNode6.Name = "ndeSFC";
+            treeNode6.Text = "SFC";
+            treeNode7.Name = "ndeSFB";
+            treeNode7.Text = "SFB";
+            treeNode8.Name = "ndeSDB";
+            treeNode8.Text = "SDB";
+            treeNode9.Name = "ndeBlocks";
+            treeNode9.Text = "Blocks";
+            treeNode10.Name = "ndeSystemStatusList";
+            treeNode10.Text = "System Status";
+            treeNode11.Name = "nodeStation";
+            treeNode11.Text = "Station";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode11});
+            this.treeView1.Size = new System.Drawing.Size(203, 468);
+            this.treeView1.TabIndex = 9;
+            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
             // 
             // S7Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(611, 448);
+            this.ClientSize = new System.Drawing.Size(912, 507);
+            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.txtConsole);
             this.Controls.Add(this.lblIpAddress);
             this.Controls.Add(this.txtIpAddress);
@@ -142,7 +258,15 @@
         private System.Windows.Forms.TextBox txtConsole;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mMCFileWLDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TreeView treeView1;
     }
 }
 

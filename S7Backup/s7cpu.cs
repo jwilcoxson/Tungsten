@@ -7,7 +7,7 @@ using Snap7;
 
 namespace S7Backup
 {
-    enum s7Language
+    public enum s7Language
     {
         STL = 0x01,
         FBD = 0x02,
@@ -16,7 +16,7 @@ namespace S7Backup
         SCL = 0x05,
         Graph = 0x06
     }
-    enum s7BlockType
+    public enum s7BlockType
     {
         OB = 0x38,
         FC = 0x43,
@@ -42,35 +42,29 @@ namespace S7Backup
     {
         public s7OrderCode orderCode;
         public s7CpuInfo cpuInfo;
-        public List<s7CpuOB> OB = new List<s7CpuOB>();
-        public List<s7CpuFC> FC = new List<s7CpuFC>();
-        public List<s7CpuFB> FB = new List<s7CpuFB>();
-        public List<s7CpuDB> DB = new List<s7CpuDB>();
-        public List<s7CpuSFC> SFC = new List<s7CpuSFC>();
-        public List<s7CpuSFB> SFB = new List<s7CpuSFB>();
-        public List<s7CpuSDB> SDB = new List<s7CpuSDB>();
+        public List<s7CpuBlock> blocks = new List<s7CpuBlock>();
 
         public void addCpuBlock(S7Client.S7BlockInfo block, byte[] data)
         {
             if (block.BlkType == (int)s7SubBlockType.OB)
-                this.OB.Add(new s7CpuOB(block, data));
+                this.blocks.Add(new s7CpuOB(block, data));
             if (block.BlkType == (int)s7SubBlockType.FC)
-                this.FC.Add(new s7CpuFC(block, data));
+                this.blocks.Add(new s7CpuFC(block, data));
             if (block.BlkType == (int)s7SubBlockType.FB)
-                this.FB.Add(new s7CpuFB(block, data));
+                this.blocks.Add(new s7CpuFB(block, data));
             if (block.BlkType == (int)s7SubBlockType.DB)
-                this.DB.Add(new s7CpuDB(block, data));
+                this.blocks.Add(new s7CpuDB(block, data));
             if (block.BlkType == (int)s7SubBlockType.SFC)
-                this.SFC.Add(new s7CpuSFC(block));
+                this.blocks.Add(new s7CpuSFC(block));
             if (block.BlkType == (int)s7SubBlockType.SFB)
-                this.SFB.Add(new s7CpuSFB(block));
+                this.blocks.Add(new s7CpuSFB(block));
             if (block.BlkType == (int)s7SubBlockType.SDB)
-                this.SDB.Add(new s7CpuSDB(block));
+                this.blocks.Add(new s7CpuSDB(block, data));
         }
         
     }
 
-    class s7CpuBlock
+    public class s7CpuBlock
     {
         public s7CpuBlock(S7Client.S7BlockInfo info)
         {
@@ -162,10 +156,11 @@ namespace S7Backup
     }
     class s7CpuSDB : s7CpuBlock
     {
-        public s7CpuSDB(S7Client.S7BlockInfo info)
+        public s7CpuSDB(S7Client.S7BlockInfo info, byte[] data)
             : base(info)
         {
             this.blockType = s7BlockType.SDB;
+            this.data = data;
         }
     }
     class s7OrderCode
