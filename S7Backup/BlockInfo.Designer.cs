@@ -42,6 +42,16 @@
             this.lblMC7Size = new System.Windows.Forms.Label();
             this.txtChecksum = new System.Windows.Forms.TextBox();
             this.lblChecksum = new System.Windows.Forms.Label();
+            this.txtLanguage = new System.Windows.Forms.TextBox();
+            this.lblLanguage = new System.Windows.Forms.Label();
+            this.txtData = new System.Windows.Forms.TextBox();
+            this.lblData = new System.Windows.Forms.Label();
+            this.txtCodeDate = new System.Windows.Forms.TextBox();
+            this.lblCodeDate = new System.Windows.Forms.Label();
+            this.txtInterfaceDate = new System.Windows.Forms.TextBox();
+            this.lblInterfaceDate = new System.Windows.Forms.Label();
+            this.txtSBBLength = new System.Windows.Forms.TextBox();
+            this.lblSBBLength = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblBlock
@@ -64,7 +74,7 @@
             // lblLoadSize
             // 
             this.lblLoadSize.AutoSize = true;
-            this.lblLoadSize.Location = new System.Drawing.Point(10, 53);
+            this.lblLoadSize.Location = new System.Drawing.Point(116, 54);
             this.lblLoadSize.Name = "lblLoadSize";
             this.lblLoadSize.Size = new System.Drawing.Size(54, 13);
             this.lblLoadSize.TabIndex = 2;
@@ -72,7 +82,7 @@
             // 
             // txtLoadSize
             // 
-            this.txtLoadSize.Location = new System.Drawing.Point(13, 69);
+            this.txtLoadSize.Location = new System.Drawing.Point(119, 70);
             this.txtLoadSize.Name = "txtLoadSize";
             this.txtLoadSize.ReadOnly = true;
             this.txtLoadSize.Size = new System.Drawing.Size(100, 20);
@@ -131,7 +141,7 @@
             // 
             // txtMC7Size
             // 
-            this.txtMC7Size.Location = new System.Drawing.Point(119, 69);
+            this.txtMC7Size.Location = new System.Drawing.Point(225, 70);
             this.txtMC7Size.Name = "txtMC7Size";
             this.txtMC7Size.ReadOnly = true;
             this.txtMC7Size.Size = new System.Drawing.Size(100, 20);
@@ -140,7 +150,7 @@
             // lblMC7Size
             // 
             this.lblMC7Size.AutoSize = true;
-            this.lblMC7Size.Location = new System.Drawing.Point(119, 52);
+            this.lblMC7Size.Location = new System.Drawing.Point(225, 53);
             this.lblMC7Size.Name = "lblMC7Size";
             this.lblMC7Size.Size = new System.Drawing.Size(52, 13);
             this.lblMC7Size.TabIndex = 10;
@@ -148,7 +158,7 @@
             // 
             // txtChecksum
             // 
-            this.txtChecksum.Location = new System.Drawing.Point(228, 69);
+            this.txtChecksum.Location = new System.Drawing.Point(331, 70);
             this.txtChecksum.Name = "txtChecksum";
             this.txtChecksum.ReadOnly = true;
             this.txtChecksum.Size = new System.Drawing.Size(100, 20);
@@ -157,17 +167,114 @@
             // lblChecksum
             // 
             this.lblChecksum.AutoSize = true;
-            this.lblChecksum.Location = new System.Drawing.Point(228, 52);
+            this.lblChecksum.Location = new System.Drawing.Point(331, 53);
             this.lblChecksum.Name = "lblChecksum";
             this.lblChecksum.Size = new System.Drawing.Size(57, 13);
             this.lblChecksum.TabIndex = 12;
             this.lblChecksum.Text = "Checksum";
+            // 
+            // txtLanguage
+            // 
+            this.txtLanguage.Location = new System.Drawing.Point(13, 70);
+            this.txtLanguage.Name = "txtLanguage";
+            this.txtLanguage.ReadOnly = true;
+            this.txtLanguage.Size = new System.Drawing.Size(100, 20);
+            this.txtLanguage.TabIndex = 15;
+            // 
+            // lblLanguage
+            // 
+            this.lblLanguage.AutoSize = true;
+            this.lblLanguage.Location = new System.Drawing.Point(13, 53);
+            this.lblLanguage.Name = "lblLanguage";
+            this.lblLanguage.Size = new System.Drawing.Size(55, 13);
+            this.lblLanguage.TabIndex = 14;
+            this.lblLanguage.Text = "Language";
+            // 
+            // txtData
+            // 
+            this.txtData.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtData.Location = new System.Drawing.Point(13, 148);
+            this.txtData.Multiline = true;
+            this.txtData.Name = "txtData";
+            this.txtData.ReadOnly = true;
+            this.txtData.Size = new System.Drawing.Size(418, 222);
+            this.txtData.TabIndex = 16;
+            // 
+            // lblData
+            // 
+            this.lblData.AutoSize = true;
+            this.lblData.Location = new System.Drawing.Point(13, 132);
+            this.lblData.Name = "lblData";
+            this.lblData.Size = new System.Drawing.Size(61, 13);
+            this.lblData.TabIndex = 17;
+            this.lblData.Text = "Data Dump";
+            // 
+            // txtCodeDate
+            // 
+            this.txtCodeDate.Location = new System.Drawing.Point(13, 109);
+            this.txtCodeDate.Name = "txtCodeDate";
+            this.txtCodeDate.ReadOnly = true;
+            this.txtCodeDate.Size = new System.Drawing.Size(100, 20);
+            this.txtCodeDate.TabIndex = 19;
+            // 
+            // lblCodeDate
+            // 
+            this.lblCodeDate.AutoSize = true;
+            this.lblCodeDate.Location = new System.Drawing.Point(13, 93);
+            this.lblCodeDate.Name = "lblCodeDate";
+            this.lblCodeDate.Size = new System.Drawing.Size(58, 13);
+            this.lblCodeDate.TabIndex = 18;
+            this.lblCodeDate.Text = "Code Date";
+            // 
+            // txtInterfaceDate
+            // 
+            this.txtInterfaceDate.Location = new System.Drawing.Point(119, 109);
+            this.txtInterfaceDate.Name = "txtInterfaceDate";
+            this.txtInterfaceDate.ReadOnly = true;
+            this.txtInterfaceDate.Size = new System.Drawing.Size(100, 20);
+            this.txtInterfaceDate.TabIndex = 21;
+            // 
+            // lblInterfaceDate
+            // 
+            this.lblInterfaceDate.AutoSize = true;
+            this.lblInterfaceDate.Location = new System.Drawing.Point(119, 92);
+            this.lblInterfaceDate.Name = "lblInterfaceDate";
+            this.lblInterfaceDate.Size = new System.Drawing.Size(75, 13);
+            this.lblInterfaceDate.TabIndex = 20;
+            this.lblInterfaceDate.Text = "Interface Date";
+            // 
+            // txtSBBLength
+            // 
+            this.txtSBBLength.Location = new System.Drawing.Point(225, 109);
+            this.txtSBBLength.Name = "txtSBBLength";
+            this.txtSBBLength.ReadOnly = true;
+            this.txtSBBLength.Size = new System.Drawing.Size(100, 20);
+            this.txtSBBLength.TabIndex = 23;
+            // 
+            // lblSBBLength
+            // 
+            this.lblSBBLength.AutoSize = true;
+            this.lblSBBLength.Location = new System.Drawing.Point(225, 92);
+            this.lblSBBLength.Name = "lblSBBLength";
+            this.lblSBBLength.Size = new System.Drawing.Size(64, 13);
+            this.lblSBBLength.TabIndex = 22;
+            this.lblSBBLength.Text = "SBB Length";
             // 
             // BlockInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(441, 382);
+            this.Controls.Add(this.txtSBBLength);
+            this.Controls.Add(this.lblSBBLength);
+            this.Controls.Add(this.txtInterfaceDate);
+            this.Controls.Add(this.lblInterfaceDate);
+            this.Controls.Add(this.txtCodeDate);
+            this.Controls.Add(this.lblCodeDate);
+            this.Controls.Add(this.lblData);
+            this.Controls.Add(this.txtData);
+            this.Controls.Add(this.txtLanguage);
+            this.Controls.Add(this.lblLanguage);
             this.Controls.Add(this.txtChecksum);
             this.Controls.Add(this.lblChecksum);
             this.Controls.Add(this.txtMC7Size);
@@ -207,5 +314,15 @@
         private System.Windows.Forms.Label lblMC7Size;
         private System.Windows.Forms.TextBox txtChecksum;
         private System.Windows.Forms.Label lblChecksum;
+        private System.Windows.Forms.TextBox txtLanguage;
+        private System.Windows.Forms.Label lblLanguage;
+        private System.Windows.Forms.TextBox txtData;
+        private System.Windows.Forms.Label lblData;
+        private System.Windows.Forms.TextBox txtCodeDate;
+        private System.Windows.Forms.Label lblCodeDate;
+        private System.Windows.Forms.TextBox txtInterfaceDate;
+        private System.Windows.Forms.Label lblInterfaceDate;
+        private System.Windows.Forms.TextBox txtSBBLength;
+        private System.Windows.Forms.Label lblSBBLength;
     }
 }

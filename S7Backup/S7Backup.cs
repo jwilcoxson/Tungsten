@@ -56,13 +56,10 @@ namespace S7Backup
             }
 
         }
-        
         private void writeLog (string text)
         {
             txtConsole.AppendText(text);
-            txtConsole.AppendText(System.Environment.NewLine);
-            Console.WriteLine(text);
-            Console.WriteLine(System.Environment.NewLine);
+            txtConsole.AppendText(System.Environment.NewLine);     
         }
         private void printCpuBlocks(s7Cpu cpu)
         {
@@ -112,9 +109,9 @@ namespace S7Backup
                         writeLog("CPU Serial Number:\t" + MyCpu.cpuInfo.serialNumber);
 
                         S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
-                        int listBLocksResult = MyClient.ListBlocks(ref bl);
+                        int listBlocksResult = MyClient.ListBlocks(ref bl);
 
-                        if (listBLocksResult == 0)
+                        if (listBlocksResult == 0)
                         {
                             writeLog("OB Count:\t" + bl.OBCount);
                             writeLog("FC Count:\t" + bl.FCCount);
@@ -127,22 +124,22 @@ namespace S7Backup
                         }
                         else //Failed to List Blocks
                         {
-
+                            writeLog("Failed to list blocks. " + listBlocksResult.ToString("X4"));
                         }
                     }
                     else //Failed to get CPU Info
                     {
-
+                        writeLog("Failed to get CPU info. " + cpuInfoResult.ToString("X4"));
                     }
                 }
                 else //Failed to get Order Code
                 {
-
+                    writeLog("Failed to get Order Code. " + orderCodeResult.ToString("X4"));
                 }
             }
             else //Failed to connect to CPU
             {
-
+                writeLog("Failed to connect to CPU. " + connectResult.ToString("X4"));
             }
         }
 
@@ -167,10 +164,12 @@ namespace S7Backup
                     MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
 
                     byte[] buffer = new byte[4096];
-                    int bufferSize = 0;
-                    
-                    if (blockType == s7BlockType.SFC || blockType == s7BlockType.SFB)
+                    int bufferSize = buffer.Length;
+
+                    if (blockType != s7BlockType.SFC && blockType != s7BlockType.SFB)
                         MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
+                    else
+                        bufferSize = 0;
 
                     byte[] data = new byte[bufferSize];
                     Array.Copy(buffer, data, data.Length);
@@ -215,14 +214,37 @@ namespace S7Backup
             bi.Show();
         }
 
-        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        private void treeView1_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            TreeNode tn = ((TreeView)sender).SelectedNode;
-            if (tn.Parent.Parent.Name == "ndeBlocks")
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
             {
-                BlockInfo bi = new BlockInfo(MyCpu.blocks.Find(x => (x.blockType.ToString() + x.blockNumber.ToString()) == tn.Text));
-                bi.Show();
+                if (treeView1.SelectedNode.Parent.Parent.Name == "ndeBlocks")
+                {
+                    BlockInfo bi = new BlockInfo(MyCpu.blocks.Find(x => (x.blockType.ToString() + x.blockNumber.ToString()) ==
+                        treeView1.SelectedNode.Text));
+                    bi.Show();
+                }
             }
         }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(s7Cpu));
+            
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "VS7 files (*.VS7)|*.VS7|All files (*.*)|*.*";
+            dialog.FileName = "S7PROG.VS7";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.OpenFile());
+                writer.Serialize(file, MyCpu);
+                file.Close();
+            }
+        }
+
+
     }
 }

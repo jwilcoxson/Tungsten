@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Snap7;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace S7Backup
 {
@@ -14,7 +17,8 @@ namespace S7Backup
         LAD = 0x03,
         DB = 0x04,
         SCL = 0x05,
-        Graph = 0x06
+        Graph = 0x06,
+        SDB = 0x11
     }
     public enum s7BlockType
     {
@@ -26,7 +30,6 @@ namespace S7Backup
         SFB = 0x46,
         SDB = 0x42
     }
-
     enum s7SubBlockType
     {
         OB = 0x08,
@@ -37,8 +40,8 @@ namespace S7Backup
         SFB = 0x0F,
         SDB = 0x0B
     }
-    [Serializable()]
-    class s7Cpu
+    [Serializable]
+    public class s7Cpu
     {
         public s7OrderCode orderCode;
         public s7CpuInfo cpuInfo;
@@ -63,9 +66,11 @@ namespace S7Backup
         }
         
     }
-
+    [Serializable]
+    [XmlInclude(typeof(s7CpuOB)), XmlInclude(typeof(s7CpuFC)), XmlInclude(typeof(s7CpuFB)), XmlInclude(typeof(s7CpuDB)), XmlInclude(typeof(s7CpuSFC)), XmlInclude(typeof(s7CpuSFB)), XmlInclude(typeof(s7CpuSDB))]
     public class s7CpuBlock
     {
+        public s7CpuBlock() { }
         public s7CpuBlock(S7Client.S7BlockInfo info)
         {
             this.language = (s7Language) info.BlkLang;
@@ -86,33 +91,35 @@ namespace S7Backup
 
         public s7Language language;
         public s7BlockType blockType;
-        public string name;
-        public string family;
-        public string author;
-        public string codeDate;
-        public string interfaceDate;
-        public int loadSize;
-        public int MC7Size;
-        public int blockNumber;
-        public int blockFlags;
-        public int localData;
-        public int SBBLength;
-        public int checksum;
-        public int version;
+        public string   name,
+                        family,
+                        author,
+                        codeDate,
+                        interfaceDate;
+        public int  loadSize, 
+                    MC7Size,
+                    blockNumber,
+                    blockFlags,
+                    localData,
+                    SBBLength,
+                    checksum,
+                    version;
         public byte[] data;
 
     }
 
-    class s7CpuOB : s7CpuBlock
+    public class s7CpuOB : s7CpuBlock
     {
+        public s7CpuOB() { }
         public s7CpuOB(S7Client.S7BlockInfo info, byte[] data) : base(info)
         {
             this.blockType = s7BlockType.OB;
             this.data = data;
         }
     }
-    class s7CpuFC : s7CpuBlock
+    public class s7CpuFC : s7CpuBlock
     {
+        public s7CpuFC() { }
         public s7CpuFC(S7Client.S7BlockInfo info, byte[] data)
             : base(info)
         {
@@ -120,8 +127,9 @@ namespace S7Backup
             this.data = data;
         }
     }
-    class s7CpuFB : s7CpuBlock
+    public class s7CpuFB : s7CpuBlock
     {
+        public s7CpuFB() { }
         public s7CpuFB(S7Client.S7BlockInfo info, byte[] data)
             : base(info)
         {
@@ -129,8 +137,9 @@ namespace S7Backup
             this.data = data;
         }
     }
-    class s7CpuDB : s7CpuBlock
+    public class s7CpuDB : s7CpuBlock
     {
+        public s7CpuDB() { }
         public s7CpuDB(S7Client.S7BlockInfo info, byte[] data)
             : base(info)
         {
@@ -138,24 +147,27 @@ namespace S7Backup
             this.data = data;
         }
     }
-    class s7CpuSFC : s7CpuBlock
+    public class s7CpuSFC : s7CpuBlock
     {
+        public s7CpuSFC() { }
         public s7CpuSFC(S7Client.S7BlockInfo info)
             : base(info)
         {
             this.blockType = s7BlockType.SFC;
         }
     }
-    class s7CpuSFB : s7CpuBlock
+    public class s7CpuSFB : s7CpuBlock
     {
+        public s7CpuSFB() { }
         public s7CpuSFB(S7Client.S7BlockInfo info)
             : base(info)
         {
             this.blockType = s7BlockType.SFB;
         }
     }
-    class s7CpuSDB : s7CpuBlock
+    public class s7CpuSDB : s7CpuBlock
     {
+        public s7CpuSDB() { }
         public s7CpuSDB(S7Client.S7BlockInfo info, byte[] data)
             : base(info)
         {
@@ -163,8 +175,10 @@ namespace S7Backup
             this.data = data;
         }
     }
-    class s7OrderCode
+    [Serializable]
+    public class s7OrderCode
     {
+        public s7OrderCode() { }
         public s7OrderCode(Snap7.S7Client.S7OrderCode oc)
         {
             this.code = oc.Code;
@@ -184,9 +198,10 @@ namespace S7Backup
             return V1.ToString() + "." + V2.ToString() + "." + V3.ToString();
         }
     }
-
-    class s7CpuInfo
+    [Serializable]
+    public class s7CpuInfo
     {
+        public s7CpuInfo() { }
         public s7CpuInfo(Snap7.S7Client.S7CpuInfo info)
         {
             this.moduleTypeName = info.ModuleTypeName;

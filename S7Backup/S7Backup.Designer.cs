@@ -28,27 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Station Info");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("OB");
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("FC");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("FB");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("DB");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("SFC");
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("SFB");
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("SDB");
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Blocks", new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode3,
-            treeNode4,
-            treeNode5,
-            treeNode6,
-            treeNode7,
-            treeNode8});
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("System Status");
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Station", new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode9,
-            treeNode10});
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Station Info");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("OB");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("FC");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("FB");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("DB");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("SFC");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("SFB");
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("SDB");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Blocks", new System.Windows.Forms.TreeNode[] {
+            treeNode13,
+            treeNode14,
+            treeNode15,
+            treeNode16,
+            treeNode17,
+            treeNode18,
+            treeNode19});
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("System Status");
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("Station", new System.Windows.Forms.TreeNode[] {
+            treeNode12,
+            treeNode20,
+            treeNode21});
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.txtIpAddress = new System.Windows.Forms.TextBox();
@@ -156,6 +156,7 @@
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -198,33 +199,33 @@
             // 
             this.treeView1.Location = new System.Drawing.Point(12, 27);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "ndeStationInfo";
-            treeNode1.Text = "Station Info";
-            treeNode2.Name = "ndeOB";
-            treeNode2.Text = "OB";
-            treeNode3.Name = "ndeFC";
-            treeNode3.Text = "FC";
-            treeNode4.Name = "ndeFB";
-            treeNode4.Text = "FB";
-            treeNode5.Name = "ndeDB";
-            treeNode5.Text = "DB";
-            treeNode6.Name = "ndeSFC";
-            treeNode6.Text = "SFC";
-            treeNode7.Name = "ndeSFB";
-            treeNode7.Text = "SFB";
-            treeNode8.Name = "ndeSDB";
-            treeNode8.Text = "SDB";
-            treeNode9.Name = "ndeBlocks";
-            treeNode9.Text = "Blocks";
-            treeNode10.Name = "ndeSystemStatusList";
-            treeNode10.Text = "System Status";
-            treeNode11.Name = "nodeStation";
-            treeNode11.Text = "Station";
+            treeNode12.Name = "ndeStationInfo";
+            treeNode12.Text = "Station Info";
+            treeNode13.Name = "ndeOB";
+            treeNode13.Text = "OB";
+            treeNode14.Name = "ndeFC";
+            treeNode14.Text = "FC";
+            treeNode15.Name = "ndeFB";
+            treeNode15.Text = "FB";
+            treeNode16.Name = "ndeDB";
+            treeNode16.Text = "DB";
+            treeNode17.Name = "ndeSFC";
+            treeNode17.Text = "SFC";
+            treeNode18.Name = "ndeSFB";
+            treeNode18.Text = "SFB";
+            treeNode19.Name = "ndeSDB";
+            treeNode19.Text = "SDB";
+            treeNode20.Name = "ndeBlocks";
+            treeNode20.Text = "Blocks";
+            treeNode21.Name = "ndeSystemStatusList";
+            treeNode21.Text = "System Status";
+            treeNode22.Name = "nodeStation";
+            treeNode22.Text = "Station";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode11});
+            treeNode22});
             this.treeView1.Size = new System.Drawing.Size(203, 468);
             this.treeView1.TabIndex = 9;
-            this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseDoubleClick);
+            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
             // 
             // S7Backup
             // 
