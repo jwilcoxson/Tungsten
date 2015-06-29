@@ -44,7 +44,6 @@
             this.lblChecksum = new System.Windows.Forms.Label();
             this.txtLanguage = new System.Windows.Forms.TextBox();
             this.lblLanguage = new System.Windows.Forms.Label();
-            this.txtData = new System.Windows.Forms.TextBox();
             this.lblData = new System.Windows.Forms.Label();
             this.txtCodeDate = new System.Windows.Forms.TextBox();
             this.lblCodeDate = new System.Windows.Forms.Label();
@@ -190,16 +189,6 @@
             this.lblLanguage.TabIndex = 14;
             this.lblLanguage.Text = "Language";
             // 
-            // txtData
-            // 
-            this.txtData.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtData.Location = new System.Drawing.Point(13, 148);
-            this.txtData.Multiline = true;
-            this.txtData.Name = "txtData";
-            this.txtData.ReadOnly = true;
-            this.txtData.Size = new System.Drawing.Size(418, 222);
-            this.txtData.TabIndex = 16;
-            // 
             // lblData
             // 
             this.lblData.AutoSize = true;
@@ -264,7 +253,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(441, 382);
+            this.ClientSize = new System.Drawing.Size(658, 382);
             this.Controls.Add(this.txtSBBLength);
             this.Controls.Add(this.lblSBBLength);
             this.Controls.Add(this.txtInterfaceDate);
@@ -272,7 +261,6 @@
             this.Controls.Add(this.txtCodeDate);
             this.Controls.Add(this.lblCodeDate);
             this.Controls.Add(this.lblData);
-            this.Controls.Add(this.txtData);
             this.Controls.Add(this.txtLanguage);
             this.Controls.Add(this.lblLanguage);
             this.Controls.Add(this.txtChecksum);
@@ -316,7 +304,6 @@
         private System.Windows.Forms.Label lblChecksum;
         private System.Windows.Forms.TextBox txtLanguage;
         private System.Windows.Forms.Label lblLanguage;
-        private System.Windows.Forms.TextBox txtData;
         private System.Windows.Forms.Label lblData;
         private System.Windows.Forms.TextBox txtCodeDate;
         private System.Windows.Forms.Label lblCodeDate;
