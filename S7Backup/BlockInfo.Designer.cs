@@ -51,6 +51,14 @@
             this.lblInterfaceDate = new System.Windows.Forms.Label();
             this.txtSBBLength = new System.Windows.Forms.TextBox();
             this.lblSBBLength = new System.Windows.Forms.Label();
+            this.txtFlags = new System.Windows.Forms.TextBox();
+            this.lblFlags = new System.Windows.Forms.Label();
+            this.txtLocalData = new System.Windows.Forms.TextBox();
+            this.lblLocalData = new System.Windows.Forms.Label();
+            this.txtVersion = new System.Windows.Forms.TextBox();
+            this.lblVersion = new System.Windows.Forms.Label();
+            this.txtTestChecksum = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblBlock
@@ -249,11 +257,87 @@
             this.lblSBBLength.TabIndex = 22;
             this.lblSBBLength.Text = "SBB Length";
             // 
+            // txtFlags
+            // 
+            this.txtFlags.Location = new System.Drawing.Point(331, 109);
+            this.txtFlags.Name = "txtFlags";
+            this.txtFlags.ReadOnly = true;
+            this.txtFlags.Size = new System.Drawing.Size(100, 20);
+            this.txtFlags.TabIndex = 25;
+            // 
+            // lblFlags
+            // 
+            this.lblFlags.AutoSize = true;
+            this.lblFlags.Location = new System.Drawing.Point(331, 92);
+            this.lblFlags.Name = "lblFlags";
+            this.lblFlags.Size = new System.Drawing.Size(32, 13);
+            this.lblFlags.TabIndex = 24;
+            this.lblFlags.Text = "Flags";
+            // 
+            // txtLocalData
+            // 
+            this.txtLocalData.Location = new System.Drawing.Point(437, 30);
+            this.txtLocalData.Name = "txtLocalData";
+            this.txtLocalData.ReadOnly = true;
+            this.txtLocalData.Size = new System.Drawing.Size(100, 20);
+            this.txtLocalData.TabIndex = 27;
+            // 
+            // lblLocalData
+            // 
+            this.lblLocalData.AutoSize = true;
+            this.lblLocalData.Location = new System.Drawing.Point(437, 13);
+            this.lblLocalData.Name = "lblLocalData";
+            this.lblLocalData.Size = new System.Drawing.Size(59, 13);
+            this.lblLocalData.TabIndex = 26;
+            this.lblLocalData.Text = "Local Data";
+            // 
+            // txtVersion
+            // 
+            this.txtVersion.Location = new System.Drawing.Point(440, 70);
+            this.txtVersion.Name = "txtVersion";
+            this.txtVersion.ReadOnly = true;
+            this.txtVersion.Size = new System.Drawing.Size(100, 20);
+            this.txtVersion.TabIndex = 29;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Location = new System.Drawing.Point(440, 53);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(42, 13);
+            this.lblVersion.TabIndex = 28;
+            this.lblVersion.Text = "Version";
+            // 
+            // txtTestChecksum
+            // 
+            this.txtTestChecksum.Location = new System.Drawing.Point(437, 102);
+            this.txtTestChecksum.Name = "txtTestChecksum";
+            this.txtTestChecksum.ReadOnly = true;
+            this.txtTestChecksum.Size = new System.Drawing.Size(100, 20);
+            this.txtTestChecksum.TabIndex = 31;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(437, 85);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.TabIndex = 30;
+            this.label1.Text = "Test Checksum";
+            // 
             // BlockInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 382);
+            this.Controls.Add(this.txtTestChecksum);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtVersion);
+            this.Controls.Add(this.lblVersion);
+            this.Controls.Add(this.txtLocalData);
+            this.Controls.Add(this.lblLocalData);
+            this.Controls.Add(this.txtFlags);
+            this.Controls.Add(this.lblFlags);
             this.Controls.Add(this.txtSBBLength);
             this.Controls.Add(this.lblSBBLength);
             this.Controls.Add(this.txtInterfaceDate);
@@ -311,5 +395,13 @@
         private System.Windows.Forms.Label lblInterfaceDate;
         private System.Windows.Forms.TextBox txtSBBLength;
         private System.Windows.Forms.Label lblSBBLength;
+        private System.Windows.Forms.TextBox txtFlags;
+        private System.Windows.Forms.Label lblFlags;
+        private System.Windows.Forms.TextBox txtLocalData;
+        private System.Windows.Forms.Label lblLocalData;
+        private System.Windows.Forms.TextBox txtVersion;
+        private System.Windows.Forms.Label lblVersion;
+        private System.Windows.Forms.TextBox txtTestChecksum;
+        private System.Windows.Forms.Label label1;
     }
 }

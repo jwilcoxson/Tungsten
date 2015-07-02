@@ -95,8 +95,8 @@ namespace S7Backup
 
                 if (orderCodeResult == 0)
                 {
-                    MyCpu.orderCode = new s7OrderCode(oc);
-                    writeLog("CPU Order Code:\t" + MyCpu.orderCode.code);
+                    MyCpu.setOrderCode(oc);
+                    writeLog("CPU Order Code:\t" + MyCpu.orderCode);
 
 
                     S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
@@ -104,9 +104,9 @@ namespace S7Backup
 
                     if (cpuInfoResult == 0)
                     {
-                        
-                        MyCpu.cpuInfo = new s7CpuInfo(ci);
-                        writeLog("CPU Serial Number:\t" + MyCpu.cpuInfo.serialNumber);
+
+                        MyCpu.setCpuInfo(ci);
+                        writeLog("CPU Serial Number:\t" + MyCpu.serialNumber);
 
                         S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
                         int listBlocksResult = MyClient.ListBlocks(ref bl);
