@@ -310,7 +310,7 @@
             // 
             // txtTestChecksum
             // 
-            this.txtTestChecksum.Location = new System.Drawing.Point(437, 102);
+            this.txtTestChecksum.Location = new System.Drawing.Point(440, 109);
             this.txtTestChecksum.Name = "txtTestChecksum";
             this.txtTestChecksum.ReadOnly = true;
             this.txtTestChecksum.Size = new System.Drawing.Size(100, 20);
@@ -319,7 +319,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(437, 85);
+            this.label1.Location = new System.Drawing.Point(440, 93);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 30;

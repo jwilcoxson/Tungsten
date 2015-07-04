@@ -28,32 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Station Info");
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("OB");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("FC");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("FB");
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("DB");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("SFC");
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("SFB");
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("SDB");
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Blocks", new System.Windows.Forms.TreeNode[] {
-            treeNode13,
-            treeNode14,
-            treeNode15,
-            treeNode16,
-            treeNode17,
-            treeNode18,
-            treeNode19});
-            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("System Status");
-            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("Station", new System.Windows.Forms.TreeNode[] {
-            treeNode12,
-            treeNode20,
-            treeNode21});
-            this.btnConnect = new System.Windows.Forms.Button();
-            this.btnDisconnect = new System.Windows.Forms.Button();
+            this.btnUpload = new System.Windows.Forms.Button();
             this.txtIpAddress = new System.Windows.Forms.TextBox();
             this.lblIpAddress = new System.Windows.Forms.Label();
-            this.txtConsole = new System.Windows.Forms.TextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,35 +40,24 @@
             this.mMCFileWLDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label2 = new System.Windows.Forms.Label();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.txtCpuInfo = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // btnConnect
+            // btnUpload
             // 
-            this.btnConnect.Location = new System.Drawing.Point(387, 117);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(120, 23);
-            this.btnConnect.TabIndex = 0;
-            this.btnConnect.Text = "Connect CPU";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // btnDisconnect
-            // 
-            this.btnDisconnect.Enabled = false;
-            this.btnDisconnect.Location = new System.Drawing.Point(387, 146);
-            this.btnDisconnect.Name = "btnDisconnect";
-            this.btnDisconnect.Size = new System.Drawing.Size(120, 23);
-            this.btnDisconnect.TabIndex = 1;
-            this.btnDisconnect.Text = "Disconnect CPU";
-            this.btnDisconnect.UseVisualStyleBackColor = true;
-            this.btnDisconnect.Click += new System.EventHandler(this.button2_Click);
+            this.btnUpload.Location = new System.Drawing.Point(12, 231);
+            this.btnUpload.Name = "btnUpload";
+            this.btnUpload.Size = new System.Drawing.Size(196, 96);
+            this.btnUpload.TabIndex = 0;
+            this.btnUpload.Text = "Upload CPU";
+            this.btnUpload.UseVisualStyleBackColor = true;
+            this.btnUpload.Click += new System.EventHandler(this.button1_Click);
             // 
             // txtIpAddress
             // 
-            this.txtIpAddress.Location = new System.Drawing.Point(281, 117);
+            this.txtIpAddress.Location = new System.Drawing.Point(15, 49);
             this.txtIpAddress.Name = "txtIpAddress";
             this.txtIpAddress.Size = new System.Drawing.Size(100, 20);
             this.txtIpAddress.TabIndex = 2;
@@ -100,22 +66,11 @@
             // lblIpAddress
             // 
             this.lblIpAddress.AutoSize = true;
-            this.lblIpAddress.Location = new System.Drawing.Point(278, 101);
+            this.lblIpAddress.Location = new System.Drawing.Point(12, 33);
             this.lblIpAddress.Name = "lblIpAddress";
             this.lblIpAddress.Size = new System.Drawing.Size(81, 13);
             this.lblIpAddress.TabIndex = 3;
             this.lblIpAddress.Text = "PLC IP Address";
-            // 
-            // txtConsole
-            // 
-            this.txtConsole.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtConsole.Location = new System.Drawing.Point(475, 319);
-            this.txtConsole.Multiline = true;
-            this.txtConsole.Name = "txtConsole";
-            this.txtConsole.ReadOnly = true;
-            this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtConsole.Size = new System.Drawing.Size(425, 176);
-            this.txtConsole.TabIndex = 4;
             // 
             // menuStrip1
             // 
@@ -123,7 +78,7 @@
             this.fileToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(912, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(658, 24);
             this.menuStrip1.TabIndex = 5;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -150,6 +105,7 @@
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.openToolStripMenuItem.Text = "Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
@@ -187,62 +143,39 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
-            // label2
+            // txtCpuInfo
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(373, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(0, 13);
-            this.label2.TabIndex = 8;
+            this.txtCpuInfo.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCpuInfo.Location = new System.Drawing.Point(420, 49);
+            this.txtCpuInfo.Multiline = true;
+            this.txtCpuInfo.Name = "txtCpuInfo";
+            this.txtCpuInfo.Size = new System.Drawing.Size(227, 276);
+            this.txtCpuInfo.TabIndex = 6;
             // 
-            // treeView1
+            // label1
             // 
-            this.treeView1.Location = new System.Drawing.Point(12, 27);
-            this.treeView1.Name = "treeView1";
-            treeNode12.Name = "ndeStationInfo";
-            treeNode12.Text = "Station Info";
-            treeNode13.Name = "ndeOB";
-            treeNode13.Text = "OB";
-            treeNode14.Name = "ndeFC";
-            treeNode14.Text = "FC";
-            treeNode15.Name = "ndeFB";
-            treeNode15.Text = "FB";
-            treeNode16.Name = "ndeDB";
-            treeNode16.Text = "DB";
-            treeNode17.Name = "ndeSFC";
-            treeNode17.Text = "SFC";
-            treeNode18.Name = "ndeSFB";
-            treeNode18.Text = "SFB";
-            treeNode19.Name = "ndeSDB";
-            treeNode19.Text = "SDB";
-            treeNode20.Name = "ndeBlocks";
-            treeNode20.Text = "Blocks";
-            treeNode21.Name = "ndeSystemStatusList";
-            treeNode21.Text = "System Status";
-            treeNode22.Name = "nodeStation";
-            treeNode22.Text = "Station";
-            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode22});
-            this.treeView1.Size = new System.Drawing.Size(203, 468);
-            this.treeView1.TabIndex = 9;
-            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(417, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(50, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "CPU Info";
             // 
             // S7Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(912, 507);
-            this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtConsole);
+            this.ClientSize = new System.Drawing.Size(658, 337);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txtCpuInfo);
             this.Controls.Add(this.lblIpAddress);
             this.Controls.Add(this.txtIpAddress);
-            this.Controls.Add(this.btnDisconnect);
-            this.Controls.Add(this.btnConnect);
+            this.Controls.Add(this.btnUpload);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "S7Backup";
             this.Text = "S7 Backup";
+            this.Load += new System.EventHandler(this.S7Backup_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -252,11 +185,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.Button btnDisconnect;
+        private System.Windows.Forms.Button btnUpload;
         private System.Windows.Forms.TextBox txtIpAddress;
         private System.Windows.Forms.Label lblIpAddress;
-        private System.Windows.Forms.TextBox txtConsole;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -266,8 +197,8 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mMCFileWLDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TextBox txtCpuInfo;
+        private System.Windows.Forms.Label label1;
     }
 }
 

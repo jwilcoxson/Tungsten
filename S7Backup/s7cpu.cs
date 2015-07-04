@@ -53,8 +53,106 @@ namespace S7Backup
         {
             blocks = new List<s7CpuBlock>();
         }
+
+        public void connect(string ipAddress)
+        {
+            this.connect(ipAddress, 0, 2);
+        }
+
+        public void connect(string ipAddress, int rack, int slot)
+        {
+            MyClient = new S7Client();
+
+            int connectResult = MyClient.ConnectTo(ipAddress, rack, slot);
+
+            if (connectResult == 0)
+            {
+                Console.WriteLine("Connected to CPU at IP Address " + ipAddress);
+                S7Client.S7OrderCode oc = new S7Client.S7OrderCode();
+                int orderCodeResult = MyClient.GetOrderCode(ref oc);
+
+                if (orderCodeResult == 0)
+                {
+                    this.setOrderCode(oc);
+                    Console.WriteLine("CPU Order Code:\t" + this.orderCode);
+                    S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
+                    int cpuInfoResult = MyClient.GetCpuInfo(ref ci);
+
+                    if (cpuInfoResult == 0)
+                    {
+
+                        this.setCpuInfo(ci);
+                        Console.WriteLine("CPU Serial Number:\t" + this.serialNumber);
+
+                        S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
+                        int listBlocksResult = MyClient.ListBlocks(ref bl);
+
+                        if (listBlocksResult == 0)
+                        {
+                            Console.WriteLine("OB Count:\t" + bl.OBCount);
+                            Console.WriteLine("FC Count:\t" + bl.FCCount);
+                            Console.WriteLine("FB Count:\t" + bl.FBCount);
+                            Console.WriteLine("DB Count:\t" + bl.DBCount);
+                            Console.WriteLine("SFC Count:\t" + bl.SFCCount);
+                            Console.WriteLine("SFB Count:\t" + bl.SFBCount);
+                            Console.WriteLine("SDB Count:\t" + bl.SDBCount);
+
+                        }
+                        else //Failed to List Blocks
+                        {
+                            Console.WriteLine("Failed to list blocks. " + listBlocksResult.ToString("X4"));
+                        }
+                    }
+                    else //Failed to get CPU Info
+                    {
+                        Console.WriteLine("Failed to get CPU info. " + cpuInfoResult.ToString("X4"));
+                    }
+                }
+                else //Failed to get Order Code
+                {
+                    Console.WriteLine("Failed to get Order Code. " + orderCodeResult.ToString("X4"));
+                }
+            }
+            else //Failed to connect to CPU
+            {
+                Console.WriteLine("Failed to connect to CPU. " + connectResult.ToString("X4"));
+            }
+            this.upload();
+            MyClient.Disconnect();
+        }
         
+        public void upload()
+        {
+            Console.WriteLine("Uploading program blocks... ");
+            foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
+            {
+                ushort[] blockList = new ushort[0x2000];
+                int blockCount = blockList.Length;
+                MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
+                for (int i = 0; i < blockCount; i++)
+                {
+                    S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
+                    MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
+
+                    byte[] buffer = new byte[4096];
+                    int bufferSize = buffer.Length;
+
+                    if (blockType != s7BlockType.SFC && blockType != s7BlockType.SFB)
+                        MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
+                    else
+                        bufferSize = 0;
+
+                    byte[] data = new byte[bufferSize];
+                    Array.Copy(buffer, data, data.Length);
+                    this.addCpuBlock(blockInfo, data);
+                }
+            }
+
+            Console.WriteLine("Done!");
+        }
+
         public List<s7CpuBlock> blocks;
+        private S7Client MyClient;
         
         public string moduleTypeName,
                       serialNumber,
@@ -141,14 +239,23 @@ namespace S7Backup
             }
         }
 
+        public override string ToString()
+        {
+            return blockType.ToString() + blockNumber.ToString();
+        }
+
         public s7Language language;
         public s7BlockType blockType;
-        public s7SubBlockType subBlockType;
-        public string   name,
-                        family,
-                        author,
-                        codeDate,
-                        interfaceDate;
+        private string _name,
+                       _family,
+                       _author,
+                       _codeDate,
+                       _interfaceDate;
+        public string name { get { return this._name; } set { this._name = value.Replace("\0", String.Empty).Replace("\1", String.Empty); } }
+        public string family { get { return this._family; } set { this._family = value.Replace("\0", String.Empty); } }
+        public string author { get { return this._author; } set { this._author = value.Replace("\0", String.Empty); } }
+        public string codeDate { get { return this._codeDate; } set { this._codeDate = value.Replace("\0", String.Empty); } }
+        public string interfaceDate { get { return this._interfaceDate; } set { this._interfaceDate = value.Replace("\0", String.Empty); } }
         public int  loadSize, 
                     MC7Size,
                     blockNumber,
@@ -164,16 +271,16 @@ namespace S7Backup
         public wldFile(s7Cpu cpu)
         {
             List<s7CpuBlock> blocks = cpu.blocks;
-
             blocks.Sort();
+            data = new byte[0];
 
             foreach (s7CpuBlock block in blocks)
             {
                 if ((block.data != null) && (block.blockType != s7BlockType.SFC) && (block.blockType != s7BlockType.SFB))
-                    data.Concat(block.data);
+                    data = data.Concat(block.data).ToArray();
             }
         }
 
-        byte[] data;
+         public byte[] data {get; private set;}
     }
 }

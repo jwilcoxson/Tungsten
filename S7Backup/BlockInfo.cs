@@ -17,7 +17,7 @@ namespace S7Backup
         {
             InitializeComponent();
 
-            txtBlock.Text = block.blockType.ToString() + block.blockNumber.ToString();
+            txtBlock.Text = block.ToString();
             txtName.Text = block.name;
             txtAuthor.Text = block.author;
             txtFamily.Text = block.family;
