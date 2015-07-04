@@ -151,6 +151,12 @@ namespace S7Backup
             Console.WriteLine("Done!");
         }
 
+        public static string cleanString(string s)
+        {
+            s = System.Text.RegularExpressions.Regex.Replace(s, @"[^\u0020-\u007F]", string.Empty);
+            return s;
+        }
+
         public List<s7CpuBlock> blocks;
         private S7Client MyClient;
         
@@ -175,7 +181,7 @@ namespace S7Backup
 
         public void setOrderCode(S7Client.S7OrderCode oc)
         {
-            this.orderCode = oc.Code;
+            this.orderCode = cleanString(oc.Code);
             this.V1 = oc.V1;
             this.V2 = oc.V2;
             this.V3 = oc.V3;
@@ -183,11 +189,11 @@ namespace S7Backup
 
         public void setCpuInfo(S7Client.S7CpuInfo ci)
         {
-            this.moduleTypeName = ci.ModuleTypeName;
-            this.serialNumber = ci.SerialNumber;
-            this.ASName = ci.ASName;
-            this.copyright = ci.Copyright;
-            this.moduleName = ci.ModuleName;
+            this.moduleTypeName = cleanString(ci.ModuleTypeName);
+            this.serialNumber = cleanString(ci.SerialNumber);
+            this.ASName = cleanString(ci.ASName);
+            this.copyright = cleanString(ci.Copyright);
+            this.moduleName = cleanString(ci.ModuleName);
         }
         
     }
@@ -212,11 +218,11 @@ namespace S7Backup
             else if (info.BlkType == (int)s7SubBlockType.SDB)
                 this.blockType = s7BlockType.SDB;
             this.language = (s7Language) info.BlkLang;
-            this.name = info.Header;
-            this.family = info.Family;
-            this.author = info.Author;
-            this.codeDate = info.CodeDate;
-            this.interfaceDate = info.IntfDate;
+            this.name = s7Cpu.cleanString(info.Header);
+            this.family = s7Cpu.cleanString(info.Family);
+            this.author = s7Cpu.cleanString(info.Author);
+            this.codeDate = s7Cpu.cleanString(info.CodeDate);
+            this.interfaceDate = s7Cpu.cleanString(info.IntfDate);
             this.loadSize = info.LoadSize;
             this.MC7Size = info.MC7Size;
             this.blockNumber = info.BlkNumber;
@@ -246,16 +252,11 @@ namespace S7Backup
 
         public s7Language language;
         public s7BlockType blockType;
-        private string _name,
-                       _family,
-                       _author,
-                       _codeDate,
-                       _interfaceDate;
-        public string name { get { return this._name; } set { this._name = value.Replace("\0", String.Empty).Replace("\1", String.Empty); } }
-        public string family { get { return this._family; } set { this._family = value.Replace("\0", String.Empty); } }
-        public string author { get { return this._author; } set { this._author = value.Replace("\0", String.Empty); } }
-        public string codeDate { get { return this._codeDate; } set { this._codeDate = value.Replace("\0", String.Empty); } }
-        public string interfaceDate { get { return this._interfaceDate; } set { this._interfaceDate = value.Replace("\0", String.Empty); } }
+        public string name,
+                       family,
+                       author,
+                       codeDate,
+                       interfaceDate;
         public int  loadSize, 
                     MC7Size,
                     blockNumber,

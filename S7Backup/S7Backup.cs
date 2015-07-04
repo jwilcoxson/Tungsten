@@ -140,5 +140,11 @@ namespace S7Backup
             printCpuInfo(MyCpu);
         }
 
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MyCpu = new s7Cpu();
+            txtCpuInfo.Text = "";
+        }
+
     }
 }
