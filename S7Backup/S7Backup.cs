@@ -27,8 +27,8 @@ namespace S7Backup
         {
             wldFile w = new wldFile(cpu);
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "WLD files (*.WLD)|*.WLD|All files (*.*)|*.*";
-            dialog.FileName = "S7PROG.WLD";
+            dialog.Filter = "WLD files (*.wld)|*.wld|All files (*.*)|*.*";
+            dialog.FileName = "S7PROG.wld";
             dialog.FilterIndex = 1;
             dialog.RestoreDirectory = true;
 
@@ -144,6 +144,11 @@ namespace S7Backup
         {
             MyCpu = new s7Cpu();
             txtCpuInfo.Text = "";
+        }
+
+        private void btnDownload_Click(object sender, EventArgs e)
+        {
+            MyCpu.download(txtIpAddress.Text);
         }
 
     }

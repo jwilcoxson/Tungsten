@@ -42,6 +42,7 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtCpuInfo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnDownload = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -162,11 +163,22 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "CPU Info";
             // 
+            // btnDownload
+            // 
+            this.btnDownload.Location = new System.Drawing.Point(214, 231);
+            this.btnDownload.Name = "btnDownload";
+            this.btnDownload.Size = new System.Drawing.Size(196, 96);
+            this.btnDownload.TabIndex = 8;
+            this.btnDownload.Text = "Download CPU";
+            this.btnDownload.UseVisualStyleBackColor = true;
+            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            // 
             // S7Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 337);
+            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtCpuInfo);
             this.Controls.Add(this.lblIpAddress);
@@ -200,6 +212,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.TextBox txtCpuInfo;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button btnDownload;
     }
 }
 

@@ -151,6 +151,35 @@ namespace S7Backup
             Console.WriteLine("Done!");
         }
 
+        public void download(string ipAddress)
+        {
+            download(ipAddress, 0, 2);
+        }
+
+        public void download(string ipAddress, int rack, int slot)
+        {
+            MyClient = new S7Client();
+            int result;
+            result = MyClient.ConnectTo(ipAddress, rack, slot);
+            foreach (s7CpuBlock b in this.blocks)
+            {
+                if (b.blockType != s7BlockType.SFC && b.blockType != s7BlockType.SFB)
+                {
+                    result = MyClient.Download(b.blockNumber, b.data, b.data.Length);
+                    if (result == 0)
+                    {
+                        Console.WriteLine("Downloaded " + b.ToString());
+                    }   
+                    else
+                    {
+                        Console.WriteLine("Error downloading " + b.ToString());
+                        Console.WriteLine("Error Code: " + result.ToString("X8"));
+                    }
+                }
+            }
+
+            Console.Write("Download Complete");
+        }
         public static string cleanString(string s)
         {
             s = System.Text.RegularExpressions.Regex.Replace(s, @"[^\u0020-\u007F]", string.Empty);
