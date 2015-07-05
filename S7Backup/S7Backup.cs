@@ -44,15 +44,10 @@ namespace S7Backup
 
         }
 
-        private void connectCpu()
-        {
-            MyCpu.connect(txtIpAddress.Text);
-            printCpuInfo(MyCpu);
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            connectCpu();
+            MyCpu.upload();
+            printCpuInfo(MyCpu);
         }
 
         private void printCpuInfo(s7Cpu cpu)
@@ -149,6 +144,16 @@ namespace S7Backup
         private void btnDownload_Click(object sender, EventArgs e)
         {
             MyCpu.download(txtIpAddress.Text);
+        }
+
+        private void btnErase_Click(object sender, EventArgs e)
+        {
+            MyCpu.erase();
+        }
+
+        private void btnConnect_Click(object sender, EventArgs e)
+        {
+            MyCpu.connect(txtIpAddress.Text);
         }
 
     }

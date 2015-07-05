@@ -62,71 +62,80 @@ namespace S7Backup
         public void connect(string ipAddress, int rack, int slot)
         {
             MyClient = new S7Client();
+            int result = MyClient.ConnectTo(ipAddress, rack, slot);
 
-            int connectResult = MyClient.ConnectTo(ipAddress, rack, slot);
-
-            if (connectResult == 0)
+            if (result == 0)
             {
                 Console.WriteLine("Connected to CPU at IP Address " + ipAddress);
                 S7Client.S7OrderCode oc = new S7Client.S7OrderCode();
-                int orderCodeResult = MyClient.GetOrderCode(ref oc);
+                result = MyClient.GetOrderCode(ref oc);
 
-                if (orderCodeResult == 0)
+                if (result == 0)
                 {
-                    this.setOrderCode(oc);
                     Console.WriteLine("CPU Order Code:\t" + this.orderCode);
-                    S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
-                    int cpuInfoResult = MyClient.GetCpuInfo(ref ci);
+                    S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
+                    result = MyClient.ListBlocks(ref bl);
 
-                    if (cpuInfoResult == 0)
+                    if (result == 0)
                     {
-
-                        this.setCpuInfo(ci);
-                        Console.WriteLine("CPU Serial Number:\t" + this.serialNumber);
-
-                        S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
-                        int listBlocksResult = MyClient.ListBlocks(ref bl);
-
-                        if (listBlocksResult == 0)
-                        {
-                            Console.WriteLine("OB Count:\t" + bl.OBCount);
-                            Console.WriteLine("FC Count:\t" + bl.FCCount);
-                            Console.WriteLine("FB Count:\t" + bl.FBCount);
-                            Console.WriteLine("DB Count:\t" + bl.DBCount);
-                            Console.WriteLine("SFC Count:\t" + bl.SFCCount);
-                            Console.WriteLine("SFB Count:\t" + bl.SFBCount);
-                            Console.WriteLine("SDB Count:\t" + bl.SDBCount);
-
-                        }
-                        else //Failed to List Blocks
-                        {
-                            Console.WriteLine("Failed to list blocks. " + listBlocksResult.ToString("X4"));
-                        }
+                        Console.WriteLine("OB Count:\t" + bl.OBCount);
+                        Console.WriteLine("FC Count:\t" + bl.FCCount);
+                        Console.WriteLine("FB Count:\t" + bl.FBCount);
+                        Console.WriteLine("DB Count:\t" + bl.DBCount);
+                        Console.WriteLine("SFC Count:\t" + bl.SFCCount);
+                        Console.WriteLine("SFB Count:\t" + bl.SFBCount);
+                        Console.WriteLine("SDB Count:\t" + bl.SDBCount);
                     }
-                    else //Failed to get CPU Info
+                    else //Failed to List Blocks
                     {
-                        Console.WriteLine("Failed to get CPU info. " + cpuInfoResult.ToString("X4"));
+                        Console.WriteLine("Failed to list blocks. " + result.ToString("X4"));
                     }
                 }
                 else //Failed to get Order Code
                 {
-                    Console.WriteLine("Failed to get Order Code. " + orderCodeResult.ToString("X4"));
+                    Console.WriteLine("Failed to get Order Code. " + result.ToString("X4"));
                 }
             }
             else //Failed to connect to CPU
             {
-                Console.WriteLine("Failed to connect to CPU. " + connectResult.ToString("X4"));
+                Console.WriteLine("Failed to connect to CPU. " + result.ToString("X4"));
             }
-            this.upload();
-            MyClient.Disconnect();
         }
         
         public void upload()
         {
+            Console.WriteLine("Getting CPU information...");
+
+            S7Client.S7OrderCode oc = new S7Client.S7OrderCode();
+            int result = MyClient.GetOrderCode(ref oc);
+
+            if (result == 0)
+            {
+                this.setOrderCode(oc);
+            }
+            else
+            {
+                Console.WriteLine("Failed to get Order Code");
+                Console.WriteLine("Error: " + result.ToString("X4"));
+            }
+
+            S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
+            result = MyClient.GetCpuInfo(ref ci);
+
+            if (result == 0)
+            {
+                this.setCpuInfo(ci);
+            }
+            else
+            {
+                Console.WriteLine("Failed to get CPU info");
+                Console.WriteLine("Error: " + result.ToString("X4"));
+            }
+
             Console.WriteLine("Uploading program blocks... ");
             foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
             {
-                ushort[] blockList = new ushort[0x2000];
+                ushort[] blockList = new ushort[MAX_BLOCK];
                 int blockCount = blockList.Length;
                 MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
                 for (int i = 0; i < blockCount; i++)
@@ -145,9 +154,9 @@ namespace S7Backup
                     byte[] data = new byte[bufferSize];
                     Array.Copy(buffer, data, data.Length);
                     this.addCpuBlock(blockInfo, data);
+                    Console.WriteLine(this.blocks.Last().ToString() + " loaded. Size: " + this.blocks.Last().loadSize + " bytes.");
                 }
             }
-
             Console.WriteLine("Done!");
         }
 
@@ -158,7 +167,6 @@ namespace S7Backup
 
         public void download(string ipAddress, int rack, int slot)
         {
-            MyClient = new S7Client();
             int result;
             result = MyClient.ConnectTo(ipAddress, rack, slot);
             foreach (s7CpuBlock b in this.blocks)
@@ -173,13 +181,46 @@ namespace S7Backup
                     else
                     {
                         Console.WriteLine("Error downloading " + b.ToString());
-                        Console.WriteLine("Error Code: " + result.ToString("X8"));
+                        Console.WriteLine("Error: " + result.ToString("X8"));
                     }
                 }
             }
 
             Console.Write("Download Complete");
         }
+
+        public void erase()
+        {
+            int result;
+            Console.WriteLine("Erasing CPU... ");
+            foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
+            {
+                ushort[] blockList = new ushort[MAX_BLOCK];
+                int blockCount = blockList.Length;
+                MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
+                for (int i = 0; i < blockCount; i++)
+                {
+                    if (blockType != s7BlockType.SFC && blockType != s7BlockType.SFB)
+                    {
+                        result = MyClient.Delete((int)blockType, blockList[i]);
+
+                        if (result == 0)
+                        {
+                            Console.WriteLine("Deleted " + blockType + blockList[i]);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Error deleting " + blockType + blockList[i]);
+                            Console.WriteLine("Error: " + result.ToString("X4"));
+                        }
+                    }
+
+                    
+                }
+            }
+            Console.WriteLine("Done!");
+        }
+
         public static string cleanString(string s)
         {
             s = System.Text.RegularExpressions.Regex.Replace(s, @"[^\u0020-\u007F]", string.Empty);
@@ -195,6 +236,7 @@ namespace S7Backup
                       copyright,
                       moduleName,
                       orderCode;
+        private const int MAX_BLOCK = 0x2000;
 
         public string version
         {

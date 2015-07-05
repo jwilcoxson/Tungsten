@@ -43,6 +43,8 @@
             this.txtCpuInfo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnDownload = new System.Windows.Forms.Button();
+            this.btnErase = new System.Windows.Forms.Button();
+            this.btnConnect = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,7 +54,7 @@
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(196, 96);
             this.btnUpload.TabIndex = 0;
-            this.btnUpload.Text = "Upload CPU";
+            this.btnUpload.Text = "Upload to PC";
             this.btnUpload.UseVisualStyleBackColor = true;
             this.btnUpload.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -169,15 +171,37 @@
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(196, 96);
             this.btnDownload.TabIndex = 8;
-            this.btnDownload.Text = "Download CPU";
+            this.btnDownload.Text = "Download to PLC";
             this.btnDownload.UseVisualStyleBackColor = true;
             this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
+            // 
+            // btnErase
+            // 
+            this.btnErase.Location = new System.Drawing.Point(214, 129);
+            this.btnErase.Name = "btnErase";
+            this.btnErase.Size = new System.Drawing.Size(196, 96);
+            this.btnErase.TabIndex = 9;
+            this.btnErase.Text = "Erase";
+            this.btnErase.UseVisualStyleBackColor = true;
+            this.btnErase.Click += new System.EventHandler(this.btnErase_Click);
+            // 
+            // btnConnect
+            // 
+            this.btnConnect.Location = new System.Drawing.Point(12, 129);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(196, 96);
+            this.btnConnect.TabIndex = 10;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // S7Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 337);
+            this.Controls.Add(this.btnConnect);
+            this.Controls.Add(this.btnErase);
             this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtCpuInfo);
@@ -213,6 +237,8 @@
         private System.Windows.Forms.TextBox txtCpuInfo;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnDownload;
+        private System.Windows.Forms.Button btnErase;
+        private System.Windows.Forms.Button btnConnect;
     }
 }
 
