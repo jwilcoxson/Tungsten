@@ -46,6 +46,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>s7.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="IPAddressControlLib, Version=1.2.5668.36966, Culture=neutral, PublicKeyToken=7052a5c2c6d6e1fc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -129,6 +132,8 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Edit me and save.ico" />
+    <Content Include="s7.ico" />
     <Content Include="snap7.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
