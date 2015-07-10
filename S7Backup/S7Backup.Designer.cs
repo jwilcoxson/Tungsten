@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.btnUpload = new System.Windows.Forms.Button();
-            this.txtIpAddress = new System.Windows.Forms.TextBox();
             this.lblIpAddress = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,6 +44,7 @@
             this.btnDownload = new System.Windows.Forms.Button();
             this.btnErase = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.txtIpAddress = new IPAddressControlLib.IPAddressControl();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,14 +57,6 @@
             this.btnUpload.Text = "Upload to PC";
             this.btnUpload.UseVisualStyleBackColor = true;
             this.btnUpload.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // txtIpAddress
-            // 
-            this.txtIpAddress.Location = new System.Drawing.Point(15, 49);
-            this.txtIpAddress.Name = "txtIpAddress";
-            this.txtIpAddress.Size = new System.Drawing.Size(100, 20);
-            this.txtIpAddress.TabIndex = 2;
-            this.txtIpAddress.Text = "10.0.1.25";
             // 
             // lblIpAddress
             // 
@@ -195,18 +187,33 @@
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
+            // txtIpAddress
+            // 
+            this.txtIpAddress.AllowInternalTab = false;
+            this.txtIpAddress.AutoHeight = true;
+            this.txtIpAddress.BackColor = System.Drawing.SystemColors.Window;
+            this.txtIpAddress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.txtIpAddress.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtIpAddress.Location = new System.Drawing.Point(12, 49);
+            this.txtIpAddress.MinimumSize = new System.Drawing.Size(87, 20);
+            this.txtIpAddress.Name = "txtIpAddress";
+            this.txtIpAddress.ReadOnly = false;
+            this.txtIpAddress.Size = new System.Drawing.Size(87, 20);
+            this.txtIpAddress.TabIndex = 11;
+            this.txtIpAddress.Text = "10.0.1.25";
+            // 
             // S7Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 337);
+            this.Controls.Add(this.txtIpAddress);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnErase);
             this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtCpuInfo);
             this.Controls.Add(this.lblIpAddress);
-            this.Controls.Add(this.txtIpAddress);
             this.Controls.Add(this.btnUpload);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -223,7 +230,6 @@
         #endregion
 
         private System.Windows.Forms.Button btnUpload;
-        private System.Windows.Forms.TextBox txtIpAddress;
         private System.Windows.Forms.Label lblIpAddress;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -239,6 +245,7 @@
         private System.Windows.Forms.Button btnDownload;
         private System.Windows.Forms.Button btnErase;
         private System.Windows.Forms.Button btnConnect;
+        private IPAddressControlLib.IPAddressControl txtIpAddress;
     }
 }
 
