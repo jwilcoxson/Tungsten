@@ -47,8 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="IPAddressControlLib">
-      <HintPath>..\..\..\..\..\Documents\ipaddresscontrollib-master\VS2010\IPAddressControlLib\bin\Debug\IPAddressControlLib.dll</HintPath>
+    <Reference Include="IPAddressControlLib, Version=1.2.5668.36966, Culture=neutral, PublicKeyToken=7052a5c2c6d6e1fc, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\IPAddressControlLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
