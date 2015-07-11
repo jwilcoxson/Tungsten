@@ -39,15 +39,15 @@
             this.mMCFileWLDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.txtCpuInfo = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnDownload = new System.Windows.Forms.Button();
             this.btnErase = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.txtIpAddress = new IPAddressControlLib.IPAddressControl();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,6 +143,28 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewHelpToolStripMenuItem,
+            this.aboutTungstenToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // viewHelpToolStripMenuItem
+            // 
+            this.viewHelpToolStripMenuItem.Name = "viewHelpToolStripMenuItem";
+            this.viewHelpToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.viewHelpToolStripMenuItem.Text = "View Help";
+            // 
+            // aboutTungstenToolStripMenuItem
+            // 
+            this.aboutTungstenToolStripMenuItem.Name = "aboutTungstenToolStripMenuItem";
+            this.aboutTungstenToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.aboutTungstenToolStripMenuItem.Text = "About Tungsten";
+            this.aboutTungstenToolStripMenuItem.Click += new System.EventHandler(this.aboutTungstenToolStripMenuItem_Click);
+            // 
             // txtCpuInfo
             // 
             this.txtCpuInfo.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -205,27 +227,6 @@
             this.txtIpAddress.Size = new System.Drawing.Size(87, 20);
             this.txtIpAddress.TabIndex = 11;
             this.txtIpAddress.Text = "10.0.1.25";
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.viewHelpToolStripMenuItem,
-            this.aboutTungstenToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            // 
-            // viewHelpToolStripMenuItem
-            // 
-            this.viewHelpToolStripMenuItem.Name = "viewHelpToolStripMenuItem";
-            this.viewHelpToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.viewHelpToolStripMenuItem.Text = "View Help";
-            // 
-            // aboutTungstenToolStripMenuItem
-            // 
-            this.aboutTungstenToolStripMenuItem.Name = "aboutTungstenToolStripMenuItem";
-            this.aboutTungstenToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.aboutTungstenToolStripMenuItem.Text = "About Tungsten";
             // 
             // S7Backup
             // 

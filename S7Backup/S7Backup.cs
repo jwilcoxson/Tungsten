@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Snap7;
 
-
 namespace S7Backup
 {
     public partial class S7Backup : Form
@@ -21,7 +20,6 @@ namespace S7Backup
         {
             InitializeComponent();
             MyCpu = new s7Cpu();
-            label2.Text = typeof(S7Backup).Assembly.GetName().Version.ToString();
         }
 
         private void saveWldFile(s7Cpu cpu)
@@ -155,6 +153,12 @@ namespace S7Backup
         private void btnConnect_Click(object sender, EventArgs e)
         {
             MyCpu.connect(txtIpAddress.Text);
+        }
+
+        private void aboutTungstenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About a = new About();
+            a.ShowDialog();
         }
 
     }
