@@ -132,7 +132,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Edit me and save.ico" />
     <Content Include="s7.ico" />
     <Content Include="snap7.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

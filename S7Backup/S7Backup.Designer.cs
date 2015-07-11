@@ -45,6 +45,9 @@
             this.btnErase = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.txtIpAddress = new IPAddressControlLib.IPAddressControl();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,7 +73,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(658, 24);
@@ -202,6 +206,27 @@
             this.txtIpAddress.TabIndex = 11;
             this.txtIpAddress.Text = "10.0.1.25";
             // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewHelpToolStripMenuItem,
+            this.aboutTungstenToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            // 
+            // viewHelpToolStripMenuItem
+            // 
+            this.viewHelpToolStripMenuItem.Name = "viewHelpToolStripMenuItem";
+            this.viewHelpToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.viewHelpToolStripMenuItem.Text = "View Help";
+            // 
+            // aboutTungstenToolStripMenuItem
+            // 
+            this.aboutTungstenToolStripMenuItem.Name = "aboutTungstenToolStripMenuItem";
+            this.aboutTungstenToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.aboutTungstenToolStripMenuItem.Text = "About Tungsten";
+            // 
             // S7Backup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -218,7 +243,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "S7Backup";
-            this.Text = "S7 Backup";
+            this.Text = "Tungsten";
             this.Load += new System.EventHandler(this.S7Backup_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -246,6 +271,9 @@
         private System.Windows.Forms.Button btnErase;
         private System.Windows.Forms.Button btnConnect;
         private IPAddressControlLib.IPAddressControl txtIpAddress;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutTungstenToolStripMenuItem;
     }
 }
 
