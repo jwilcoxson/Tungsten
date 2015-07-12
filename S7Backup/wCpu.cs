@@ -250,30 +250,50 @@ namespace Tungsten
         public void setCpuRunMode(wCpuRunMode runMode)
         {
             int result;
+
+            wCpuRunMode currentRunMode = this.getCpuRunMode();
             
             if (runMode == wCpuRunMode.Run)
             {
-                result = MyClient.PlcHotStart();
-                if (result == 0)
+
+                if (currentRunMode == wCpuRunMode.Run)
                 {
-                    Console.WriteLine("PLC has started");
+                    Console.WriteLine("PLC is already in Run");
                 }
                 else
                 {
-                    Console.WriteLine("Could not start PLC. " + result.ToString("X4"));
+                    result = MyClient.PlcHotStart();
+                    if (result == 0)
+                    {
+                        Console.WriteLine("PLC has started");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not start PLC. " + result.ToString("X4"));
+                    }
                 }
+
             }
             else if (runMode == wCpuRunMode.Stop)
             {
-                result = MyClient.PlcStop();
-                if (result == 0)
+
+                if (currentRunMode == wCpuRunMode.Stop)
                 {
-                    Console.WriteLine("PLC has stopped");
+                    Console.WriteLine("PLC is already in Stop");
                 }
                 else
                 {
-                    Console.WriteLine("Could not stop PLC. " + result.ToString("X4"));
+                    result = MyClient.PlcStop();
+                    if (result == 0)
+                    {
+                        Console.WriteLine("PLC has stopped");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Could not stop PLC. " + result.ToString("X4"));
+                    }
                 }
+    
             }
             else
             {
