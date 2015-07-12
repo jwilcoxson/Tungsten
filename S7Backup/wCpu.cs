@@ -40,6 +40,12 @@ namespace Tungsten
         SFB = 0x0F,
         SDB = 0x0B
     }
+
+    public enum wCpuRunMode {
+        Unknown = 0x00,
+        Stop = 0x04,
+        Run = 0x08
+    }
    
     [Serializable]
     public class wCpu
@@ -219,6 +225,60 @@ namespace Tungsten
                 }
             }
             Console.WriteLine("Done!");
+        }
+
+        public wCpuRunMode getCpuRunMode()
+        {
+            int result;
+            int rm = (int)wCpuRunMode.Unknown;
+            result = MyClient.PlcGetStatus(ref rm);
+            wCpuRunMode runMode = (wCpuRunMode)rm;
+
+            if (result != 0)
+            {
+                Console.WriteLine("Failed to get Run Mode. " + result.ToString("X4"));
+            }
+            else
+            {
+                Console.WriteLine("PLC Run Mode is " + runMode);
+            }
+
+            return runMode;
+
+        }
+
+        public void setCpuRunMode(wCpuRunMode runMode)
+        {
+            int result;
+            
+            if (runMode == wCpuRunMode.Run)
+            {
+                result = MyClient.PlcHotStart();
+                if (result == 0)
+                {
+                    Console.WriteLine("PLC has started");
+                }
+                else
+                {
+                    Console.WriteLine("Could not start PLC. " + result.ToString("X4"));
+                }
+            }
+            else if (runMode == wCpuRunMode.Stop)
+            {
+                result = MyClient.PlcStop();
+                if (result == 0)
+                {
+                    Console.WriteLine("PLC has stopped");
+                }
+                else
+                {
+                    Console.WriteLine("Could not stop PLC. " + result.ToString("X4"));
+                }
+            }
+            else
+            {
+                Console.WriteLine("Unknown is not a valid CPU Run Mode");
+            }
         }
 
         public static string cleanString(string s)

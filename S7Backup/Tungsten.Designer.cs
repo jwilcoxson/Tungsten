@@ -48,6 +48,9 @@
             this.btnErase = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.txtIpAddress = new IPAddressControlLib.IPAddressControl();
+            this.startCpu = new System.Windows.Forms.Button();
+            this.stopCpu = new System.Windows.Forms.Button();
+            this.getRunMode = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -228,11 +231,44 @@
             this.txtIpAddress.TabIndex = 11;
             this.txtIpAddress.Text = "10.0.1.25";
             // 
-            // S7Backup
+            // startCpu
+            // 
+            this.startCpu.Location = new System.Drawing.Point(214, 33);
+            this.startCpu.Name = "startCpu";
+            this.startCpu.Size = new System.Drawing.Size(75, 23);
+            this.startCpu.TabIndex = 12;
+            this.startCpu.Text = "Start CPU";
+            this.startCpu.UseVisualStyleBackColor = true;
+            this.startCpu.Click += new System.EventHandler(this.startCpu_Click);
+            // 
+            // stopCpu
+            // 
+            this.stopCpu.Location = new System.Drawing.Point(214, 62);
+            this.stopCpu.Name = "stopCpu";
+            this.stopCpu.Size = new System.Drawing.Size(75, 23);
+            this.stopCpu.TabIndex = 13;
+            this.stopCpu.Text = "Stop CPU";
+            this.stopCpu.UseVisualStyleBackColor = true;
+            this.stopCpu.Click += new System.EventHandler(this.stopCpu_Click);
+            // 
+            // getRunMode
+            // 
+            this.getRunMode.Location = new System.Drawing.Point(295, 33);
+            this.getRunMode.Name = "getRunMode";
+            this.getRunMode.Size = new System.Drawing.Size(101, 23);
+            this.getRunMode.TabIndex = 14;
+            this.getRunMode.Text = "Get Run Mode";
+            this.getRunMode.UseVisualStyleBackColor = true;
+            this.getRunMode.Click += new System.EventHandler(this.getRunMode_Click);
+            // 
+            // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 337);
+            this.Controls.Add(this.getRunMode);
+            this.Controls.Add(this.stopCpu);
+            this.Controls.Add(this.startCpu);
             this.Controls.Add(this.txtIpAddress);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnErase);
@@ -243,7 +279,7 @@
             this.Controls.Add(this.btnUpload);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "S7Backup";
+            this.Name = "Tungsten";
             this.Text = "Tungsten";
             this.Load += new System.EventHandler(this.S7Backup_Load);
             this.menuStrip1.ResumeLayout(false);
@@ -275,6 +311,9 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutTungstenToolStripMenuItem;
+        private System.Windows.Forms.Button startCpu;
+        private System.Windows.Forms.Button stopCpu;
+        private System.Windows.Forms.Button getRunMode;
     }
 }
 

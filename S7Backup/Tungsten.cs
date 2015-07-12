@@ -161,5 +161,20 @@ namespace Tungsten
             a.ShowDialog();
         }
 
+        private void startCpu_Click(object sender, EventArgs e)
+        {
+            MyCpu.setCpuRunMode(wCpuRunMode.Run);
+        }
+
+        private void stopCpu_Click(object sender, EventArgs e)
+        {
+            MyCpu.setCpuRunMode(wCpuRunMode.Stop);
+        }
+
+        private void getRunMode_Click(object sender, EventArgs e)
+        {
+            MyCpu.getCpuRunMode();
+        }
+
     }
 }
