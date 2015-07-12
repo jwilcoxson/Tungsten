@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace S7Backup
+namespace Tungsten
 {
     static class Program
     {

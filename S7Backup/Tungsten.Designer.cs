@@ -1,4 +1,4 @@
-﻿namespace S7Backup
+﻿namespace Tungsten
 {
     partial class Tungsten
     {

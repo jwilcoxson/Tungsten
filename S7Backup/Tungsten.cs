@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Snap7;
 
-namespace S7Backup
+namespace Tungsten
 {
     public partial class Tungsten : Form
     {

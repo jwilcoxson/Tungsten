@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ComponentModel.Design;
 
-namespace S7Backup
+namespace Tungsten
 {
     public partial class BlockInfo : Form
     {
