@@ -1,6 +1,6 @@
 ﻿namespace S7Backup
 {
-    partial class S7Backup
+    partial class Tungsten
     {
         /// <summary>
         /// Required designer variable.

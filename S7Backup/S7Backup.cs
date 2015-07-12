@@ -11,18 +11,18 @@ using Snap7;
 
 namespace S7Backup
 {
-    public partial class S7Backup : Form
+    public partial class Tungsten : Form
     {
 
-        private s7Cpu MyCpu;
+        private wCpu MyCpu;
 
-        public S7Backup()
+        public Tungsten()
         {
             InitializeComponent();
-            MyCpu = new s7Cpu();
+            MyCpu = new wCpu();
         }
 
-        private void saveWldFile(s7Cpu cpu)
+        private void saveWldFile(wCpu cpu)
         {
             wldFile w = new wldFile(cpu);
             SaveFileDialog dialog = new SaveFileDialog();
@@ -49,18 +49,18 @@ namespace S7Backup
             printCpuInfo(MyCpu);
         }
 
-        private void printCpuInfo(s7Cpu cpu)
+        private void printCpuInfo(wCpu cpu)
         {
             List<string> s = new List<string>();
             s.Add(cpu.orderCode);
             s.Add("CPU Serial Number:\t" + cpu.serialNumber);
-            s.Add("OB Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.OB));
-            s.Add("FC Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.FC));
-            s.Add("FB Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.FB));
-            s.Add("DB Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.DB));
-            s.Add("SFC Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.SFC));
-            s.Add("SFB Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.SFB));
-            s.Add("SDB Count:\t" + MyCpu.blocks.Count(x => x.blockType == s7BlockType.SDB));
+            s.Add("OB Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.OB));
+            s.Add("FC Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.FC));
+            s.Add("FB Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.FB));
+            s.Add("DB Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.DB));
+            s.Add("SFC Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.SFC));
+            s.Add("SFB Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.SFB));
+            s.Add("SDB Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.SDB));
             foreach (string i in s)
             {
                 txtCpuInfo.AppendText(i + System.Environment.NewLine);
@@ -77,9 +77,9 @@ namespace S7Backup
             Application.Exit();
         }
 
-        private void saveVs7(s7Cpu cpu)
+        private void saveVs7(wCpu cpu)
         {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(s7Cpu));
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(wCpu));
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "VS7 files (*.VS7)|*.VS7|All files (*.*)|*.*";
             dialog.FileName = "S7PROG.VS7";
@@ -94,10 +94,10 @@ namespace S7Backup
             }
         }
         
-        private s7Cpu openVs7()
+        private wCpu openVs7()
         {
-            s7Cpu cpu;
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(s7Cpu));
+            wCpu cpu;
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(wCpu));
 
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "VS7 files (*.VS7)|*.VS7|All files (*.*)|*.*";
@@ -108,7 +108,7 @@ namespace S7Backup
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 System.IO.StreamReader file = new System.IO.StreamReader(dialog.OpenFile());
-                cpu = (s7Cpu)reader.Deserialize(file);
+                cpu = (wCpu)reader.Deserialize(file);
                 file.Close();
                 return cpu;
             }
@@ -136,7 +136,7 @@ namespace S7Backup
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MyCpu = new s7Cpu();
+            MyCpu = new wCpu();
             txtCpuInfo.Text = "";
         }
 

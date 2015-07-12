@@ -13,7 +13,7 @@ namespace S7Backup
 {
     public partial class BlockInfo : Form
     {
-        public BlockInfo(s7CpuBlock block)
+        public BlockInfo(wCpuBlock block)
         {
             InitializeComponent();
 

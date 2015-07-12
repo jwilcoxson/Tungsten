@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 namespace S7Backup
 {
-    public enum s7Language
+    public enum wLanguage
     {
         STL = 0x01,
         FBD = 0x02,
@@ -20,7 +20,7 @@ namespace S7Backup
         Graph = 0x06,
         SDB = 0x11
     }
-    public enum s7BlockType
+    public enum wBlockType
     {
         OB = 0x38,
         FC = 0x43,
@@ -30,7 +30,7 @@ namespace S7Backup
         SFB = 0x46,
         SDB = 0x42
     }
-    public enum s7SubBlockType
+    public enum wSubBlockType
     {
         OB = 0x08,
         FC = 0x0C,
@@ -42,16 +42,16 @@ namespace S7Backup
     }
    
     [Serializable]
-    public class s7Cpu
+    public class wCpu
     {
-        public s7Cpu()
+        public wCpu()
         {
-            blocks = new List<s7CpuBlock>();
+            blocks = new List<wCpuBlock>();
         }
         //TODO: Deconstruct WLD file in to CPU
-        public s7Cpu(wldFile w)
+        public wCpu(wldFile w)
         {
-            blocks = new List<s7CpuBlock>();
+            blocks = new List<wCpuBlock>();
         }
 
         public void connect(string ipAddress)
@@ -133,7 +133,7 @@ namespace S7Backup
             }
 
             Console.WriteLine("Uploading program blocks... ");
-            foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
+            foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
             {
                 ushort[] blockList = new ushort[MAX_BLOCK];
                 int blockCount = blockList.Length;
@@ -146,7 +146,7 @@ namespace S7Backup
                     byte[] buffer = new byte[4096];
                     int bufferSize = buffer.Length;
 
-                    if (blockType != s7BlockType.SFC && blockType != s7BlockType.SFB)
+                    if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
                         MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
                     else
                         bufferSize = 0;
@@ -169,9 +169,9 @@ namespace S7Backup
         {
             int result;
             result = MyClient.ConnectTo(ipAddress, rack, slot);
-            foreach (s7CpuBlock b in this.blocks)
+            foreach (wCpuBlock b in this.blocks)
             {
-                if (b.blockType != s7BlockType.SFC && b.blockType != s7BlockType.SFB)
+                if (b.blockType != wBlockType.SFC && b.blockType != wBlockType.SFB)
                 {
                     result = MyClient.Download(b.blockNumber, b.data, b.data.Length);
                     if (result == 0)
@@ -193,14 +193,14 @@ namespace S7Backup
         {
             int result;
             Console.WriteLine("Erasing CPU... ");
-            foreach (s7BlockType blockType in Enum.GetValues(typeof(s7BlockType)))
+            foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
             {
                 ushort[] blockList = new ushort[MAX_BLOCK];
                 int blockCount = blockList.Length;
                 MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
                 for (int i = 0; i < blockCount; i++)
                 {
-                    if (blockType != s7BlockType.SFC && blockType != s7BlockType.SFB)
+                    if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
                     {
                         result = MyClient.Delete((int)blockType, blockList[i]);
 
@@ -227,7 +227,7 @@ namespace S7Backup
             return s;
         }
 
-        public List<s7CpuBlock> blocks;
+        public List<wCpuBlock> blocks;
         private S7Client MyClient;
         
         public string moduleTypeName,
@@ -247,7 +247,7 @@ namespace S7Backup
 
         public void addCpuBlock(S7Client.S7BlockInfo block, byte[] data)
         {
-            this.blocks.Add(new s7CpuBlock(block, data));
+            this.blocks.Add(new wCpuBlock(block, data));
         }
 
         public void setOrderCode(S7Client.S7OrderCode oc)
@@ -269,31 +269,31 @@ namespace S7Backup
         
     }
     [Serializable]
-    public class s7CpuBlock : IComparable<s7CpuBlock>
+    public class wCpuBlock : IComparable<wCpuBlock>
     {
-        public s7CpuBlock() { }
-        public s7CpuBlock(S7Client.S7BlockInfo info, byte[] data)
+        public wCpuBlock() { }
+        public wCpuBlock(S7Client.S7BlockInfo info, byte[] data)
         {
-            if (info.BlkType == (int)s7SubBlockType.OB)
-                this.blockType = s7BlockType.OB;
-            else if (info.BlkType == (int)s7SubBlockType.FC)
-                this.blockType = s7BlockType.FC;
-            else if (info.BlkType == (int)s7SubBlockType.FB)
-                this.blockType = s7BlockType.FB;
-            else if (info.BlkType == (int)s7SubBlockType.DB)
-                this.blockType = s7BlockType.DB;
-            else if (info.BlkType == (int)s7SubBlockType.SFC)
-                this.blockType = s7BlockType.SFC;
-            else if (info.BlkType == (int)s7SubBlockType.SFB)
-                this.blockType = s7BlockType.SFB;
-            else if (info.BlkType == (int)s7SubBlockType.SDB)
-                this.blockType = s7BlockType.SDB;
-            this.language = (s7Language) info.BlkLang;
-            this.name = s7Cpu.cleanString(info.Header);
-            this.family = s7Cpu.cleanString(info.Family);
-            this.author = s7Cpu.cleanString(info.Author);
-            this.codeDate = s7Cpu.cleanString(info.CodeDate);
-            this.interfaceDate = s7Cpu.cleanString(info.IntfDate);
+            if (info.BlkType == (int)wSubBlockType.OB)
+                this.blockType = wBlockType.OB;
+            else if (info.BlkType == (int)wSubBlockType.FC)
+                this.blockType = wBlockType.FC;
+            else if (info.BlkType == (int)wSubBlockType.FB)
+                this.blockType = wBlockType.FB;
+            else if (info.BlkType == (int)wSubBlockType.DB)
+                this.blockType = wBlockType.DB;
+            else if (info.BlkType == (int)wSubBlockType.SFC)
+                this.blockType = wBlockType.SFC;
+            else if (info.BlkType == (int)wSubBlockType.SFB)
+                this.blockType = wBlockType.SFB;
+            else if (info.BlkType == (int)wSubBlockType.SDB)
+                this.blockType = wBlockType.SDB;
+            this.language = (wLanguage) info.BlkLang;
+            this.name = wCpu.cleanString(info.Header);
+            this.family = wCpu.cleanString(info.Family);
+            this.author = wCpu.cleanString(info.Author);
+            this.codeDate = wCpu.cleanString(info.CodeDate);
+            this.interfaceDate = wCpu.cleanString(info.IntfDate);
             this.loadSize = info.LoadSize;
             this.MC7Size = info.MC7Size;
             this.blockNumber = info.BlkNumber;
@@ -304,7 +304,7 @@ namespace S7Backup
             this.data = data;
         }
 
-        public int CompareTo(s7CpuBlock b)
+        public int CompareTo(wCpuBlock b)
         {
             if (this.blockType == b.blockType)
             {
@@ -321,8 +321,8 @@ namespace S7Backup
             return blockType.ToString() + blockNumber.ToString();
         }
 
-        public s7Language language;
-        public s7BlockType blockType;
+        public wLanguage language;
+        public wBlockType blockType;
         public string name,
                        family,
                        author,
@@ -340,15 +340,15 @@ namespace S7Backup
     }
     public class wldFile
     {
-        public wldFile(s7Cpu cpu)
+        public wldFile(wCpu cpu)
         {
-            List<s7CpuBlock> blocks = cpu.blocks;
+            List<wCpuBlock> blocks = cpu.blocks;
             blocks.Sort();
             data = new byte[0];
 
-            foreach (s7CpuBlock block in blocks)
+            foreach (wCpuBlock block in blocks)
             {
-                if ((block.data != null) && (block.blockType != s7BlockType.SFC) && (block.blockType != s7BlockType.SFB))
+                if ((block.data != null) && (block.blockType != wBlockType.SFC) && (block.blockType != wBlockType.SFB))
                     data = data.Concat(block.data).ToArray();
             }
         }
