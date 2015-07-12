@@ -47,7 +47,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>s7.ico</ApplicationIcon>
+    <ApplicationIcon>tungsten.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IPAddressControlLib, Version=1.2.5668.36966, Culture=neutral, PublicKeyToken=7052a5c2c6d6e1fc, processorArchitecture=MSIL">
@@ -79,15 +79,15 @@
     <Compile Include="BlockInfo.Designer.cs">
       <DependentUpon>BlockInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="S7Backup.cs">
+    <Compile Include="Tungsten.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="S7Backup.Designer.cs">
-      <DependentUpon>S7Backup.cs</DependentUpon>
+    <Compile Include="Tungsten.Designer.cs">
+      <DependentUpon>Tungsten.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="s7Cpu.cs" />
+    <Compile Include="wCpu.cs" />
     <Compile Include="snap7.net.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
@@ -95,8 +95,8 @@
     <EmbeddedResource Include="BlockInfo.resx">
       <DependentUpon>BlockInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="S7Backup.resx">
-      <DependentUpon>S7Backup.cs</DependentUpon>
+    <EmbeddedResource Include="Tungsten.resx">
+      <DependentUpon>Tungsten.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -141,7 +141,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="s7.ico" />
+    <Content Include="tungsten.ico" />
     <Content Include="snap7.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
