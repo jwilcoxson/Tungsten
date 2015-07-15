@@ -46,6 +46,28 @@ namespace Tungsten
         Stop = 0x04,
         Run = 0x08
     }
+
+    public class wPlcException : Exception
+    {
+        public wPlcException()
+            : base()
+        {
+
+        }
+
+        public wPlcException(string message)
+            : base(message)
+        {
+
+        }
+
+        public wPlcException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+
+        }
+
+    }
    
     [Serializable]
     public class wCpu
@@ -94,18 +116,29 @@ namespace Tungsten
                     }
                     else //Failed to List Blocks
                     {
-                        Console.WriteLine("Failed to list blocks. " + result.ToString("X4"));
+                        string error = "Failed to list blocks. " + result.ToString("X4");
+                        Console.WriteLine(error);
+                        throw new wPlcException(error);
                     }
                 }
                 else //Failed to get Order Code
                 {
-                    Console.WriteLine("Failed to get Order Code. " + result.ToString("X4"));
+                    string error = "Failed to get Order Code. " + result.ToString("X4");
+                    Console.WriteLine(error);
+                    throw new wPlcException(error);
                 }
             }
             else //Failed to connect to CPU
             {
-                Console.WriteLine("Failed to connect to CPU. " + result.ToString("X4"));
+                string error = "Failed to connect to CPU. " + result.ToString("X4");
+                Console.WriteLine(error);
+                throw new wPlcException(error);
             }
+        }
+
+        public void disconnect()
+        {
+            MyClient.Disconnect();
         }
         
         public void upload()
@@ -121,8 +154,9 @@ namespace Tungsten
             }
             else
             {
-                Console.WriteLine("Failed to get Order Code");
-                Console.WriteLine("Error: " + result.ToString("X4"));
+                string error = "Failed to get Order Code. " + result.ToString("X4");
+                Console.WriteLine(error);
+                throw new wPlcException(error);
             }
 
             S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
@@ -134,8 +168,9 @@ namespace Tungsten
             }
             else
             {
-                Console.WriteLine("Failed to get CPU info");
-                Console.WriteLine("Error: " + result.ToString("X4"));
+                string error = "Failed to get CPU info" + result.ToString("X4");
+                Console.WriteLine(error);
+                throw new wPlcException(error);
             }
 
             Console.WriteLine("Uploading program blocks... ");
@@ -143,42 +178,79 @@ namespace Tungsten
             {
                 ushort[] blockList = new ushort[MAX_BLOCK];
                 int blockCount = blockList.Length;
-                MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
-                for (int i = 0; i < blockCount; i++)
+                
+                result = MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
+
+                if (result == 0)
                 {
-                    S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
-                    MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
+                    for (int i = 0; i < blockCount; i++)
+                    {
+                        S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
+                        result = MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
+                        
+                        if (result == 0)
+                        {
+                            byte[] buffer = new byte[4096];
+                            int bufferSize = buffer.Length;
 
-                    byte[] buffer = new byte[4096];
-                    int bufferSize = buffer.Length;
+                            if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
+                            {
+                                result = MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
 
-                    if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
-                        MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
-                    else
-                        bufferSize = 0;
+                                if (result != 0)
+                                {
+                                    string error = "Could not upload " + blockType + blockList[i] + ". " + result.ToString("X4");
+                                    Console.WriteLine(error);
+                                    throw new wPlcException(error);
+                                }
+                            }
+                            else
+                            {
+                                bufferSize = 0;
+                            }
 
-                    byte[] data = new byte[bufferSize];
-                    Array.Copy(buffer, data, data.Length);
-                    this.addCpuBlock(blockInfo, data);
-                    Console.WriteLine(this.blocks.Last().ToString() + " loaded. Size: " + this.blocks.Last().loadSize + " bytes.");
+                            byte[] data = new byte[bufferSize];
+                            Array.Copy(buffer, data, data.Length);
+                            this.addCpuBlock(blockInfo, data);
+                            Console.WriteLine(this.blocks.Last().ToString() + " loaded. Size: " + this.blocks.Last().loadSize + " bytes.");
+                        }
+                        else
+                        {
+                            string error = "Could not get Block Info for " + blockType + blockList[i] + ". " + result.ToString("X4");
+                            Console.WriteLine(error);
+                            throw new wPlcException(error);
+                        }
+
+                    }
                 }
+                else
+                {
+                    string error = "Failed to list blocks. " + result.ToString("X4");
+                    Console.WriteLine(error);
+                    throw new wPlcException(error);
+                }
+
             }
             Console.WriteLine("Done!");
         }
 
         public void download(string ipAddress)
         {
-            download(ipAddress, 0, 2);
+            download(ipAddress, 0, 2, true);
         }
 
-        public void download(string ipAddress, int rack, int slot)
+        public void download(string ipAddress, int rack, int slot, bool eraseCpu)
         {
-            int result;
-            result = MyClient.ConnectTo(ipAddress, rack, slot);
+            if (eraseCpu)
+            {
+                this.erase();
+            }
+            
             foreach (wCpuBlock b in this.blocks)
             {
                 if (b.blockType != wBlockType.SFC && b.blockType != wBlockType.SFB)
                 {
+                    int result;
                     result = MyClient.Download(b.blockNumber, b.data, b.data.Length);
                     if (result == 0)
                     {
@@ -186,8 +258,9 @@ namespace Tungsten
                     }   
                     else
                     {
-                        Console.WriteLine("Error downloading " + b.ToString());
-                        Console.WriteLine("Error: " + result.ToString("X8"));
+                        string error = "Could not download  " + b.ToString() + " " + result.ToString("X8");
+                        Console.WriteLine(error);
+                        throw new wPlcException(error);
                     }
                 }
             }
@@ -197,32 +270,45 @@ namespace Tungsten
 
         public void erase()
         {
-            int result;
+            
             Console.WriteLine("Erasing CPU... ");
             foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
             {
                 ushort[] blockList = new ushort[MAX_BLOCK];
                 int blockCount = blockList.Length;
-                MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
-                for (int i = 0; i < blockCount; i++)
+                
+                int result;
+                result = MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
+
+                if (result == 0)
                 {
-                    if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
+                    for (int i = 0; i < blockCount; i++)
                     {
-                        result = MyClient.Delete((int)blockType, blockList[i]);
+                        if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
+                        {
+                            result = MyClient.Delete((int)blockType, blockList[i]);
 
-                        if (result == 0)
-                        {
-                            Console.WriteLine("Deleted " + blockType + blockList[i]);
+                            if (result == 0)
+                            {
+                                Console.WriteLine("Deleted " + blockType + blockList[i]);
+                            }
+                            else
+                            {
+                                string error = "Could not delete  " + blockType + blockList[i] + " " + result.ToString("X4");
+                                Console.WriteLine(error);
+                                throw new wPlcException(error);
+                            }
                         }
-                        else
-                        {
-                            Console.WriteLine("Error deleting " + blockType + blockList[i]);
-                            Console.WriteLine("Error: " + result.ToString("X4"));
-                        }
+
                     }
-
-                    
                 }
+                else
+                {
+                    string error = "Failed to list blocks. " + result.ToString("X4");
+                    Console.WriteLine(error);
+                    throw new wPlcException(error);
+                }
+
             }
             Console.WriteLine("Done!");
         }
@@ -236,7 +322,9 @@ namespace Tungsten
 
             if (result != 0)
             {
-                Console.WriteLine("Failed to get Run Mode. " + result.ToString("X4"));
+                string error = "Failed to get Run Mode. " + result.ToString("X4");
+                Console.WriteLine(error);
+                throw new wPlcException(error);
             }
             else
             {
@@ -269,7 +357,9 @@ namespace Tungsten
                     }
                     else
                     {
-                        Console.WriteLine("Could not start PLC. " + result.ToString("X4"));
+                        string error = "Could not start PLC. " + result.ToString("X4");
+                        Console.WriteLine(error);
+                        throw new wPlcException(error);
                     }
                 }
 
@@ -290,7 +380,9 @@ namespace Tungsten
                     }
                     else
                     {
-                        Console.WriteLine("Could not stop PLC. " + result.ToString("X4"));
+                        string error = "Could not stop PLC. " + result.ToString("X4");
+                        Console.WriteLine(error);
+                        throw new wPlcException(error);
                     }
                 }
     

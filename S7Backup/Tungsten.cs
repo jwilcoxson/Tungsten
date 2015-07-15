@@ -15,6 +15,7 @@ namespace Tungsten
     {
 
         private wCpu MyCpu;
+        private bool plcConnected = false;
 
         public Tungsten()
         {
@@ -43,10 +44,19 @@ namespace Tungsten
 
         }
 
+        //TODO: Fix this class name
         private void button1_Click(object sender, EventArgs e)
         {
-            MyCpu.upload();
-            printCpuInfo(MyCpu);
+            try
+            {
+                MyCpu.upload();
+                printCpuInfo(MyCpu);
+            }
+            catch (wPlcException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
         }
 
         private void printCpuInfo(wCpu cpu)
@@ -142,17 +152,84 @@ namespace Tungsten
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
-            MyCpu.download(txtIpAddress.Text);
+            try
+            {
+                MyCpu.download(txtIpAddress.Text);
+            }
+            catch (wPlcException ex)
+            {
+                MessageBox.Show(ex.Message);
+                disableControls();
+            }
         }
 
         private void btnErase_Click(object sender, EventArgs e)
         {
-            MyCpu.erase();
+            try
+            {
+                MyCpu.erase();
+            }
+            catch (wPlcException ex)
+            {
+                MessageBox.Show(ex.Message);
+                disableControls();
+            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            MyCpu.connect(txtIpAddress.Text);
+            if (plcConnected == false)
+            {
+                try
+                {
+                    MyCpu.connect(txtIpAddress.Text);
+                    wCpuRunMode rm = MyCpu.getCpuRunMode();
+                    plcConnected = true;
+                    enableControls();
+                    if (rm == wCpuRunMode.Run)
+                    {
+                        btnStartCpu.Enabled = false;
+                    }
+                    else if (rm == wCpuRunMode.Stop)
+                    {
+                        btnStopCpu.Enabled = false;
+                    }
+
+                }
+                catch (wPlcException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                disableControls();
+                MyCpu.disconnect();
+                plcConnected = false;
+            }
+            
+        }
+
+        private void enableControls()
+        {
+            btnConnect.Text = "Disconnect";
+            btnUpload.Enabled = true;
+            btnErase.Enabled = true;
+            btnDownload.Enabled = true;
+            btnStartCpu.Enabled = true;
+            btnStopCpu.Enabled = true;
+            btnGetRunMode.Enabled = true;
+        }
+
+        private void disableControls()
+        {
+            btnConnect.Text = "Connect";
+            btnUpload.Enabled = false;
+            btnErase.Enabled = false;
+            btnDownload.Enabled = false;
+            btnStartCpu.Enabled = false;
+            btnStopCpu.Enabled = false;
+            btnGetRunMode.Enabled = false;
         }
 
         private void aboutTungstenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -163,17 +240,53 @@ namespace Tungsten
 
         private void startCpu_Click(object sender, EventArgs e)
         {
-            MyCpu.setCpuRunMode(wCpuRunMode.Run);
+            try
+            {
+                MyCpu.setCpuRunMode(wCpuRunMode.Run);
+                btnStopCpu.Enabled = true;
+                btnStartCpu.Enabled = false;
+            }
+            catch (wPlcException ex)
+            {
+                //TODO
+            }
+            
         }
 
         private void stopCpu_Click(object sender, EventArgs e)
         {
-            MyCpu.setCpuRunMode(wCpuRunMode.Stop);
+            try
+            {
+                MyCpu.setCpuRunMode(wCpuRunMode.Stop);
+                btnStartCpu.Enabled = true;
+                btnStopCpu.Enabled = false;
+            }
+            catch (wPlcException ex)
+            {
+                //TODO
+            }
+            
         }
 
         private void getRunMode_Click(object sender, EventArgs e)
         {
-            MyCpu.getCpuRunMode();
+            try
+            {
+                wCpuRunMode rm = MyCpu.getCpuRunMode();
+                if (rm == wCpuRunMode.Run)
+                {
+                    btnStartCpu.Enabled = false;
+                }
+                else if (rm == wCpuRunMode.Stop)
+                {
+                    btnStopCpu.Enabled = false;
+                }
+            }
+            catch (wPlcException ex)
+            {
+                //TODO
+            }
+           
         }
 
     }

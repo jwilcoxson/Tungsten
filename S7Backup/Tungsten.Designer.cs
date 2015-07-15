@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Tungsten));
             this.btnUpload = new System.Windows.Forms.Button();
             this.lblIpAddress = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -48,14 +49,15 @@
             this.btnErase = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.txtIpAddress = new IPAddressControlLib.IPAddressControl();
-            this.startCpu = new System.Windows.Forms.Button();
-            this.stopCpu = new System.Windows.Forms.Button();
-            this.getRunMode = new System.Windows.Forms.Button();
+            this.btnStartCpu = new System.Windows.Forms.Button();
+            this.btnStopCpu = new System.Windows.Forms.Button();
+            this.btnGetRunMode = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnUpload
             // 
+            this.btnUpload.Enabled = false;
             this.btnUpload.Location = new System.Drawing.Point(12, 231);
             this.btnUpload.Name = "btnUpload";
             this.btnUpload.Size = new System.Drawing.Size(196, 96);
@@ -188,6 +190,7 @@
             // 
             // btnDownload
             // 
+            this.btnDownload.Enabled = false;
             this.btnDownload.Location = new System.Drawing.Point(214, 231);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(196, 96);
@@ -198,6 +201,7 @@
             // 
             // btnErase
             // 
+            this.btnErase.Enabled = false;
             this.btnErase.Location = new System.Drawing.Point(214, 129);
             this.btnErase.Name = "btnErase";
             this.btnErase.Size = new System.Drawing.Size(196, 96);
@@ -231,44 +235,47 @@
             this.txtIpAddress.TabIndex = 11;
             this.txtIpAddress.Text = "10.0.1.25";
             // 
-            // startCpu
+            // btnStartCpu
             // 
-            this.startCpu.Location = new System.Drawing.Point(214, 33);
-            this.startCpu.Name = "startCpu";
-            this.startCpu.Size = new System.Drawing.Size(75, 23);
-            this.startCpu.TabIndex = 12;
-            this.startCpu.Text = "Start CPU";
-            this.startCpu.UseVisualStyleBackColor = true;
-            this.startCpu.Click += new System.EventHandler(this.startCpu_Click);
+            this.btnStartCpu.Enabled = false;
+            this.btnStartCpu.Location = new System.Drawing.Point(214, 33);
+            this.btnStartCpu.Name = "btnStartCpu";
+            this.btnStartCpu.Size = new System.Drawing.Size(75, 23);
+            this.btnStartCpu.TabIndex = 12;
+            this.btnStartCpu.Text = "Start CPU";
+            this.btnStartCpu.UseVisualStyleBackColor = true;
+            this.btnStartCpu.Click += new System.EventHandler(this.startCpu_Click);
             // 
-            // stopCpu
+            // btnStopCpu
             // 
-            this.stopCpu.Location = new System.Drawing.Point(214, 62);
-            this.stopCpu.Name = "stopCpu";
-            this.stopCpu.Size = new System.Drawing.Size(75, 23);
-            this.stopCpu.TabIndex = 13;
-            this.stopCpu.Text = "Stop CPU";
-            this.stopCpu.UseVisualStyleBackColor = true;
-            this.stopCpu.Click += new System.EventHandler(this.stopCpu_Click);
+            this.btnStopCpu.Enabled = false;
+            this.btnStopCpu.Location = new System.Drawing.Point(214, 62);
+            this.btnStopCpu.Name = "btnStopCpu";
+            this.btnStopCpu.Size = new System.Drawing.Size(75, 23);
+            this.btnStopCpu.TabIndex = 13;
+            this.btnStopCpu.Text = "Stop CPU";
+            this.btnStopCpu.UseVisualStyleBackColor = true;
+            this.btnStopCpu.Click += new System.EventHandler(this.stopCpu_Click);
             // 
-            // getRunMode
+            // btnGetRunMode
             // 
-            this.getRunMode.Location = new System.Drawing.Point(295, 33);
-            this.getRunMode.Name = "getRunMode";
-            this.getRunMode.Size = new System.Drawing.Size(101, 23);
-            this.getRunMode.TabIndex = 14;
-            this.getRunMode.Text = "Get Run Mode";
-            this.getRunMode.UseVisualStyleBackColor = true;
-            this.getRunMode.Click += new System.EventHandler(this.getRunMode_Click);
+            this.btnGetRunMode.Enabled = false;
+            this.btnGetRunMode.Location = new System.Drawing.Point(295, 33);
+            this.btnGetRunMode.Name = "btnGetRunMode";
+            this.btnGetRunMode.Size = new System.Drawing.Size(101, 23);
+            this.btnGetRunMode.TabIndex = 14;
+            this.btnGetRunMode.Text = "Get Run Mode";
+            this.btnGetRunMode.UseVisualStyleBackColor = true;
+            this.btnGetRunMode.Click += new System.EventHandler(this.getRunMode_Click);
             // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(658, 337);
-            this.Controls.Add(this.getRunMode);
-            this.Controls.Add(this.stopCpu);
-            this.Controls.Add(this.startCpu);
+            this.Controls.Add(this.btnGetRunMode);
+            this.Controls.Add(this.btnStopCpu);
+            this.Controls.Add(this.btnStartCpu);
             this.Controls.Add(this.txtIpAddress);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnErase);
@@ -278,7 +285,10 @@
             this.Controls.Add(this.lblIpAddress);
             this.Controls.Add(this.btnUpload);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Tungsten";
             this.Text = "Tungsten";
             this.Load += new System.EventHandler(this.S7Backup_Load);
@@ -311,9 +321,9 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutTungstenToolStripMenuItem;
-        private System.Windows.Forms.Button startCpu;
-        private System.Windows.Forms.Button stopCpu;
-        private System.Windows.Forms.Button getRunMode;
+        private System.Windows.Forms.Button btnStartCpu;
+        private System.Windows.Forms.Button btnStopCpu;
+        private System.Windows.Forms.Button btnGetRunMode;
     }
 }
 
