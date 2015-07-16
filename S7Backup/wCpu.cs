@@ -7,6 +7,7 @@ using Snap7;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using System.Windows.Forms;
 
 namespace Tungsten
 {
@@ -254,6 +255,9 @@ namespace Tungsten
 
         public void download(string ipAddress, int rack, int slot, bool eraseCpu)
         {
+            wCpuRunMode rm = wCpuRunMode.Unknown;
+            bool skippedSystemData = false;
+
             if (eraseCpu)
             {
                 this.erase();
@@ -261,6 +265,32 @@ namespace Tungsten
             
             foreach (wCpuBlock b in this.blocks)
             {
+                if (b.blockType == wBlockType.SDB && rm != wCpuRunMode.Stop && !skippedSystemData)
+                {
+                    rm = this.getCpuRunMode();
+                    if (rm != wCpuRunMode.Stop)
+                    {
+                        string message = "The PLC needs to be stopped to load System Data" + System.Environment.NewLine;
+                        message = message + "Would you like to stop the PLC?";
+                        DialogResult dr = MessageBox.Show(message, "", MessageBoxButtons.YesNo);
+                        
+                        if (dr == DialogResult.Yes)
+                        {
+                            this.setCpuRunMode(wCpuRunMode.Stop);
+                        }
+                        else
+                        {
+                            MessageBox.Show("System Data will not be loaded");
+                        }
+                        
+                    }
+                }
+
+                if (b.blockType == wBlockType.SDB && skippedSystemData)
+                {
+                    continue;
+                }
+
                 if (b.blockType != wBlockType.SFC && b.blockType != wBlockType.SFB)
                 {
                     int result;
