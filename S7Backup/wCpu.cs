@@ -49,10 +49,12 @@ namespace Tungsten
 
     public class wPlcException : Exception
     {
+        public readonly int errorCode;
+
         public wPlcException()
             : base()
         {
-
+            errorCode = 0x00;
         }
 
         public wPlcException(string message)
@@ -65,6 +67,18 @@ namespace Tungsten
             : base(message, innerException)
         {
 
+        }
+
+        public wPlcException(string message, int errorCode)
+            : base(message)
+        {
+            this.errorCode = errorCode;
+        }
+
+        public wPlcException(string message, Exception innerException, int errorCode)
+            : base(message, innerException)
+        {
+            this.errorCode = errorCode;
         }
 
     }
@@ -116,29 +130,33 @@ namespace Tungsten
                     }
                     else //Failed to List Blocks
                     {
-                        string error = "Failed to list blocks. " + result.ToString("X4");
-                        Console.WriteLine(error);
-                        throw new wPlcException(error);
+                        string error = "Failed to list blocks";
+                        throw new wPlcException(error, result);
                     }
                 }
                 else //Failed to get Order Code
                 {
-                    string error = "Failed to get Order Code. " + result.ToString("X4");
-                    Console.WriteLine(error);
-                    throw new wPlcException(error);
+                    string error = "Failed to get Order Code";
+                    throw new wPlcException(error, result);
                 }
             }
             else //Failed to connect to CPU
             {
-                string error = "Failed to connect to CPU. " + result.ToString("X4");
-                Console.WriteLine(error);
-                throw new wPlcException(error);
+                string error = "Failed to connect to CPU";
+                throw new wPlcException(error, result);
             }
         }
 
         public void disconnect()
         {
-            MyClient.Disconnect();
+            int result;
+            result = MyClient.Disconnect();
+
+            if (result != 0)
+            {
+                string error = "Error during PLC disconnect";
+                throw new wPlcException(error, result);
+            }
         }
         
         public void upload()
@@ -154,9 +172,8 @@ namespace Tungsten
             }
             else
             {
-                string error = "Failed to get Order Code. " + result.ToString("X4");
-                Console.WriteLine(error);
-                throw new wPlcException(error);
+                string error = "Failed to get Order Code";
+                throw new wPlcException(error, result);
             }
 
             S7Client.S7CpuInfo ci = new S7Client.S7CpuInfo();
@@ -168,9 +185,8 @@ namespace Tungsten
             }
             else
             {
-                string error = "Failed to get CPU info" + result.ToString("X4");
-                Console.WriteLine(error);
-                throw new wPlcException(error);
+                string error = "Failed to get CPU info";
+                throw new wPlcException(error, result);
             }
 
             Console.WriteLine("Uploading program blocks... ");
@@ -199,9 +215,8 @@ namespace Tungsten
 
                                 if (result != 0)
                                 {
-                                    string error = "Could not upload " + blockType + blockList[i] + ". " + result.ToString("X4");
-                                    Console.WriteLine(error);
-                                    throw new wPlcException(error);
+                                    string error = "Could not upload " + blockType + blockList[i];
+                                    throw new wPlcException(error, result);
                                 }
                             }
                             else
@@ -216,18 +231,16 @@ namespace Tungsten
                         }
                         else
                         {
-                            string error = "Could not get Block Info for " + blockType + blockList[i] + ". " + result.ToString("X4");
-                            Console.WriteLine(error);
-                            throw new wPlcException(error);
+                            string error = "Could not get Block Info for " + blockType + blockList[i];
+                            throw new wPlcException(error, result);
                         }
 
                     }
                 }
                 else
                 {
-                    string error = "Failed to list blocks. " + result.ToString("X4");
-                    Console.WriteLine(error);
-                    throw new wPlcException(error);
+                    string error = "Failed to list blocks";
+                    throw new wPlcException(error, result);
                 }
 
             }
@@ -258,9 +271,8 @@ namespace Tungsten
                     }   
                     else
                     {
-                        string error = "Could not download  " + b.ToString() + " " + result.ToString("X8");
-                        Console.WriteLine(error);
-                        throw new wPlcException(error);
+                        string error = "Could not download  " + b.ToString();
+                        throw new wPlcException(error, result);
                     }
                 }
             }
@@ -294,9 +306,8 @@ namespace Tungsten
                             }
                             else
                             {
-                                string error = "Could not delete  " + blockType + blockList[i] + " " + result.ToString("X4");
-                                Console.WriteLine(error);
-                                throw new wPlcException(error);
+                                string error = "Could not delete  " + blockType + blockList[i];
+                                throw new wPlcException(error, result);
                             }
                         }
 
@@ -304,9 +315,8 @@ namespace Tungsten
                 }
                 else
                 {
-                    string error = "Failed to list blocks. " + result.ToString("X4");
-                    Console.WriteLine(error);
-                    throw new wPlcException(error);
+                    string error = "Failed to list blocks";
+                    throw new wPlcException(error, result);
                 }
 
             }
@@ -322,9 +332,8 @@ namespace Tungsten
 
             if (result != 0)
             {
-                string error = "Failed to get Run Mode. " + result.ToString("X4");
-                Console.WriteLine(error);
-                throw new wPlcException(error);
+                string error = "Failed to get Run Mode";
+                throw new wPlcException(error, result);
             }
             else
             {
@@ -357,9 +366,8 @@ namespace Tungsten
                     }
                     else
                     {
-                        string error = "Could not start PLC. " + result.ToString("X4");
-                        Console.WriteLine(error);
-                        throw new wPlcException(error);
+                        string error = "Could not start PLC";
+                        throw new wPlcException(error, result);
                     }
                 }
 
@@ -380,9 +388,8 @@ namespace Tungsten
                     }
                     else
                     {
-                        string error = "Could not stop PLC. " + result.ToString("X4");
-                        Console.WriteLine(error);
-                        throw new wPlcException(error);
+                        string error = "Could not stop PLC";
+                        throw new wPlcException(error, result);
                     }
                 }
     

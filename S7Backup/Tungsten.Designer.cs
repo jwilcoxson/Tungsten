@@ -64,7 +64,7 @@
             this.btnUpload.TabIndex = 0;
             this.btnUpload.Text = "Upload to PC";
             this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.button1_Click);
+            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
             // 
             // lblIpAddress
             // 
@@ -244,7 +244,7 @@
             this.btnStartCpu.TabIndex = 12;
             this.btnStartCpu.Text = "Start CPU";
             this.btnStartCpu.UseVisualStyleBackColor = true;
-            this.btnStartCpu.Click += new System.EventHandler(this.startCpu_Click);
+            this.btnStartCpu.Click += new System.EventHandler(this.btnStartCpu_Click);
             // 
             // btnStopCpu
             // 
@@ -255,7 +255,7 @@
             this.btnStopCpu.TabIndex = 13;
             this.btnStopCpu.Text = "Stop CPU";
             this.btnStopCpu.UseVisualStyleBackColor = true;
-            this.btnStopCpu.Click += new System.EventHandler(this.stopCpu_Click);
+            this.btnStopCpu.Click += new System.EventHandler(this.btnStopCpu_Click);
             // 
             // btnGetRunMode
             // 
@@ -266,7 +266,7 @@
             this.btnGetRunMode.TabIndex = 14;
             this.btnGetRunMode.Text = "Get Run Mode";
             this.btnGetRunMode.UseVisualStyleBackColor = true;
-            this.btnGetRunMode.Click += new System.EventHandler(this.getRunMode_Click);
+            this.btnGetRunMode.Click += new System.EventHandler(this.btnGetRunMode_Click);
             // 
             // Tungsten
             // 
@@ -291,7 +291,6 @@
             this.MinimizeBox = false;
             this.Name = "Tungsten";
             this.Text = "Tungsten";
-            this.Load += new System.EventHandler(this.S7Backup_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
