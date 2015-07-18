@@ -32,9 +32,10 @@ namespace Tungsten
             btnUpload.Enabled = true;
             btnErase.Enabled = true;
             btnDownload.Enabled = true;
-            btnStartCpu.Enabled = true;
-            btnStopCpu.Enabled = true;
+            btnStartPlc.Enabled = true;
+            btnStopPlc.Enabled = true;
             btnGetRunMode.Enabled = true;
+            grpPlcInformation.Enabled = true;
         }
 
         private void disableControls()
@@ -43,9 +44,10 @@ namespace Tungsten
             btnUpload.Enabled = false;
             btnErase.Enabled = false;
             btnDownload.Enabled = false;
-            btnStartCpu.Enabled = false;
-            btnStopCpu.Enabled = false;
+            btnStartPlc.Enabled = false;
+            btnStopPlc.Enabled = false;
             btnGetRunMode.Enabled = false;
+            grpPlcInformation.Enabled = false;
         }
 
         private void printCpuInfo(wCpu cpu)
@@ -62,7 +64,7 @@ namespace Tungsten
             s.Add("SDB Count:\t" + MyCpu.blocks.Count(x => x.blockType == wBlockType.SDB));
             foreach (string i in s)
             {
-                txtCpuInfo.AppendText(i + System.Environment.NewLine);
+                //txtCpuInfo.AppendText(i + System.Environment.NewLine);
             }
         }
 
@@ -92,6 +94,7 @@ namespace Tungsten
 
             Console.WriteLine(error + ex.errorCode.ToString("X8") + System.Environment.NewLine);
 
+            //TODO Center this dialog in parent
             MessageBox.Show(error);
         }
 
@@ -175,7 +178,7 @@ namespace Tungsten
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MyCpu = new wCpu();
-            txtCpuInfo.Text = "";
+            //txtCpuInfo.Text = "";
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -211,35 +214,39 @@ namespace Tungsten
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            if (plcConnected == false)
+            if (plcConnected == false && cmbPlc.SelectedIndex >= 0)
             {
                 try
                 {
-                    MyCpu.connect(txtIpAddress.Text);
+                    MyCpu.connect(plcListing[cmbPlc.SelectedIndex]);
                     wCpuRunMode rm = MyCpu.getCpuRunMode();
                     plcConnected = true;
                     enableControls();
+                    populateBlockList(MyCpu);
+                    
                     if (rm == wCpuRunMode.Run)
                     {
-                        btnStartCpu.Enabled = false;
+                        btnStartPlc.Enabled = false;
                     }
                     else if (rm == wCpuRunMode.Stop)
                     {
-                        btnStopCpu.Enabled = false;
+                        btnStopPlc.Enabled = false;
                     }
 
                 }
                 catch (wPlcException ex)
                 {
                     showErrorForException(ex);
-                    MyCpu.disconnect();
+                    if (plcConnected == true)
+                        MyCpu.disconnect();
                     disableControls();
                 }
             }
             else
             {
                 disableControls();
-                MyCpu.disconnect();
+                if (plcConnected == true)
+                    MyCpu.disconnect();
                 plcConnected = false;
             }
 
@@ -271,7 +278,7 @@ namespace Tungsten
         {
             try
             {
-                MyCpu.download(txtIpAddress.Text);
+
             }
             catch (wPlcException ex)
             {
@@ -300,8 +307,8 @@ namespace Tungsten
             try
             {
                 MyCpu.setCpuRunMode(wCpuRunMode.Run);
-                btnStopCpu.Enabled = true;
-                btnStartCpu.Enabled = false;
+                btnStopPlc.Enabled = true;
+                btnStartPlc.Enabled = false;
             }
             catch (wPlcException ex)
             {
@@ -317,8 +324,8 @@ namespace Tungsten
             try
             {
                 MyCpu.setCpuRunMode(wCpuRunMode.Stop);
-                btnStartCpu.Enabled = true;
-                btnStopCpu.Enabled = false;
+                btnStartPlc.Enabled = true;
+                btnStopPlc.Enabled = false;
             }
             catch (wPlcException ex)
             {
@@ -336,11 +343,11 @@ namespace Tungsten
                 wCpuRunMode rm = MyCpu.getCpuRunMode();
                 if (rm == wCpuRunMode.Run)
                 {
-                    btnStartCpu.Enabled = false;
+                    btnStartPlc.Enabled = false;
                 }
                 else if (rm == wCpuRunMode.Stop)
                 {
-                    btnStopCpu.Enabled = false;
+                    btnStopPlc.Enabled = false;
                 }
             }
             catch (wPlcException ex)
@@ -417,5 +424,28 @@ namespace Tungsten
             {0x26, "Cannot change parameter while connected"}
         };
 
+        private Dictionary<int, string> plcListing = new Dictionary<int,string>();
+
+        private void cmbPlc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbPlc.SelectedIndex == cmbPlc.Items.Count -1)
+            {
+                AddPlc addPlc = new AddPlc();
+                DialogResult dr = addPlc.ShowDialog();
+                cmbPlc.Items.Insert(cmbPlc.Items.Count - 1, addPlc.bookmarkName + " - " + addPlc.ipAddress);
+                cmbPlc.SelectedIndex = cmbPlc.Items.Count - 2;
+
+                //TODO Adding and removing from this dictionary should really be done as an event on the Combo Box 
+                plcListing.Add(cmbPlc.Items.Count - 2, addPlc.ipAddress);
+            }
+        }
+
+        private void populateBlockList(wCpu cpu)
+        {
+            foreach(wCpuBlock b in cpu.blocks)
+            {
+                blockList.Items.Add(b.ToString());
+            }
+        }
     }
 }
