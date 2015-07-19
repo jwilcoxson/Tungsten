@@ -36,7 +36,6 @@
             System.Windows.Forms.ListViewGroup listViewGroup6 = new System.Windows.Forms.ListViewGroup("SFB", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup7 = new System.Windows.Forms.ListViewGroup("SDB", System.Windows.Forms.HorizontalAlignment.Left);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Tungsten));
-            this.btnUpload = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,20 +65,11 @@
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnUpload
-            // 
-            this.btnUpload.Enabled = false;
-            this.btnUpload.Location = new System.Drawing.Point(424, 27);
-            this.btnUpload.Name = "btnUpload";
-            this.btnUpload.Size = new System.Drawing.Size(200, 50);
-            this.btnUpload.TabIndex = 0;
-            this.btnUpload.Text = "Upload to PC";
-            this.btnUpload.UseVisualStyleBackColor = true;
-            this.btnUpload.Click += new System.EventHandler(this.btnUpload_Click);
             // 
             // menuStrip1
             // 
@@ -179,7 +169,7 @@
             // btnDownload
             // 
             this.btnDownload.Enabled = false;
-            this.btnDownload.Location = new System.Drawing.Point(424, 83);
+            this.btnDownload.Location = new System.Drawing.Point(424, 30);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(200, 50);
             this.btnDownload.TabIndex = 8;
@@ -190,7 +180,7 @@
             // btnErase
             // 
             this.btnErase.Enabled = false;
-            this.btnErase.Location = new System.Drawing.Point(424, 139);
+            this.btnErase.Location = new System.Drawing.Point(424, 86);
             this.btnErase.Name = "btnErase";
             this.btnErase.Size = new System.Drawing.Size(200, 50);
             this.btnErase.TabIndex = 9;
@@ -200,9 +190,9 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(224, 27);
+            this.btnConnect.Location = new System.Drawing.Point(273, 27);
             this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(100, 70);
+            this.btnConnect.Size = new System.Drawing.Size(100, 21);
             this.btnConnect.TabIndex = 10;
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
@@ -211,7 +201,7 @@
             // btnStartPlc
             // 
             this.btnStartPlc.Enabled = false;
-            this.btnStartPlc.Location = new System.Drawing.Point(424, 195);
+            this.btnStartPlc.Location = new System.Drawing.Point(424, 142);
             this.btnStartPlc.Name = "btnStartPlc";
             this.btnStartPlc.Size = new System.Drawing.Size(95, 50);
             this.btnStartPlc.TabIndex = 12;
@@ -222,7 +212,7 @@
             // btnStopPlc
             // 
             this.btnStopPlc.Enabled = false;
-            this.btnStopPlc.Location = new System.Drawing.Point(529, 195);
+            this.btnStopPlc.Location = new System.Drawing.Point(529, 142);
             this.btnStopPlc.Name = "btnStopPlc";
             this.btnStopPlc.Size = new System.Drawing.Size(95, 50);
             this.btnStopPlc.TabIndex = 13;
@@ -233,7 +223,7 @@
             // btnGetRunMode
             // 
             this.btnGetRunMode.Enabled = false;
-            this.btnGetRunMode.Location = new System.Drawing.Point(494, 307);
+            this.btnGetRunMode.Location = new System.Drawing.Point(317, 142);
             this.btnGetRunMode.Name = "btnGetRunMode";
             this.btnGetRunMode.Size = new System.Drawing.Size(101, 23);
             this.btnGetRunMode.TabIndex = 14;
@@ -243,9 +233,9 @@
             // 
             // btnScan
             // 
-            this.btnScan.Location = new System.Drawing.Point(12, 27);
+            this.btnScan.Location = new System.Drawing.Point(273, 54);
             this.btnScan.Name = "btnScan";
-            this.btnScan.Size = new System.Drawing.Size(100, 70);
+            this.btnScan.Size = new System.Drawing.Size(100, 25);
             this.btnScan.TabIndex = 16;
             this.btnScan.Text = "Scan for PLCs";
             this.btnScan.UseVisualStyleBackColor = true;
@@ -253,7 +243,7 @@
             // btnViewDiagnosticBuffer
             // 
             this.btnViewDiagnosticBuffer.Enabled = false;
-            this.btnViewDiagnosticBuffer.Location = new System.Drawing.Point(424, 251);
+            this.btnViewDiagnosticBuffer.Location = new System.Drawing.Point(424, 198);
             this.btnViewDiagnosticBuffer.Name = "btnViewDiagnosticBuffer";
             this.btnViewDiagnosticBuffer.Size = new System.Drawing.Size(200, 50);
             this.btnViewDiagnosticBuffer.TabIndex = 18;
@@ -266,7 +256,7 @@
             this.cmbPlc.FormattingEnabled = true;
             this.cmbPlc.Items.AddRange(new object[] {
             "Add New..."});
-            this.cmbPlc.Location = new System.Drawing.Point(102, 103);
+            this.cmbPlc.Location = new System.Drawing.Point(45, 27);
             this.cmbPlc.Name = "cmbPlc";
             this.cmbPlc.Size = new System.Drawing.Size(222, 21);
             this.cmbPlc.TabIndex = 19;
@@ -275,7 +265,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(69, 106);
+            this.label2.Location = new System.Drawing.Point(12, 30);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(27, 13);
             this.label2.TabIndex = 20;
@@ -287,9 +277,9 @@
             this.grpPlcInformation.Controls.Add(this.Label3);
             this.grpPlcInformation.Controls.Add(this.blockList);
             this.grpPlcInformation.Enabled = false;
-            this.grpPlcInformation.Location = new System.Drawing.Point(13, 337);
+            this.grpPlcInformation.Location = new System.Drawing.Point(13, 254);
             this.grpPlcInformation.Name = "grpPlcInformation";
-            this.grpPlcInformation.Size = new System.Drawing.Size(605, 199);
+            this.grpPlcInformation.Size = new System.Drawing.Size(605, 282);
             this.grpPlcInformation.TabIndex = 21;
             this.grpPlcInformation.TabStop = false;
             this.grpPlcInformation.Text = "PLC Information";
@@ -307,9 +297,12 @@
             // 
             this.blockList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name,
+            this.title,
+            this.author,
             this.loadSize,
             this.codeDate,
             this.interfaceDate});
+            this.blockList.FullRowSelect = true;
             listViewGroup1.Header = "OB";
             listViewGroup1.Name = "ob";
             listViewGroup2.Header = "FC";
@@ -334,7 +327,7 @@
             listViewGroup7});
             this.blockList.Location = new System.Drawing.Point(179, 19);
             this.blockList.Name = "blockList";
-            this.blockList.Size = new System.Drawing.Size(420, 174);
+            this.blockList.Size = new System.Drawing.Size(420, 257);
             this.blockList.TabIndex = 22;
             this.blockList.UseCompatibleStateImageBehavior = false;
             this.blockList.View = System.Windows.Forms.View.Details;
@@ -355,6 +348,14 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
+            // title
+            // 
+            this.title.Text = "Title";
+            // 
+            // author
+            // 
+            this.author.Text = "Author";
+            // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,7 +372,6 @@
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnErase);
             this.Controls.Add(this.btnDownload);
-            this.Controls.Add(this.btnUpload);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -390,7 +390,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Button btnUpload;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -420,6 +419,8 @@
         private System.Windows.Forms.ColumnHeader codeDate;
         private System.Windows.Forms.ColumnHeader interfaceDate;
         private System.Windows.Forms.Label Label3;
+        private System.Windows.Forms.ColumnHeader title;
+        private System.Windows.Forms.ColumnHeader author;
     }
 }
 

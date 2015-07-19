@@ -29,7 +29,6 @@ namespace Tungsten
         private void enableControls()
         {
             btnConnect.Text = "Disconnect";
-            btnUpload.Enabled = true;
             btnErase.Enabled = true;
             btnDownload.Enabled = true;
             btnStartPlc.Enabled = true;
@@ -41,7 +40,6 @@ namespace Tungsten
         private void disableControls()
         {
             btnConnect.Text = "Connect";
-            btnUpload.Enabled = false;
             btnErase.Enabled = false;
             btnDownload.Enabled = false;
             btnStartPlc.Enabled = false;
@@ -221,6 +219,7 @@ namespace Tungsten
                     MyCpu.connect(plcListing[cmbPlc.SelectedIndex]);
                     wCpuRunMode rm = MyCpu.getCpuRunMode();
                     plcConnected = true;
+                    MyCpu.upload();
                     enableControls();
                     populateBlockList(MyCpu);
                     
@@ -248,28 +247,6 @@ namespace Tungsten
                 if (plcConnected == true)
                     MyCpu.disconnect();
                 plcConnected = false;
-            }
-
-        }
-
-        private void btnUpload_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MyCpu.upload();
-                printCpuInfo(MyCpu);
-                DialogResult dr = MessageBox.Show(String.Empty, "Save PLC program?", MessageBoxButtons.YesNo);
-
-                if (dr == DialogResult.Yes)
-                {
-                    saveWld(MyCpu);
-                }
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
             }
 
         }
@@ -444,7 +421,18 @@ namespace Tungsten
         {
             foreach(wCpuBlock b in cpu.blocks)
             {
-                blockList.Items.Add(b.ToString());
+                ListViewItem li = new ListViewItem();
+                li.Text = b.ToString();
+
+                li.SubItems.Add(b.name);
+                li.SubItems.Add(b.author);
+                li.SubItems.Add(b.loadSize.ToString());
+                li.SubItems.Add(b.codeDate);
+                li.SubItems.Add(b.interfaceDate);
+                li.Group = blockList.Groups[b.blockType.ToString().ToLower()];
+
+                blockList.Items.Add(li);
+                
             }
         }
     }
