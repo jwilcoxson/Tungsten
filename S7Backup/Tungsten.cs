@@ -34,6 +34,8 @@ namespace Tungsten
             btnStartPlc.Enabled = true;
             btnStopPlc.Enabled = true;
             grpPlcInformation.Enabled = true;
+            copyRAMToROMToolStripMenuItem.Enabled = true;
+            compressMemoryToolStripMenuItem.Enabled = true;
         }
 
         private void disableControls()
@@ -44,6 +46,8 @@ namespace Tungsten
             btnStartPlc.Enabled = false;
             btnStopPlc.Enabled = false;
             grpPlcInformation.Enabled = false;
+            copyRAMToROMToolStripMenuItem.Enabled = false;
+            compressMemoryToolStripMenuItem.Enabled = false;
         }
 
         private void printCpuInfo(wCpu cpu)
@@ -440,6 +444,33 @@ namespace Tungsten
             wCpuBlock block = MyCpu.blocks.Find(b => b.ToString() == blockName);
             BlockInfo bi = new BlockInfo(block);
             bi.Show();
+        }
+
+        private void copyRAMToROMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MyCpu.copyRamToRom();
+                MessageBox.Show("RAM successfully copied to ROM");
+            }
+            catch (wPlcException ex)
+            {
+                showErrorForException(ex);
+            }
+        }
+
+        private void compressMemoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MyCpu.compressMemory();
+                MessageBox.Show("PLC Memory Compressed");
+                //TODO Possibly show how much was saved?
+            }
+            catch (wPlcException ex)
+            {
+                showErrorForException(ex);
+            }
         }
     }
 }

@@ -430,6 +430,34 @@ namespace Tungsten
             }
         }
 
+        public void copyRamToRom()
+        {
+            int result = MyClient.PlcCopyRamToRom(timeout);
+            if (result == 0)
+            {
+                Console.WriteLine("Copied RAM to ROM");
+            }
+            else
+            {
+                string error = "Could not copy RAM to ROM";
+                throw new wPlcException(error, result);
+            }
+        }
+
+        public void compressMemory()
+        {
+            int result = MyClient.PlcCompress(timeout);
+            if (result == 0)
+            {
+                Console.WriteLine("PLC Memory Compressed");
+            }
+            else
+            {
+                string error = "Could not compress PLC memory";
+                throw new wPlcException(error, result);
+            }
+        }
+
         public static string cleanString(string s)
         {
             s = System.Text.RegularExpressions.Regex.Replace(s, @"[^\u0020-\u007F]", string.Empty);
@@ -446,6 +474,7 @@ namespace Tungsten
                       moduleName,
                       orderCode;
         private const int MAX_BLOCK = 0x2000;
+        private const uint timeout = 5000;
 
         public string version
         {

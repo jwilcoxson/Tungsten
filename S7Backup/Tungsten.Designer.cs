@@ -67,6 +67,8 @@
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accessibleNodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyRAMToROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.compressMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -341,7 +343,9 @@
             // pLCToolStripMenuItem
             // 
             this.pLCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.accessibleNodesToolStripMenuItem});
+            this.accessibleNodesToolStripMenuItem,
+            this.copyRAMToROMToolStripMenuItem,
+            this.compressMemoryToolStripMenuItem});
             this.pLCToolStripMenuItem.Name = "pLCToolStripMenuItem";
             this.pLCToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.pLCToolStripMenuItem.Text = "PLC";
@@ -349,8 +353,24 @@
             // accessibleNodesToolStripMenuItem
             // 
             this.accessibleNodesToolStripMenuItem.Name = "accessibleNodesToolStripMenuItem";
-            this.accessibleNodesToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.accessibleNodesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.accessibleNodesToolStripMenuItem.Text = "Accessible Nodes";
+            // 
+            // copyRAMToROMToolStripMenuItem
+            // 
+            this.copyRAMToROMToolStripMenuItem.Enabled = false;
+            this.copyRAMToROMToolStripMenuItem.Name = "copyRAMToROMToolStripMenuItem";
+            this.copyRAMToROMToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.copyRAMToROMToolStripMenuItem.Text = "Copy RAM to ROM";
+            this.copyRAMToROMToolStripMenuItem.Click += new System.EventHandler(this.copyRAMToROMToolStripMenuItem_Click);
+            // 
+            // compressMemoryToolStripMenuItem
+            // 
+            this.compressMemoryToolStripMenuItem.Enabled = false;
+            this.compressMemoryToolStripMenuItem.Name = "compressMemoryToolStripMenuItem";
+            this.compressMemoryToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.compressMemoryToolStripMenuItem.Text = "Compress Memory";
+            this.compressMemoryToolStripMenuItem.Click += new System.EventHandler(this.compressMemoryToolStripMenuItem_Click);
             // 
             // Tungsten
             // 
@@ -415,6 +435,8 @@
         private System.Windows.Forms.ColumnHeader author;
         private System.Windows.Forms.ToolStripMenuItem pLCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem accessibleNodesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyRAMToROMToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem compressMemoryToolStripMenuItem;
     }
 }
 
