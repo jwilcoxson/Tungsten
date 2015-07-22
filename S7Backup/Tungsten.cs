@@ -24,6 +24,7 @@ namespace Tungsten
         {
             InitializeComponent();
             MyCpu = new wCpu();
+            loadPlcBookmarks();
         }
 
         private void enableControls()
@@ -218,11 +219,12 @@ namespace Tungsten
             {
                 try
                 {
-                    MyCpu.connect(plcListing[cmbPlc.SelectedIndex]);
+                    MyCpu.connect(plcListing[cmbPlc.SelectedIndex].ipAddress);
                     wCpuRunMode rm = MyCpu.getCpuRunMode();
                     plcConnected = true;
                     MyCpu.upload();
                     enableControls();
+                    lblModel.Text += ("\n" + MyCpu.orderCode); 
                     populateBlockList(MyCpu);
                     
                     if (rm == wCpuRunMode.Run)
@@ -403,7 +405,7 @@ namespace Tungsten
             {0x26, "Cannot change parameter while connected"}
         };
 
-        private Dictionary<int, string> plcListing = new Dictionary<int,string>();
+        private List<plcBookmark> plcListing = new List<plcBookmark>();
 
         private void cmbPlc_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -411,11 +413,17 @@ namespace Tungsten
             {
                 AddPlc addPlc = new AddPlc();
                 DialogResult dr = addPlc.ShowDialog();
-                cmbPlc.Items.Insert(cmbPlc.Items.Count - 1, addPlc.bookmarkName + " - " + addPlc.ipAddress);
-                cmbPlc.SelectedIndex = cmbPlc.Items.Count - 2;
 
-                //TODO Adding and removing from this dictionary should really be done as an event on the Combo Box 
-                plcListing.Add(cmbPlc.Items.Count - 2, addPlc.ipAddress);
+                string title = addPlc.ipAddress;
+                if (addPlc.bookmarkName != "")
+                {
+                    title = addPlc.bookmarkName + " (" + title + ")";
+                }
+                cmbPlc.Items.Insert(cmbPlc.Items.Count - 1, title);
+                cmbPlc.SelectedIndex = cmbPlc.Items.Count - 2;
+                plcBookmark bp = new plcBookmark(cmbPlc.SelectedIndex, addPlc.bookmarkName, addPlc.ipAddress);
+                plcListing.Add(bp);
+                savePlcBookmarks();
             }
         }
 
@@ -472,5 +480,68 @@ namespace Tungsten
                 showErrorForException(ex);
             }
         }
+
+        private void savePlcBookmarks()
+        {
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<plcBookmark>));
+
+            System.IO.StreamWriter file = new System.IO.StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "bookmarks.xml");
+            SaveFileDialog dialog = new SaveFileDialog();
+            writer.Serialize(file, plcListing);
+            file.Close();
+        }
+
+        private void loadPlcBookmarks()
+        {
+            List<plcBookmark> list = new List<plcBookmark>();
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<plcBookmark>));
+
+            try
+            {
+                System.IO.StreamReader file = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + "bookmarks.xml");
+
+                try
+                {
+                    list = (List<plcBookmark>)reader.Deserialize(file);
+                    file.Close();
+                    plcListing = list;
+                    foreach (plcBookmark b in plcListing)
+                    {
+                        string title = b.ipAddress;
+                        if (b.bookmarkName != "")
+                        {
+                            title = b.bookmarkName + " (" + title + ")";
+                        }
+                        cmbPlc.Items.Insert(b.index, title);
+                    }
+                }
+                catch
+                {
+                    file.Close();
+                }
+            }
+            catch (System.IO.FileNotFoundException ex)
+            {
+
+            }
+        }
+
     }
+
+    [Serializable]
+    public class plcBookmark
+    {
+        public plcBookmark() { }
+        public plcBookmark(int index, string bookmarkName, string ipAddress)
+        {
+            this.index = index;
+            this.bookmarkName = bookmarkName;
+            this.ipAddress = ipAddress;
+        }
+
+        public int index;
+        public string bookmarkName;
+        public string ipAddress;
+    }
+
 }
