@@ -53,8 +53,6 @@
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnStartPlc = new System.Windows.Forms.Button();
             this.btnStopPlc = new System.Windows.Forms.Button();
-            this.btnGetRunMode = new System.Windows.Forms.Button();
-            this.btnScan = new System.Windows.Forms.Button();
             this.btnViewDiagnosticBuffer = new System.Windows.Forms.Button();
             this.cmbPlc = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -62,11 +60,13 @@
             this.Label3 = new System.Windows.Forms.Label();
             this.blockList = new System.Windows.Forms.ListView();
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.accessibleNodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -75,6 +75,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.pLCToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -220,26 +221,6 @@
             this.btnStopPlc.UseVisualStyleBackColor = true;
             this.btnStopPlc.Click += new System.EventHandler(this.btnStopCpu_Click);
             // 
-            // btnGetRunMode
-            // 
-            this.btnGetRunMode.Enabled = false;
-            this.btnGetRunMode.Location = new System.Drawing.Point(317, 142);
-            this.btnGetRunMode.Name = "btnGetRunMode";
-            this.btnGetRunMode.Size = new System.Drawing.Size(101, 23);
-            this.btnGetRunMode.TabIndex = 14;
-            this.btnGetRunMode.Text = "Get Run Mode";
-            this.btnGetRunMode.UseVisualStyleBackColor = true;
-            this.btnGetRunMode.Click += new System.EventHandler(this.btnGetRunMode_Click);
-            // 
-            // btnScan
-            // 
-            this.btnScan.Location = new System.Drawing.Point(273, 54);
-            this.btnScan.Name = "btnScan";
-            this.btnScan.Size = new System.Drawing.Size(100, 25);
-            this.btnScan.TabIndex = 16;
-            this.btnScan.Text = "Scan for PLCs";
-            this.btnScan.UseVisualStyleBackColor = true;
-            // 
             // btnViewDiagnosticBuffer
             // 
             this.btnViewDiagnosticBuffer.Enabled = false;
@@ -331,10 +312,19 @@
             this.blockList.TabIndex = 22;
             this.blockList.UseCompatibleStateImageBehavior = false;
             this.blockList.View = System.Windows.Forms.View.Details;
+            this.blockList.ItemActivate += new System.EventHandler(this.blockList_ItemActivate);
             // 
             // name
             // 
             this.name.Text = "Name";
+            // 
+            // title
+            // 
+            this.title.Text = "Title";
+            // 
+            // author
+            // 
+            this.author.Text = "Author";
             // 
             // loadSize
             // 
@@ -348,13 +338,19 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
-            // title
+            // pLCToolStripMenuItem
             // 
-            this.title.Text = "Title";
+            this.pLCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.accessibleNodesToolStripMenuItem});
+            this.pLCToolStripMenuItem.Name = "pLCToolStripMenuItem";
+            this.pLCToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
+            this.pLCToolStripMenuItem.Text = "PLC";
             // 
-            // author
+            // accessibleNodesToolStripMenuItem
             // 
-            this.author.Text = "Author";
+            this.accessibleNodesToolStripMenuItem.Name = "accessibleNodesToolStripMenuItem";
+            this.accessibleNodesToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.accessibleNodesToolStripMenuItem.Text = "Accessible Nodes";
             // 
             // Tungsten
             // 
@@ -365,8 +361,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbPlc);
             this.Controls.Add(this.btnViewDiagnosticBuffer);
-            this.Controls.Add(this.btnScan);
-            this.Controls.Add(this.btnGetRunMode);
             this.Controls.Add(this.btnStopPlc);
             this.Controls.Add(this.btnStartPlc);
             this.Controls.Add(this.btnConnect);
@@ -407,8 +401,6 @@
         private System.Windows.Forms.ToolStripMenuItem aboutTungstenToolStripMenuItem;
         private System.Windows.Forms.Button btnStartPlc;
         private System.Windows.Forms.Button btnStopPlc;
-        private System.Windows.Forms.Button btnGetRunMode;
-        private System.Windows.Forms.Button btnScan;
         private System.Windows.Forms.Button btnViewDiagnosticBuffer;
         private System.Windows.Forms.ComboBox cmbPlc;
         private System.Windows.Forms.Label label2;
@@ -421,6 +413,8 @@
         private System.Windows.Forms.Label Label3;
         private System.Windows.Forms.ColumnHeader title;
         private System.Windows.Forms.ColumnHeader author;
+        private System.Windows.Forms.ToolStripMenuItem pLCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem accessibleNodesToolStripMenuItem;
     }
 }
 

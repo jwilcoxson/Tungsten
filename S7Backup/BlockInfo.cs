@@ -16,7 +16,7 @@ namespace Tungsten
         public BlockInfo(wCpuBlock block)
         {
             InitializeComponent();
-
+            Text = "Block Information - " + block.ToString();
             txtBlock.Text = block.ToString();
             txtName.Text = block.name;
             txtAuthor.Text = block.author;
@@ -32,7 +32,8 @@ namespace Tungsten
             txtChecksum.Text = block.checksum.ToString("x4").Insert(2, " ");
             txtFlags.Text = block.blockFlags.ToString("x4").Insert(2, " ");
             txtVersion.Text = block.version.ToString("x4").Insert(2, " ");
-            if (block.data != null)
+            //TODO Fix this shit
+            if (block.data != null && false)
             {
                 ByteViewer bv = new ByteViewer();
                 bv.SetBytes(block.data);

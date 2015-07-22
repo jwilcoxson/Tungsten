@@ -329,7 +329,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(658, 382);
+            this.ClientSize = new System.Drawing.Size(554, 382);
             this.Controls.Add(this.txtTestChecksum);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtVersion);
@@ -364,7 +364,9 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "BlockInfo";
-            this.Text = "BlockInfo";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.Text = "Block Info";
             this.ResumeLayout(false);
             this.PerformLayout();
 

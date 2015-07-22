@@ -33,7 +33,6 @@ namespace Tungsten
             btnDownload.Enabled = true;
             btnStartPlc.Enabled = true;
             btnStopPlc.Enabled = true;
-            btnGetRunMode.Enabled = true;
             grpPlcInformation.Enabled = true;
         }
 
@@ -44,7 +43,6 @@ namespace Tungsten
             btnDownload.Enabled = false;
             btnStartPlc.Enabled = false;
             btnStopPlc.Enabled = false;
-            btnGetRunMode.Enabled = false;
             grpPlcInformation.Enabled = false;
         }
 
@@ -434,6 +432,14 @@ namespace Tungsten
                 blockList.Items.Add(li);
                 
             }
+        }
+
+        private void blockList_ItemActivate(object sender, EventArgs e)
+        {
+            string blockName = blockList.SelectedItems[0].Text;
+            wCpuBlock block = MyCpu.blocks.Find(b => b.ToString() == blockName);
+            BlockInfo bi = new BlockInfo(block);
+            bi.Show();
         }
     }
 }
