@@ -16,6 +16,8 @@ namespace Tungsten
 
         private wCpu MyCpu;
         private bool plcConnected = false;
+        private string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\"
+                                        + About.AssemblyCompany + @"\" + About.AssemblyProduct + @"\";
 
         /// <summary>
         /// Main Constructor for the Tungsten Form Class
@@ -23,6 +25,12 @@ namespace Tungsten
         public Tungsten()
         {
             InitializeComponent();
+            
+            if (!System.IO.Directory.Exists(appDataPath))
+            {
+                System.IO.Directory.CreateDirectory(appDataPath);
+            }
+
             MyCpu = new wCpu();
             loadPlcBookmarks();
         }
@@ -30,25 +38,25 @@ namespace Tungsten
         private void enableControls()
         {
             btnConnect.Text = "Disconnect";
-            btnErase.Enabled = true;
-            btnDownload.Enabled = true;
             btnStartPlc.Enabled = true;
             btnStopPlc.Enabled = true;
             grpPlcInformation.Enabled = true;
             copyRAMToROMToolStripMenuItem.Enabled = true;
             compressMemoryToolStripMenuItem.Enabled = true;
+            eraseMemoryToolStripMenuItem.Enabled = true;
+            downloadToPLCToolStripMenuItem.Enabled = true;
         }
 
         private void disableControls()
         {
             btnConnect.Text = "Connect";
-            btnErase.Enabled = false;
-            btnDownload.Enabled = false;
             btnStartPlc.Enabled = false;
             btnStopPlc.Enabled = false;
             grpPlcInformation.Enabled = false;
             copyRAMToROMToolStripMenuItem.Enabled = false;
             compressMemoryToolStripMenuItem.Enabled = false;
+            eraseMemoryToolStripMenuItem.Enabled = false;
+            downloadToPLCToolStripMenuItem.Enabled = false;
         }
 
         private void printCpuInfo(wCpu cpu)
@@ -226,7 +234,7 @@ namespace Tungsten
                     enableControls();
                     lblModel.Text += ("\n" + MyCpu.orderCode); 
                     populateBlockList(MyCpu);
-                    
+
                     if (rm == wCpuRunMode.Run)
                     {
                         btnStartPlc.Enabled = false;
@@ -253,34 +261,6 @@ namespace Tungsten
                 plcConnected = false;
             }
 
-        }
-
-        private void btnDownload_Click(object sender, EventArgs e)
-        {
-            try
-            {
-
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
-            }
-        }
-
-        private void btnErase_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MyCpu.erase();
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
-            }
         }
 
         private void btnStartCpu_Click(object sender, EventArgs e)
@@ -471,9 +451,40 @@ namespace Tungsten
         {
             try
             {
+                int memoryOld = 0;
+                foreach (wCpuBlock b in MyCpu.blocks)
+                {
+                    if (b.blockType != wBlockType.SFC && b.blockType != wBlockType.SFB)
+                    {
+                        memoryOld += b.loadSize;
+                    }
+                }
+                
                 MyCpu.compressMemory();
-                MessageBox.Show("PLC Memory Compressed");
-                //TODO Possibly show how much was saved?
+
+                int memoryNew = 0;
+                foreach (wCpuBlock b in MyCpu.blocks)
+                {
+                    if (b.blockType != wBlockType.SFC && b.blockType != wBlockType.SFB)
+                    {
+                        memoryNew += b.loadSize;
+                    }
+                }
+
+                int bytesSaved = memoryOld - memoryNew;
+                string message;
+
+                if (bytesSaved > 0)
+                {
+                    message = string.Format("PLC Load Memory was compressed. Saved {0} bytes.", memoryOld - memoryNew);
+                }
+                else
+                {
+                    message = "PLC Load Memory is already fully compressed";
+                }
+
+                MessageBox.Show(message);
+                
             }
             catch (wPlcException ex)
             {
@@ -485,7 +496,7 @@ namespace Tungsten
         {
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<plcBookmark>));
 
-            System.IO.StreamWriter file = new System.IO.StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "bookmarks.xml");
+            System.IO.StreamWriter file = new System.IO.StreamWriter(appDataPath + "bookmarks.config");
             SaveFileDialog dialog = new SaveFileDialog();
             writer.Serialize(file, plcListing);
             file.Close();
@@ -495,10 +506,10 @@ namespace Tungsten
         {
             List<plcBookmark> list = new List<plcBookmark>();
             System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<plcBookmark>));
-
+            
             try
             {
-                System.IO.StreamReader file = new System.IO.StreamReader(AppDomain.CurrentDomain.BaseDirectory + "bookmarks.xml");
+                System.IO.StreamReader file = new System.IO.StreamReader(appDataPath + "bookmarks.config");
 
                 try
                 {
@@ -524,6 +535,35 @@ namespace Tungsten
             {
 
             }
+        }
+
+        private void eraseMemoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MyCpu.erase();
+            }
+            catch (wPlcException ex)
+            {
+                showErrorForException(ex);
+                MyCpu.disconnect();
+                disableControls();
+            }
+        }
+
+        private void downloadToPLCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string title = "Erase PLC?";
+            string message = "Would you like to erase the existing PLC program before download?";
+            DialogResult dr = MessageBox.Show(message, title, MessageBoxButtons.YesNo,);
+            bool eraseCpu = false;
+            if (dr == DialogResult.Yes)
+            {
+                eraseCpu = true;
+            }
+
+            //Todo: fix this broken download method
+            //MyCpu.download(plcListing[cmbPlc.SelectedIndex].ipAddress);
         }
 
     }

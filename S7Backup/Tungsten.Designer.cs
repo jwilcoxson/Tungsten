@@ -49,11 +49,10 @@
             this.accessibleNodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyRAMToROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compressMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.eraseMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnDownload = new System.Windows.Forms.Button();
-            this.btnErase = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnStartPlc = new System.Windows.Forms.Button();
             this.btnStopPlc = new System.Windows.Forms.Button();
@@ -61,6 +60,7 @@
             this.cmbPlc = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpPlcInformation = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.lblModel = new System.Windows.Forms.Label();
             this.blockList = new System.Windows.Forms.ListView();
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -69,7 +69,7 @@
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label1 = new System.Windows.Forms.Label();
+            this.downloadToPLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -153,7 +153,9 @@
             this.pLCToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.accessibleNodesToolStripMenuItem,
             this.copyRAMToROMToolStripMenuItem,
-            this.compressMemoryToolStripMenuItem});
+            this.compressMemoryToolStripMenuItem,
+            this.eraseMemoryToolStripMenuItem,
+            this.downloadToPLCToolStripMenuItem});
             this.pLCToolStripMenuItem.Name = "pLCToolStripMenuItem";
             this.pLCToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.pLCToolStripMenuItem.Text = "PLC";
@@ -180,6 +182,14 @@
             this.compressMemoryToolStripMenuItem.Text = "Compress Memory";
             this.compressMemoryToolStripMenuItem.Click += new System.EventHandler(this.compressMemoryToolStripMenuItem_Click);
             // 
+            // eraseMemoryToolStripMenuItem
+            // 
+            this.eraseMemoryToolStripMenuItem.Enabled = false;
+            this.eraseMemoryToolStripMenuItem.Name = "eraseMemoryToolStripMenuItem";
+            this.eraseMemoryToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.eraseMemoryToolStripMenuItem.Text = "Erase Memory";
+            this.eraseMemoryToolStripMenuItem.Click += new System.EventHandler(this.eraseMemoryToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -202,28 +212,6 @@
             this.aboutTungstenToolStripMenuItem.Text = "About Tungsten";
             this.aboutTungstenToolStripMenuItem.Click += new System.EventHandler(this.aboutTungstenToolStripMenuItem_Click);
             // 
-            // btnDownload
-            // 
-            this.btnDownload.Enabled = false;
-            this.btnDownload.Location = new System.Drawing.Point(424, 30);
-            this.btnDownload.Name = "btnDownload";
-            this.btnDownload.Size = new System.Drawing.Size(200, 50);
-            this.btnDownload.TabIndex = 8;
-            this.btnDownload.Text = "Download to PLC";
-            this.btnDownload.UseVisualStyleBackColor = true;
-            this.btnDownload.Click += new System.EventHandler(this.btnDownload_Click);
-            // 
-            // btnErase
-            // 
-            this.btnErase.Enabled = false;
-            this.btnErase.Location = new System.Drawing.Point(424, 86);
-            this.btnErase.Name = "btnErase";
-            this.btnErase.Size = new System.Drawing.Size(200, 50);
-            this.btnErase.TabIndex = 9;
-            this.btnErase.Text = "Erase";
-            this.btnErase.UseVisualStyleBackColor = true;
-            this.btnErase.Click += new System.EventHandler(this.btnErase_Click);
-            // 
             // btnConnect
             // 
             this.btnConnect.Location = new System.Drawing.Point(273, 27);
@@ -237,7 +225,7 @@
             // btnStartPlc
             // 
             this.btnStartPlc.Enabled = false;
-            this.btnStartPlc.Location = new System.Drawing.Point(424, 142);
+            this.btnStartPlc.Location = new System.Drawing.Point(422, 31);
             this.btnStartPlc.Name = "btnStartPlc";
             this.btnStartPlc.Size = new System.Drawing.Size(95, 50);
             this.btnStartPlc.TabIndex = 12;
@@ -248,7 +236,7 @@
             // btnStopPlc
             // 
             this.btnStopPlc.Enabled = false;
-            this.btnStopPlc.Location = new System.Drawing.Point(529, 142);
+            this.btnStopPlc.Location = new System.Drawing.Point(527, 31);
             this.btnStopPlc.Name = "btnStopPlc";
             this.btnStopPlc.Size = new System.Drawing.Size(95, 50);
             this.btnStopPlc.TabIndex = 13;
@@ -259,7 +247,7 @@
             // btnViewDiagnosticBuffer
             // 
             this.btnViewDiagnosticBuffer.Enabled = false;
-            this.btnViewDiagnosticBuffer.Location = new System.Drawing.Point(424, 198);
+            this.btnViewDiagnosticBuffer.Location = new System.Drawing.Point(422, 87);
             this.btnViewDiagnosticBuffer.Name = "btnViewDiagnosticBuffer";
             this.btnViewDiagnosticBuffer.Size = new System.Drawing.Size(200, 50);
             this.btnViewDiagnosticBuffer.TabIndex = 18;
@@ -294,12 +282,20 @@
             this.grpPlcInformation.Controls.Add(this.lblModel);
             this.grpPlcInformation.Controls.Add(this.blockList);
             this.grpPlcInformation.Enabled = false;
-            this.grpPlcInformation.Location = new System.Drawing.Point(13, 254);
+            this.grpPlcInformation.Location = new System.Drawing.Point(13, 142);
             this.grpPlcInformation.Name = "grpPlcInformation";
             this.grpPlcInformation.Size = new System.Drawing.Size(605, 282);
             this.grpPlcInformation.TabIndex = 21;
             this.grpPlcInformation.TabStop = false;
             this.grpPlcInformation.Text = "PLC Information";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 13);
+            this.label1.TabIndex = 24;
             // 
             // lblModel
             // 
@@ -374,19 +370,19 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
-            // label1
+            // downloadToPLCToolStripMenuItem
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 36);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(0, 13);
-            this.label1.TabIndex = 24;
+            this.downloadToPLCToolStripMenuItem.Enabled = false;
+            this.downloadToPLCToolStripMenuItem.Name = "downloadToPLCToolStripMenuItem";
+            this.downloadToPLCToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.downloadToPLCToolStripMenuItem.Text = "Download to PLC";
+            this.downloadToPLCToolStripMenuItem.Click += new System.EventHandler(this.downloadToPLCToolStripMenuItem_Click);
             // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 548);
+            this.ClientSize = new System.Drawing.Size(630, 437);
             this.Controls.Add(this.grpPlcInformation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbPlc);
@@ -394,8 +390,6 @@
             this.Controls.Add(this.btnStopPlc);
             this.Controls.Add(this.btnStartPlc);
             this.Controls.Add(this.btnConnect);
-            this.Controls.Add(this.btnErase);
-            this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
@@ -423,8 +417,6 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mMCFileWLDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
-        private System.Windows.Forms.Button btnDownload;
-        private System.Windows.Forms.Button btnErase;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
@@ -448,6 +440,8 @@
         private System.Windows.Forms.ToolStripMenuItem copyRAMToROMToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem compressMemoryToolStripMenuItem;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem eraseMemoryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem downloadToPLCToolStripMenuItem;
     }
 }
 

@@ -458,6 +458,31 @@ namespace Tungsten
             }
         }
 
+        //TODO figure out all of this SSL stuff
+        public void readSslList()
+        {
+            S7Client.S7SZLList sList = new S7Client.S7SZLList();
+            int sCount = MAX_BLOCK;
+            int result = MyClient.ReadSZLList(ref sList, ref sCount);
+            if (result == 0)
+            {
+                int recordLength = sList.Header.LENTHDR;
+               // List<byte[]> sslList = new List<byte[sList.Header.LENTHDR]>();
+                for (int i = 0; i < sList.Header.N_DR; i++)
+                {
+                    byte [] record = new byte[sList.Header.LENTHDR];
+                    
+                    System.Array.Copy(sList.Data, i * sList.Header.LENTHDR, record, i * sList.Header.LENTHDR, sList.Header.LENTHDR);
+                }
+
+            }
+            else
+            {
+                string error = "Could not read SSL Listing";
+                throw new wPlcException(error, result);
+            }
+        }
+
         public static string cleanString(string s)
         {
             s = System.Text.RegularExpressions.Regex.Replace(s, @"[^\u0020-\u007F]", string.Empty);
