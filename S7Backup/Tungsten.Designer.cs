@@ -19,8 +19,7 @@
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
+#region Windows Form Designer generated code
 
         /// <summary>
         /// Required method for Designer support - do not modify
@@ -50,16 +49,19 @@
             this.copyRAMToROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compressMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eraseMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadToPLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cPUModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewDiagnosticBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnConnect = new System.Windows.Forms.Button();
-            this.btnStartPlc = new System.Windows.Forms.Button();
-            this.btnStopPlc = new System.Windows.Forms.Button();
-            this.btnViewDiagnosticBuffer = new System.Windows.Forms.Button();
             this.cmbPlc = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpPlcInformation = new System.Windows.Forms.GroupBox();
+            this.lblSerialNumber = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblModel = new System.Windows.Forms.Label();
             this.blockList = new System.Windows.Forms.ListView();
@@ -69,7 +71,8 @@
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.downloadToPLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblModuleTypeName = new System.Windows.Forms.Label();
+            this.lblModuleName = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -155,7 +158,9 @@
             this.copyRAMToROMToolStripMenuItem,
             this.compressMemoryToolStripMenuItem,
             this.eraseMemoryToolStripMenuItem,
-            this.downloadToPLCToolStripMenuItem});
+            this.downloadToPLCToolStripMenuItem,
+            this.cPUModeToolStripMenuItem,
+            this.viewDiagnosticBufferToolStripMenuItem});
             this.pLCToolStripMenuItem.Name = "pLCToolStripMenuItem";
             this.pLCToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.pLCToolStripMenuItem.Text = "PLC";
@@ -163,14 +168,14 @@
             // accessibleNodesToolStripMenuItem
             // 
             this.accessibleNodesToolStripMenuItem.Name = "accessibleNodesToolStripMenuItem";
-            this.accessibleNodesToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.accessibleNodesToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.accessibleNodesToolStripMenuItem.Text = "Accessible Nodes";
             // 
             // copyRAMToROMToolStripMenuItem
             // 
             this.copyRAMToROMToolStripMenuItem.Enabled = false;
             this.copyRAMToROMToolStripMenuItem.Name = "copyRAMToROMToolStripMenuItem";
-            this.copyRAMToROMToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.copyRAMToROMToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.copyRAMToROMToolStripMenuItem.Text = "Copy RAM to ROM";
             this.copyRAMToROMToolStripMenuItem.Click += new System.EventHandler(this.copyRAMToROMToolStripMenuItem_Click);
             // 
@@ -178,7 +183,7 @@
             // 
             this.compressMemoryToolStripMenuItem.Enabled = false;
             this.compressMemoryToolStripMenuItem.Name = "compressMemoryToolStripMenuItem";
-            this.compressMemoryToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.compressMemoryToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.compressMemoryToolStripMenuItem.Text = "Compress Memory";
             this.compressMemoryToolStripMenuItem.Click += new System.EventHandler(this.compressMemoryToolStripMenuItem_Click);
             // 
@@ -186,9 +191,49 @@
             // 
             this.eraseMemoryToolStripMenuItem.Enabled = false;
             this.eraseMemoryToolStripMenuItem.Name = "eraseMemoryToolStripMenuItem";
-            this.eraseMemoryToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.eraseMemoryToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.eraseMemoryToolStripMenuItem.Text = "Erase Memory";
             this.eraseMemoryToolStripMenuItem.Click += new System.EventHandler(this.eraseMemoryToolStripMenuItem_Click);
+            // 
+            // downloadToPLCToolStripMenuItem
+            // 
+            this.downloadToPLCToolStripMenuItem.Enabled = false;
+            this.downloadToPLCToolStripMenuItem.Name = "downloadToPLCToolStripMenuItem";
+            this.downloadToPLCToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.downloadToPLCToolStripMenuItem.Text = "Download to PLC";
+            this.downloadToPLCToolStripMenuItem.Click += new System.EventHandler(this.downloadToPLCToolStripMenuItem_Click);
+            // 
+            // cPUModeToolStripMenuItem
+            // 
+            this.cPUModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.runToolStripMenuItem,
+            this.stopToolStripMenuItem});
+            this.cPUModeToolStripMenuItem.Name = "cPUModeToolStripMenuItem";
+            this.cPUModeToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.cPUModeToolStripMenuItem.Text = "CPU Mode";
+            // 
+            // runToolStripMenuItem
+            // 
+            this.runToolStripMenuItem.Enabled = false;
+            this.runToolStripMenuItem.Name = "runToolStripMenuItem";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Enabled = false;
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // viewDiagnosticBufferToolStripMenuItem
+            // 
+            this.viewDiagnosticBufferToolStripMenuItem.Enabled = false;
+            this.viewDiagnosticBufferToolStripMenuItem.Name = "viewDiagnosticBufferToolStripMenuItem";
+            this.viewDiagnosticBufferToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.viewDiagnosticBufferToolStripMenuItem.Text = "View Diagnostic Buffer";
             // 
             // helpToolStripMenuItem
             // 
@@ -222,38 +267,6 @@
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
-            // btnStartPlc
-            // 
-            this.btnStartPlc.Enabled = false;
-            this.btnStartPlc.Location = new System.Drawing.Point(422, 31);
-            this.btnStartPlc.Name = "btnStartPlc";
-            this.btnStartPlc.Size = new System.Drawing.Size(95, 50);
-            this.btnStartPlc.TabIndex = 12;
-            this.btnStartPlc.Text = "Start PLC";
-            this.btnStartPlc.UseVisualStyleBackColor = true;
-            this.btnStartPlc.Click += new System.EventHandler(this.btnStartCpu_Click);
-            // 
-            // btnStopPlc
-            // 
-            this.btnStopPlc.Enabled = false;
-            this.btnStopPlc.Location = new System.Drawing.Point(527, 31);
-            this.btnStopPlc.Name = "btnStopPlc";
-            this.btnStopPlc.Size = new System.Drawing.Size(95, 50);
-            this.btnStopPlc.TabIndex = 13;
-            this.btnStopPlc.Text = "Stop PLC";
-            this.btnStopPlc.UseVisualStyleBackColor = true;
-            this.btnStopPlc.Click += new System.EventHandler(this.btnStopCpu_Click);
-            // 
-            // btnViewDiagnosticBuffer
-            // 
-            this.btnViewDiagnosticBuffer.Enabled = false;
-            this.btnViewDiagnosticBuffer.Location = new System.Drawing.Point(422, 87);
-            this.btnViewDiagnosticBuffer.Name = "btnViewDiagnosticBuffer";
-            this.btnViewDiagnosticBuffer.Size = new System.Drawing.Size(200, 50);
-            this.btnViewDiagnosticBuffer.TabIndex = 18;
-            this.btnViewDiagnosticBuffer.Text = "View Diagnostic Buffer";
-            this.btnViewDiagnosticBuffer.UseVisualStyleBackColor = true;
-            // 
             // cmbPlc
             // 
             this.cmbPlc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -278,16 +291,28 @@
             // 
             // grpPlcInformation
             // 
+            this.grpPlcInformation.Controls.Add(this.lblModuleName);
+            this.grpPlcInformation.Controls.Add(this.lblModuleTypeName);
+            this.grpPlcInformation.Controls.Add(this.lblSerialNumber);
             this.grpPlcInformation.Controls.Add(this.label1);
             this.grpPlcInformation.Controls.Add(this.lblModel);
             this.grpPlcInformation.Controls.Add(this.blockList);
             this.grpPlcInformation.Enabled = false;
-            this.grpPlcInformation.Location = new System.Drawing.Point(13, 142);
+            this.grpPlcInformation.Location = new System.Drawing.Point(13, 55);
             this.grpPlcInformation.Name = "grpPlcInformation";
             this.grpPlcInformation.Size = new System.Drawing.Size(605, 282);
             this.grpPlcInformation.TabIndex = 21;
             this.grpPlcInformation.TabStop = false;
             this.grpPlcInformation.Text = "PLC Information";
+            // 
+            // lblSerialNumber
+            // 
+            this.lblSerialNumber.AutoSize = true;
+            this.lblSerialNumber.Location = new System.Drawing.Point(6, 66);
+            this.lblSerialNumber.Name = "lblSerialNumber";
+            this.lblSerialNumber.Size = new System.Drawing.Size(73, 13);
+            this.lblSerialNumber.TabIndex = 25;
+            this.lblSerialNumber.Text = "Serial Number";
             // 
             // label1
             // 
@@ -370,25 +395,32 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
-            // downloadToPLCToolStripMenuItem
+            // lblModuleTypeName
             // 
-            this.downloadToPLCToolStripMenuItem.Enabled = false;
-            this.downloadToPLCToolStripMenuItem.Name = "downloadToPLCToolStripMenuItem";
-            this.downloadToPLCToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.downloadToPLCToolStripMenuItem.Text = "Download to PLC";
-            this.downloadToPLCToolStripMenuItem.Click += new System.EventHandler(this.downloadToPLCToolStripMenuItem_Click);
+            this.lblModuleTypeName.AutoSize = true;
+            this.lblModuleTypeName.Location = new System.Drawing.Point(6, 112);
+            this.lblModuleTypeName.Name = "lblModuleTypeName";
+            this.lblModuleTypeName.Size = new System.Drawing.Size(100, 13);
+            this.lblModuleTypeName.TabIndex = 26;
+            this.lblModuleTypeName.Text = "Module Type Name";
+            // 
+            // lblModuleName
+            // 
+            this.lblModuleName.AutoSize = true;
+            this.lblModuleName.Location = new System.Drawing.Point(6, 150);
+            this.lblModuleName.Name = "lblModuleName";
+            this.lblModuleName.Size = new System.Drawing.Size(73, 13);
+            this.lblModuleName.TabIndex = 27;
+            this.lblModuleName.Text = "Module Name";
             // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 437);
+            this.ClientSize = new System.Drawing.Size(630, 343);
             this.Controls.Add(this.grpPlcInformation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbPlc);
-            this.Controls.Add(this.btnViewDiagnosticBuffer);
-            this.Controls.Add(this.btnStopPlc);
-            this.Controls.Add(this.btnStartPlc);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -421,9 +453,6 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutTungstenToolStripMenuItem;
-        private System.Windows.Forms.Button btnStartPlc;
-        private System.Windows.Forms.Button btnStopPlc;
-        private System.Windows.Forms.Button btnViewDiagnosticBuffer;
         private System.Windows.Forms.ComboBox cmbPlc;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox grpPlcInformation;
@@ -442,6 +471,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem eraseMemoryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem downloadToPLCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cPUModeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewDiagnosticBufferToolStripMenuItem;
+        private System.Windows.Forms.Label lblSerialNumber;
+        private System.Windows.Forms.Label lblModuleName;
+        private System.Windows.Forms.Label lblModuleTypeName;
     }
 }
 

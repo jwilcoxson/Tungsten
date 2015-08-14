@@ -38,25 +38,27 @@ namespace Tungsten
         private void enableControls()
         {
             btnConnect.Text = "Disconnect";
-            btnStartPlc.Enabled = true;
-            btnStopPlc.Enabled = true;
             grpPlcInformation.Enabled = true;
             copyRAMToROMToolStripMenuItem.Enabled = true;
             compressMemoryToolStripMenuItem.Enabled = true;
             eraseMemoryToolStripMenuItem.Enabled = true;
             downloadToPLCToolStripMenuItem.Enabled = true;
+            runToolStripMenuItem.Enabled = true;
+            stopToolStripMenuItem.Enabled = true;
+            viewDiagnosticBufferToolStripMenuItem.Enabled = true;
         }
 
         private void disableControls()
         {
             btnConnect.Text = "Connect";
-            btnStartPlc.Enabled = false;
-            btnStopPlc.Enabled = false;
             grpPlcInformation.Enabled = false;
             copyRAMToROMToolStripMenuItem.Enabled = false;
             compressMemoryToolStripMenuItem.Enabled = false;
             eraseMemoryToolStripMenuItem.Enabled = false;
             downloadToPLCToolStripMenuItem.Enabled = false;
+            runToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem.Enabled = false;
+            viewDiagnosticBufferToolStripMenuItem.Enabled = false;
         }
 
         private void printCpuInfo(wCpu cpu)
@@ -232,16 +234,19 @@ namespace Tungsten
                     plcConnected = true;
                     MyCpu.upload();
                     enableControls();
-                    lblModel.Text += ("\n" + MyCpu.orderCode); 
+                    lblModel.Text = ("Model\n" + MyCpu.orderCode);
+                    lblSerialNumber.Text = ("Serial Number\n" + MyCpu.serialNumber);
+                    lblModuleTypeName.Text += ("Module Type Name\n" + MyCpu.moduleTypeName);
+                    lblModuleName.Text += ("Module Name\n" + MyCpu.moduleName);
                     populateBlockList(MyCpu);
 
                     if (rm == wCpuRunMode.Run)
                     {
-                        btnStartPlc.Enabled = false;
+                        runToolStripMenuItem.Enabled = false;
                     }
                     else if (rm == wCpuRunMode.Stop)
                     {
-                        btnStopPlc.Enabled = false;
+                        stopToolStripMenuItem.Enabled = false;
                     }
 
                 }
@@ -263,13 +268,13 @@ namespace Tungsten
 
         }
 
-        private void btnStartCpu_Click(object sender, EventArgs e)
+        private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
                 MyCpu.setCpuRunMode(wCpuRunMode.Run);
-                btnStopPlc.Enabled = true;
-                btnStartPlc.Enabled = false;
+                stopToolStripMenuItem.Enabled = true;
+                runToolStripMenuItem.Enabled = false;
             }
             catch (wPlcException ex)
             {
@@ -280,13 +285,13 @@ namespace Tungsten
 
         }
 
-        private void btnStopCpu_Click(object sender, EventArgs e)
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
                 MyCpu.setCpuRunMode(wCpuRunMode.Stop);
-                btnStartPlc.Enabled = true;
-                btnStopPlc.Enabled = false;
+                runToolStripMenuItem.Enabled = true;
+                stopToolStripMenuItem.Enabled = false;
             }
             catch (wPlcException ex)
             {
@@ -304,11 +309,11 @@ namespace Tungsten
                 wCpuRunMode rm = MyCpu.getCpuRunMode();
                 if (rm == wCpuRunMode.Run)
                 {
-                    btnStartPlc.Enabled = false;
+                    runToolStripMenuItem.Enabled = false;
                 }
                 else if (rm == wCpuRunMode.Stop)
                 {
-                    btnStopPlc.Enabled = false;
+                    stopToolStripMenuItem.Enabled = false;
                 }
             }
             catch (wPlcException ex)
@@ -555,7 +560,7 @@ namespace Tungsten
         {
             string title = "Erase PLC?";
             string message = "Would you like to erase the existing PLC program before download?";
-            DialogResult dr = MessageBox.Show(message, title, MessageBoxButtons.YesNo,);
+            DialogResult dr = MessageBox.Show(message, title, MessageBoxButtons.YesNo);
             bool eraseCpu = false;
             if (dr == DialogResult.Yes)
             {
