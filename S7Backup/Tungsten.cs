@@ -137,7 +137,67 @@ namespace Tungsten
         //TODO Implement openWldFile Method
         private wCpu openWld()
         {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "WLD files (*.WLD)|*.WLD|All files (*.*)|*.*";
+            dialog.FileName = "S7PROG.wld";
+            dialog.FilterIndex = 1;
+            dialog.RestoreDirectory = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                System.IO.Stream fs;
+                fs = dialog.OpenFile();
+
+                int b = fs.ReadByte();
+
+                List<byte> bytes = new List<byte>();
+
+                while (b != -1)
+                {
+                    bytes.Add((byte)b);
+                    b = fs.ReadByte();
+                }
+
+                decodeWld(bytes);
+            }
             return new wCpu();
+        }
+
+        private void decodeWld(List<byte> bytes)
+        {
+            const int BLOCK_TYPE_OFFSET = 5;
+            const int BLOCK_NUMBER_OFFSET_HIGH = 6;
+            const int BLOCK_NUMBER_OFFSET_LOW = 7;
+            const int BLOCK_LENGTH_OFFSET_HIGH = 10;
+            const int BLOCK_LENGTH_OFFSET_LOW = 11;
+
+            int currentOffset = 0;
+
+            while (currentOffset < bytes.Count)
+            {
+                wSubBlockType blockType = (wSubBlockType)bytes[currentOffset + BLOCK_TYPE_OFFSET];
+                int blockNumber = 256 * bytes[currentOffset + BLOCK_NUMBER_OFFSET_HIGH] +
+                                    bytes[currentOffset + BLOCK_NUMBER_OFFSET_LOW];
+                int blockLength = 256 * bytes[currentOffset + BLOCK_LENGTH_OFFSET_HIGH] +
+                                    bytes[currentOffset + BLOCK_LENGTH_OFFSET_LOW];
+               
+
+                if (blockType == wSubBlockType.OB)
+                {
+                    try
+                    {
+                        MyCpu.downloadBlock(bytes.GetRange(currentOffset, blockLength));
+                    }
+                    catch (wPlcException ex)
+                    {
+                        showErrorForException(ex);
+                    }
+                   
+                }
+
+                Console.WriteLine("Found " + blockType + blockNumber + " with length " + blockLength);
+                currentOffset += blockLength;
+            }
         }
 
         private void saveVs7(wCpu cpu)
@@ -180,7 +240,6 @@ namespace Tungsten
                 return null;
             }
         }
-
 
         /*
          * Menu Strip Event Methods
@@ -236,8 +295,8 @@ namespace Tungsten
                     enableControls();
                     lblModel.Text = ("Model\n" + MyCpu.orderCode);
                     lblSerialNumber.Text = ("Serial Number\n" + MyCpu.serialNumber);
-                    lblModuleTypeName.Text += ("Module Type Name\n" + MyCpu.moduleTypeName);
-                    lblModuleName.Text += ("Module Name\n" + MyCpu.moduleName);
+                    lblModuleTypeName.Text = ("Module Type Name\n" + MyCpu.moduleTypeName);
+                    lblModuleName.Text = ("Module Name\n" + MyCpu.moduleName);
                     populateBlockList(MyCpu);
 
                     if (rm == wCpuRunMode.Run)
@@ -569,6 +628,11 @@ namespace Tungsten
 
             //Todo: fix this broken download method
             //MyCpu.download(plcListing[cmbPlc.SelectedIndex].ipAddress);
+        }
+
+        private void mMCFileWLDToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openWld();
         }
 
     }

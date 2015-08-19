@@ -248,6 +248,20 @@ namespace Tungsten
             Console.WriteLine("Done!");
         }
 
+        public void downloadBlock(List<byte> b)
+        {
+            int result = MyClient.Download(-1, b.ToArray(), b.Count);
+            if (result != 0)
+            {
+               string error = "Failed to download block";
+               throw new wPlcException(error, result);
+            }
+            else
+            {
+                Console.WriteLine("Downloaded Block");
+            }
+        }
+
         public void download(string ipAddress)
         {
             download(ipAddress, 0, 2, true);

@@ -61,6 +61,8 @@
             this.cmbPlc = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpPlcInformation = new System.Windows.Forms.GroupBox();
+            this.lblModuleName = new System.Windows.Forms.Label();
+            this.lblModuleTypeName = new System.Windows.Forms.Label();
             this.lblSerialNumber = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblModel = new System.Windows.Forms.Label();
@@ -71,8 +73,6 @@
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblModuleTypeName = new System.Windows.Forms.Label();
-            this.lblModuleName = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -110,6 +110,7 @@
             // 
             // openToolStripMenuItem
             // 
+            this.openToolStripMenuItem.Enabled = false;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.openToolStripMenuItem.Text = "Open";
@@ -117,6 +118,7 @@
             // 
             // saveToolStripMenuItem
             // 
+            this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.saveToolStripMenuItem.Text = "Save";
@@ -134,13 +136,14 @@
             // mMCFileWLDToolStripMenuItem
             // 
             this.mMCFileWLDToolStripMenuItem.Name = "mMCFileWLDToolStripMenuItem";
-            this.mMCFileWLDToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.mMCFileWLDToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.mMCFileWLDToolStripMenuItem.Text = "Import...";
+            this.mMCFileWLDToolStripMenuItem.Click += new System.EventHandler(this.mMCFileWLDToolStripMenuItem_Click);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exportToolStripMenuItem.Text = "Export...";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
@@ -305,6 +308,24 @@
             this.grpPlcInformation.TabStop = false;
             this.grpPlcInformation.Text = "PLC Information";
             // 
+            // lblModuleName
+            // 
+            this.lblModuleName.AutoSize = true;
+            this.lblModuleName.Location = new System.Drawing.Point(6, 150);
+            this.lblModuleName.Name = "lblModuleName";
+            this.lblModuleName.Size = new System.Drawing.Size(73, 13);
+            this.lblModuleName.TabIndex = 27;
+            this.lblModuleName.Text = "Module Name";
+            // 
+            // lblModuleTypeName
+            // 
+            this.lblModuleTypeName.AutoSize = true;
+            this.lblModuleTypeName.Location = new System.Drawing.Point(6, 112);
+            this.lblModuleTypeName.Name = "lblModuleTypeName";
+            this.lblModuleTypeName.Size = new System.Drawing.Size(100, 13);
+            this.lblModuleTypeName.TabIndex = 26;
+            this.lblModuleTypeName.Text = "Module Type Name";
+            // 
             // lblSerialNumber
             // 
             this.lblSerialNumber.AutoSize = true;
@@ -394,24 +415,6 @@
             // interfaceDate
             // 
             this.interfaceDate.Text = "Interface Date";
-            // 
-            // lblModuleTypeName
-            // 
-            this.lblModuleTypeName.AutoSize = true;
-            this.lblModuleTypeName.Location = new System.Drawing.Point(6, 112);
-            this.lblModuleTypeName.Name = "lblModuleTypeName";
-            this.lblModuleTypeName.Size = new System.Drawing.Size(100, 13);
-            this.lblModuleTypeName.TabIndex = 26;
-            this.lblModuleTypeName.Text = "Module Type Name";
-            // 
-            // lblModuleName
-            // 
-            this.lblModuleName.AutoSize = true;
-            this.lblModuleName.Location = new System.Drawing.Point(6, 150);
-            this.lblModuleName.Name = "lblModuleName";
-            this.lblModuleName.Size = new System.Drawing.Size(73, 13);
-            this.lblModuleName.TabIndex = 27;
-            this.lblModuleName.Text = "Module Name";
             // 
             // Tungsten
             // 
