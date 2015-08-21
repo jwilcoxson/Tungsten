@@ -40,20 +40,19 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.mMCFileWLDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.accessibleNodesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyRAMToROMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.compressMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eraseMemoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.downloadToPLCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cPUModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDiagnosticBufferToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.downloadToPlcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,13 +65,14 @@
             this.lblSerialNumber = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblModel = new System.Windows.Forms.Label();
-            this.blockList = new System.Windows.Forms.ListView();
+            this.lstBlockList = new System.Windows.Forms.ListView();
             this.name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.author = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -95,7 +95,6 @@
             this.newToolStripMenuItem,
             this.openToolStripMenuItem,
             this.saveToolStripMenuItem,
-            this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -104,7 +103,7 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -112,7 +111,7 @@
             // 
             this.openToolStripMenuItem.Enabled = false;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
@@ -120,37 +119,14 @@
             // 
             this.saveToolStripMenuItem.Enabled = false;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mMCFileWLDToolStripMenuItem,
-            this.exportToolStripMenuItem});
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(168, 22);
-            this.toolStripMenuItem1.Text = "Memory Card File";
-            // 
-            // mMCFileWLDToolStripMenuItem
-            // 
-            this.mMCFileWLDToolStripMenuItem.Name = "mMCFileWLDToolStripMenuItem";
-            this.mMCFileWLDToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.mMCFileWLDToolStripMenuItem.Text = "Import...";
-            this.mMCFileWLDToolStripMenuItem.Click += new System.EventHandler(this.mMCFileWLDToolStripMenuItem_Click);
-            // 
-            // exportToolStripMenuItem
-            // 
-            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.exportToolStripMenuItem.Text = "Export...";
-            this.exportToolStripMenuItem.Click += new System.EventHandler(this.exportToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -161,9 +137,9 @@
             this.copyRAMToROMToolStripMenuItem,
             this.compressMemoryToolStripMenuItem,
             this.eraseMemoryToolStripMenuItem,
-            this.downloadToPLCToolStripMenuItem,
             this.cPUModeToolStripMenuItem,
-            this.viewDiagnosticBufferToolStripMenuItem});
+            this.viewDiagnosticBufferToolStripMenuItem,
+            this.programToolStripMenuItem});
             this.pLCToolStripMenuItem.Name = "pLCToolStripMenuItem";
             this.pLCToolStripMenuItem.Size = new System.Drawing.Size(40, 20);
             this.pLCToolStripMenuItem.Text = "PLC";
@@ -198,14 +174,6 @@
             this.eraseMemoryToolStripMenuItem.Text = "Erase Memory";
             this.eraseMemoryToolStripMenuItem.Click += new System.EventHandler(this.eraseMemoryToolStripMenuItem_Click);
             // 
-            // downloadToPLCToolStripMenuItem
-            // 
-            this.downloadToPLCToolStripMenuItem.Enabled = false;
-            this.downloadToPLCToolStripMenuItem.Name = "downloadToPLCToolStripMenuItem";
-            this.downloadToPLCToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-            this.downloadToPLCToolStripMenuItem.Text = "Download to PLC";
-            this.downloadToPLCToolStripMenuItem.Click += new System.EventHandler(this.downloadToPLCToolStripMenuItem_Click);
-            // 
             // cPUModeToolStripMenuItem
             // 
             this.cPUModeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -237,6 +205,31 @@
             this.viewDiagnosticBufferToolStripMenuItem.Name = "viewDiagnosticBufferToolStripMenuItem";
             this.viewDiagnosticBufferToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
             this.viewDiagnosticBufferToolStripMenuItem.Text = "View Diagnostic Buffer";
+            // 
+            // programToolStripMenuItem
+            // 
+            this.programToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.downloadToPlcToolStripMenuItem,
+            this.saveToDiskToolStripMenuItem});
+            this.programToolStripMenuItem.Name = "programToolStripMenuItem";
+            this.programToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.programToolStripMenuItem.Text = "Program";
+            // 
+            // downloadToPlcToolStripMenuItem
+            // 
+            this.downloadToPlcToolStripMenuItem.Enabled = false;
+            this.downloadToPlcToolStripMenuItem.Name = "downloadToPlcToolStripMenuItem";
+            this.downloadToPlcToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.downloadToPlcToolStripMenuItem.Text = "Download to PLC";
+            this.downloadToPlcToolStripMenuItem.Click += new System.EventHandler(this.downloadToPlcToolStripMenuItem_Click);
+            // 
+            // saveToDiskToolStripMenuItem
+            // 
+            this.saveToDiskToolStripMenuItem.Enabled = false;
+            this.saveToDiskToolStripMenuItem.Name = "saveToDiskToolStripMenuItem";
+            this.saveToDiskToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.saveToDiskToolStripMenuItem.Text = "Save to Disk";
+            this.saveToDiskToolStripMenuItem.Click += new System.EventHandler(this.saveToDiskToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -299,7 +292,7 @@
             this.grpPlcInformation.Controls.Add(this.lblSerialNumber);
             this.grpPlcInformation.Controls.Add(this.label1);
             this.grpPlcInformation.Controls.Add(this.lblModel);
-            this.grpPlcInformation.Controls.Add(this.blockList);
+            this.grpPlcInformation.Controls.Add(this.lstBlockList);
             this.grpPlcInformation.Enabled = false;
             this.grpPlcInformation.Location = new System.Drawing.Point(13, 55);
             this.grpPlcInformation.Name = "grpPlcInformation";
@@ -352,16 +345,16 @@
             this.lblModel.TabIndex = 23;
             this.lblModel.Text = "Model";
             // 
-            // blockList
+            // lstBlockList
             // 
-            this.blockList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.lstBlockList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.name,
             this.title,
             this.author,
             this.loadSize,
             this.codeDate,
             this.interfaceDate});
-            this.blockList.FullRowSelect = true;
+            this.lstBlockList.FullRowSelect = true;
             listViewGroup1.Header = "OB";
             listViewGroup1.Name = "ob";
             listViewGroup2.Header = "FC";
@@ -376,7 +369,7 @@
             listViewGroup6.Name = "sfb";
             listViewGroup7.Header = "SDB";
             listViewGroup7.Name = "sdb";
-            this.blockList.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
+            this.lstBlockList.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
             listViewGroup1,
             listViewGroup2,
             listViewGroup3,
@@ -384,13 +377,13 @@
             listViewGroup5,
             listViewGroup6,
             listViewGroup7});
-            this.blockList.Location = new System.Drawing.Point(179, 19);
-            this.blockList.Name = "blockList";
-            this.blockList.Size = new System.Drawing.Size(420, 257);
-            this.blockList.TabIndex = 22;
-            this.blockList.UseCompatibleStateImageBehavior = false;
-            this.blockList.View = System.Windows.Forms.View.Details;
-            this.blockList.ItemActivate += new System.EventHandler(this.blockList_ItemActivate);
+            this.lstBlockList.Location = new System.Drawing.Point(179, 19);
+            this.lstBlockList.Name = "lstBlockList";
+            this.lstBlockList.Size = new System.Drawing.Size(420, 257);
+            this.lstBlockList.TabIndex = 22;
+            this.lstBlockList.UseCompatibleStateImageBehavior = false;
+            this.lstBlockList.View = System.Windows.Forms.View.Details;
+            this.lstBlockList.ItemActivate += new System.EventHandler(this.blockList_ItemActivate);
             // 
             // name
             // 
@@ -416,11 +409,22 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
+            // progressBar
+            // 
+            this.progressBar.Location = new System.Drawing.Point(379, 27);
+            this.progressBar.MarqueeAnimationSpeed = 30;
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(100, 21);
+            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar.TabIndex = 22;
+            this.progressBar.Visible = false;
+            // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(630, 343);
+            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.grpPlcInformation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbPlc);
@@ -448,10 +452,7 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem mMCFileWLDToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewHelpToolStripMenuItem;
@@ -459,7 +460,7 @@
         private System.Windows.Forms.ComboBox cmbPlc;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox grpPlcInformation;
-        private System.Windows.Forms.ListView blockList;
+        private System.Windows.Forms.ListView lstBlockList;
         private System.Windows.Forms.ColumnHeader name;
         private System.Windows.Forms.ColumnHeader loadSize;
         private System.Windows.Forms.ColumnHeader codeDate;
@@ -473,7 +474,6 @@
         private System.Windows.Forms.ToolStripMenuItem compressMemoryToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem eraseMemoryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem downloadToPLCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cPUModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
@@ -481,6 +481,10 @@
         private System.Windows.Forms.Label lblSerialNumber;
         private System.Windows.Forms.Label lblModuleName;
         private System.Windows.Forms.Label lblModuleTypeName;
+        private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem downloadToPlcToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToDiskToolStripMenuItem;
+        private System.Windows.Forms.ProgressBar progressBar;
     }
 }
 

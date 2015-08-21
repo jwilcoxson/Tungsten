@@ -5,7 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using Snap7;
 
@@ -42,7 +42,8 @@ namespace Tungsten
             copyRAMToROMToolStripMenuItem.Enabled = true;
             compressMemoryToolStripMenuItem.Enabled = true;
             eraseMemoryToolStripMenuItem.Enabled = true;
-            downloadToPLCToolStripMenuItem.Enabled = true;
+            downloadToPlcToolStripMenuItem.Enabled = true;
+            saveToDiskToolStripMenuItem.Enabled = true;
             runToolStripMenuItem.Enabled = true;
             stopToolStripMenuItem.Enabled = true;
             viewDiagnosticBufferToolStripMenuItem.Enabled = true;
@@ -55,7 +56,8 @@ namespace Tungsten
             copyRAMToROMToolStripMenuItem.Enabled = false;
             compressMemoryToolStripMenuItem.Enabled = false;
             eraseMemoryToolStripMenuItem.Enabled = false;
-            downloadToPLCToolStripMenuItem.Enabled = false;
+            downloadToPlcToolStripMenuItem.Enabled = false;
+            saveToDiskToolStripMenuItem.Enabled = false;
             runToolStripMenuItem.Enabled = false;
             stopToolStripMenuItem.Enabled = false;
             viewDiagnosticBufferToolStripMenuItem.Enabled = false;
@@ -262,7 +264,7 @@ namespace Tungsten
             saveVs7(MyCpu);
         }
 
-        private void exportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveToDiskToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveWld(MyCpu);
         }
@@ -291,7 +293,11 @@ namespace Tungsten
                     MyCpu.connect(plcListing[cmbPlc.SelectedIndex].ipAddress);
                     wCpuRunMode rm = MyCpu.getCpuRunMode();
                     plcConnected = true;
-                    MyCpu.upload();
+                    progressBar.Visible = true;
+                    Thread uploadThread = new Thread(new ThreadStart(MyCpu.upload));
+                    uploadThread.Start();
+                    //TODO: The UI is being blocked here and the progress bar wont animate :(
+                    uploadThread.Join();
                     enableControls();
                     lblModel.Text = ("Model\n" + MyCpu.orderCode);
                     lblSerialNumber.Text = ("Serial Number\n" + MyCpu.serialNumber);
@@ -316,6 +322,10 @@ namespace Tungsten
                         MyCpu.disconnect();
                     disableControls();
                 }
+                finally
+                {
+                    progressBar.Visible = false;
+                }
             }
             else
             {
@@ -323,6 +333,7 @@ namespace Tungsten
                 if (plcConnected == true)
                     MyCpu.disconnect();
                 plcConnected = false;
+                reset();
             }
 
         }
@@ -361,27 +372,14 @@ namespace Tungsten
 
         }
 
-        private void btnGetRunMode_Click(object sender, EventArgs e)
+        private void reset()
         {
-            try
-            {
-                wCpuRunMode rm = MyCpu.getCpuRunMode();
-                if (rm == wCpuRunMode.Run)
-                {
-                    runToolStripMenuItem.Enabled = false;
-                }
-                else if (rm == wCpuRunMode.Stop)
-                {
-                    stopToolStripMenuItem.Enabled = false;
-                }
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
-            }
-
+            this.lblModel.Text = "Model";
+            this.lblModuleName.Text = "Module Name";
+            this.lblModuleTypeName.Text = "Module Type Name";
+            this.lblSerialNumber.Text = "Serial Number";
+            this.lstBlockList.Items.Clear();
+            MyCpu = new wCpu();
         }
 
         /*
@@ -477,22 +475,20 @@ namespace Tungsten
             {
                 ListViewItem li = new ListViewItem();
                 li.Text = b.ToString();
-
                 li.SubItems.Add(b.name);
                 li.SubItems.Add(b.author);
                 li.SubItems.Add(b.loadSize.ToString());
                 li.SubItems.Add(b.codeDate);
                 li.SubItems.Add(b.interfaceDate);
-                li.Group = blockList.Groups[b.blockType.ToString().ToLower()];
-
-                blockList.Items.Add(li);
+                li.Group = lstBlockList.Groups[b.blockType.ToString().ToLower()];
+                lstBlockList.Items.Add(li);
                 
             }
         }
 
         private void blockList_ItemActivate(object sender, EventArgs e)
         {
-            string blockName = blockList.SelectedItems[0].Text;
+            string blockName = lstBlockList.SelectedItems[0].Text;
             wCpuBlock block = MyCpu.blocks.Find(b => b.ToString() == blockName);
             BlockInfo bi = new BlockInfo(block);
             bi.Show();
@@ -630,7 +626,7 @@ namespace Tungsten
             //MyCpu.download(plcListing[cmbPlc.SelectedIndex].ipAddress);
         }
 
-        private void mMCFileWLDToolStripMenuItem_Click(object sender, EventArgs e)
+        private void downloadToPlcToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openWld();
         }
@@ -647,7 +643,6 @@ namespace Tungsten
             this.bookmarkName = bookmarkName;
             this.ipAddress = ipAddress;
         }
-
         public int index;
         public string bookmarkName;
         public string ipAddress;

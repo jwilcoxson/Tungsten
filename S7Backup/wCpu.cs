@@ -191,57 +191,71 @@ namespace Tungsten
             }
 
             Console.WriteLine("Uploading program blocks... ");
+
+            Dictionary<wBlockType, ushort[]> blockList = new Dictionary<wBlockType, ushort[]>();
+            Dictionary<wBlockType, int> blockCount = new Dictionary<wBlockType, int>();
+            int totalBlockCount = 0;
+
             foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
             {
-                ushort[] blockList = new ushort[MAX_BLOCK];
-                int blockCount = blockList.Length;
-                
-                result = MyClient.ListBlocksOfType((int)blockType, blockList, ref blockCount);
-
+                blockList.Add(blockType, new ushort[MAX_BLOCK]);
+                int resultBlockCount = blockList[blockType].Length;               
+                result = MyClient.ListBlocksOfType((int)blockType, blockList[blockType], ref resultBlockCount);
                 if (result == 0)
                 {
-                    for (int i = 0; i < blockCount; i++)
-                    {
-                        S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
-                        result = MyClient.GetAgBlockInfo((int)blockType, blockList[i], ref blockInfo);
-                        
-                        if (result == 0)
-                        {
-                            byte[] buffer = new byte[4096];
-                            int bufferSize = buffer.Length;
-
-                            if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
-                            {
-                                result = MyClient.FullUpload((int)blockType, blockList[i], buffer, ref bufferSize);
-
-                                if (result != 0)
-                                {
-                                    string error = "Could not upload " + blockType + blockList[i];
-                                    throw new wPlcException(error, result);
-                                }
-                            }
-                            else
-                            {
-                                bufferSize = 0;
-                            }
-
-                            byte[] data = new byte[bufferSize];
-                            Array.Copy(buffer, data, data.Length);
-                            this.addCpuBlock(blockInfo, data);
-                            Console.WriteLine(this.blocks.Last().ToString() + " loaded. Size: " + this.blocks.Last().loadSize + " bytes.");
-                        }
-                        else
-                        {
-                            string error = "Could not get Block Info for " + blockType + blockList[i];
-                            throw new wPlcException(error, result);
-                        }
-
-                    }
+                    blockCount.Add(blockType, resultBlockCount);
+                    totalBlockCount += resultBlockCount;
                 }
                 else
                 {
                     string error = "Failed to list blocks";
                     throw new wPlcException(error, result);
+                }
+            }
+
+            int uploadedBlockCount = 0;
+
+            foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
+            {
+
+                for (int i = 0; i < blockCount[blockType]; i++)
+                {
+                    //p.setValue(((uploadedBlockCount + 1) / totalBlockCount) * 100);
+                    S7Client.S7BlockInfo blockInfo = new S7Client.S7BlockInfo();
+                    result = MyClient.GetAgBlockInfo((int)blockType, blockList[blockType][i], ref blockInfo);
+                        
+                    if (result == 0)
+                    {
+                        byte[] buffer = new byte[4096];
+                        int bufferSize = buffer.Length;
+
+                        if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
+                        {
+                            result = MyClient.FullUpload((int)blockType, blockList[blockType][i], buffer, ref bufferSize);
+
+                            if (result != 0)
+                            {
+                                string error = "Could not upload " + blockType + blockList[blockType][i];
+                                throw new wPlcException(error, result);
+                            }
+                        }
+                        else
+                        {
+                            bufferSize = 0;
+                        }
+
+                        byte[] data = new byte[bufferSize];
+                        Array.Copy(buffer, data, data.Length);
+                        this.addCpuBlock(blockInfo, data);
+                        Console.WriteLine(this.blocks.Last().ToString() + " loaded. Size: " + this.blocks.Last().loadSize + " bytes.");
+                    }
+                    else
+                    {
+                        string error = "Could not get Block Info for " + blockType + blockList[blockType][i];
+                        throw new wPlcException(error, result);
+                    }
+
+                    uploadedBlockCount++;
                 }
 
             }
