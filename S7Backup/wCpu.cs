@@ -105,7 +105,10 @@ namespace Tungsten
         public void connect(string ipAddress, int rack, int slot)
         {
             MyClient = new S7Client();
-            int result = MyClient.ConnectTo(ipAddress, rack, slot);
+            this.ipAddress = ipAddress;
+            this.rack = rack;
+            this.slot = slot;
+            int result = MyClient.ConnectTo(this.ipAddress, this.rack, this.slot);
 
             if (result == 0)
             {
@@ -158,6 +161,12 @@ namespace Tungsten
                 string error = "Error during PLC disconnect";
                 throw new wPlcException(error, result);
             }
+        }
+
+        public void resetConnection()
+        {
+            this.disconnect();
+            this.connect(this.ipAddress);
         }
         
         public void upload()
@@ -528,6 +537,9 @@ namespace Tungsten
                       orderCode;
         private const int MAX_BLOCK = 0x2000;
         private const uint timeout = 5000;
+        private string ipAddress;
+        private int rack;
+        private int slot;
 
         public string version
         {

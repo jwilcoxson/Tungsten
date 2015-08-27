@@ -72,7 +72,7 @@
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.lblPlcMode = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -245,6 +245,7 @@
             this.viewHelpToolStripMenuItem.Name = "viewHelpToolStripMenuItem";
             this.viewHelpToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.viewHelpToolStripMenuItem.Text = "View Help";
+            this.viewHelpToolStripMenuItem.Click += new System.EventHandler(this.viewHelpToolStripMenuItem_Click);
             // 
             // aboutTungstenToolStripMenuItem
             // 
@@ -255,7 +256,7 @@
             // 
             // btnConnect
             // 
-            this.btnConnect.Location = new System.Drawing.Point(273, 27);
+            this.btnConnect.Location = new System.Drawing.Point(324, 27);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(100, 21);
             this.btnConnect.TabIndex = 10;
@@ -269,7 +270,7 @@
             this.cmbPlc.FormattingEnabled = true;
             this.cmbPlc.Items.AddRange(new object[] {
             "Add New..."});
-            this.cmbPlc.Location = new System.Drawing.Point(45, 27);
+            this.cmbPlc.Location = new System.Drawing.Point(96, 27);
             this.cmbPlc.Name = "cmbPlc";
             this.cmbPlc.Size = new System.Drawing.Size(222, 21);
             this.cmbPlc.TabIndex = 19;
@@ -280,13 +281,14 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(12, 30);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(27, 13);
+            this.label2.Size = new System.Drawing.Size(78, 13);
             this.label2.TabIndex = 20;
-            this.label2.Text = "PLC";
+            this.label2.Text = "PLC Bookmark";
             this.label2.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // grpPlcInformation
             // 
+            this.grpPlcInformation.Controls.Add(this.lblPlcMode);
             this.grpPlcInformation.Controls.Add(this.lblModuleName);
             this.grpPlcInformation.Controls.Add(this.lblModuleTypeName);
             this.grpPlcInformation.Controls.Add(this.lblSerialNumber);
@@ -296,7 +298,7 @@
             this.grpPlcInformation.Enabled = false;
             this.grpPlcInformation.Location = new System.Drawing.Point(13, 55);
             this.grpPlcInformation.Name = "grpPlcInformation";
-            this.grpPlcInformation.Size = new System.Drawing.Size(605, 282);
+            this.grpPlcInformation.Size = new System.Drawing.Size(605, 342);
             this.grpPlcInformation.TabIndex = 21;
             this.grpPlcInformation.TabStop = false;
             this.grpPlcInformation.Text = "PLC Information";
@@ -304,7 +306,7 @@
             // lblModuleName
             // 
             this.lblModuleName.AutoSize = true;
-            this.lblModuleName.Location = new System.Drawing.Point(6, 150);
+            this.lblModuleName.Location = new System.Drawing.Point(9, 164);
             this.lblModuleName.Name = "lblModuleName";
             this.lblModuleName.Size = new System.Drawing.Size(73, 13);
             this.lblModuleName.TabIndex = 27;
@@ -379,7 +381,7 @@
             listViewGroup7});
             this.lstBlockList.Location = new System.Drawing.Point(179, 19);
             this.lstBlockList.Name = "lstBlockList";
-            this.lstBlockList.Size = new System.Drawing.Size(420, 257);
+            this.lstBlockList.Size = new System.Drawing.Size(420, 317);
             this.lstBlockList.TabIndex = 22;
             this.lstBlockList.UseCompatibleStateImageBehavior = false;
             this.lstBlockList.View = System.Windows.Forms.View.Details;
@@ -409,22 +411,20 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
-            // progressBar
+            // lblPlcMode
             // 
-            this.progressBar.Location = new System.Drawing.Point(379, 27);
-            this.progressBar.MarqueeAnimationSpeed = 30;
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(100, 21);
-            this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
-            this.progressBar.TabIndex = 22;
-            this.progressBar.Visible = false;
+            this.lblPlcMode.AutoSize = true;
+            this.lblPlcMode.Location = new System.Drawing.Point(9, 220);
+            this.lblPlcMode.Name = "lblPlcMode";
+            this.lblPlcMode.Size = new System.Drawing.Size(60, 13);
+            this.lblPlcMode.TabIndex = 28;
+            this.lblPlcMode.Text = "PLC Mode:";
             // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 343);
-            this.Controls.Add(this.progressBar);
+            this.ClientSize = new System.Drawing.Size(630, 409);
             this.Controls.Add(this.grpPlcInformation);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cmbPlc);
@@ -484,7 +484,7 @@
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem downloadToPlcToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToDiskToolStripMenuItem;
-        private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.Label lblPlcMode;
     }
 }
 

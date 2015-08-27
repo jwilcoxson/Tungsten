@@ -44,8 +44,6 @@ namespace Tungsten
             eraseMemoryToolStripMenuItem.Enabled = true;
             downloadToPlcToolStripMenuItem.Enabled = true;
             saveToDiskToolStripMenuItem.Enabled = true;
-            runToolStripMenuItem.Enabled = true;
-            stopToolStripMenuItem.Enabled = true;
             viewDiagnosticBufferToolStripMenuItem.Enabled = true;
         }
 
@@ -58,8 +56,6 @@ namespace Tungsten
             eraseMemoryToolStripMenuItem.Enabled = false;
             downloadToPlcToolStripMenuItem.Enabled = false;
             saveToDiskToolStripMenuItem.Enabled = false;
-            runToolStripMenuItem.Enabled = false;
-            stopToolStripMenuItem.Enabled = false;
             viewDiagnosticBufferToolStripMenuItem.Enabled = false;
         }
 
@@ -159,8 +155,14 @@ namespace Tungsten
                     bytes.Add((byte)b);
                     b = fs.ReadByte();
                 }
-
-                decodeWld(bytes);
+                try
+                {
+                    decodeWld(bytes);
+                }
+                catch (wPlcException ex)
+                {
+                    showErrorForException(ex);
+                }
             }
             return new wCpu();
         }
@@ -172,8 +174,10 @@ namespace Tungsten
             const int BLOCK_NUMBER_OFFSET_LOW = 7;
             const int BLOCK_LENGTH_OFFSET_HIGH = 10;
             const int BLOCK_LENGTH_OFFSET_LOW = 11;
-
             int currentOffset = 0;
+
+            wCpuRunMode rm = MyCpu.getCpuRunMode();
+            bool downloadSdb = true;
 
             while (currentOffset < bytes.Count)
             {
@@ -182,9 +186,25 @@ namespace Tungsten
                                     bytes[currentOffset + BLOCK_NUMBER_OFFSET_LOW];
                 int blockLength = 256 * bytes[currentOffset + BLOCK_LENGTH_OFFSET_HIGH] +
                                     bytes[currentOffset + BLOCK_LENGTH_OFFSET_LOW];
-               
 
-                if (blockType == wSubBlockType.OB)
+                Console.WriteLine("Found " + blockType + blockNumber + " with length " + blockLength);
+
+                if ((blockType == wSubBlockType.SDB) && (rm != wCpuRunMode.Stop) && (downloadSdb == true))
+                {
+                    DialogResult dr = MessageBox.Show("The PLC will need to be stopped to download System Blocks, would you like to stop the PLC?",
+                                                        "Block Download", MessageBoxButtons.YesNo);
+                    if (dr == DialogResult.Yes)
+                    {
+                        MyCpu.setCpuRunMode(wCpuRunMode.Stop);
+                    }
+                    else
+                    {
+                        downloadSdb = false;
+                    }
+                }
+
+                if ((blockType != wSubBlockType.SFB) && (blockType != wSubBlockType.SFC) &&
+                    ((blockType != wSubBlockType.SDB) || ((blockType == wSubBlockType.SDB) && downloadSdb)))
                 {
                     try
                     {
@@ -193,13 +213,15 @@ namespace Tungsten
                     catch (wPlcException ex)
                     {
                         showErrorForException(ex);
+                        throw new wPlcException("Failed to download " + blockType + blockNumber + System.Environment.NewLine +
+                                                ex.Message, ex);
                     }
                    
                 }
-
-                Console.WriteLine("Found " + blockType + blockNumber + " with length " + blockLength);
                 currentOffset += blockLength;
             }
+
+            MessageBox.Show("PLC program successfully downloaded to PLC");
         }
 
         private void saveVs7(wCpu cpu)
@@ -284,36 +306,48 @@ namespace Tungsten
          * Button Event Methods
          */
 
+        private void refreshCpuInformation()
+        {
+            wCpuRunMode rm = MyCpu.getCpuRunMode();
+            lblModel.Text = ("Model\n" + MyCpu.orderCode);
+            lblSerialNumber.Text = ("Serial Number\n" + MyCpu.serialNumber);
+            lblModuleTypeName.Text = ("Module Type Name\n" + MyCpu.moduleTypeName);
+            lblModuleName.Text = ("Module Name\n" + MyCpu.moduleName);
+            
+            populateBlockList(MyCpu);
+
+            if (rm == wCpuRunMode.Run)
+            {
+                runToolStripMenuItem.Enabled = false;
+                stopToolStripMenuItem.Enabled = true;
+                lblPlcMode.Text = "PLC Mode: Run";
+            }
+            else if (rm == wCpuRunMode.Stop)
+            {
+                runToolStripMenuItem.Enabled = true;
+                stopToolStripMenuItem.Enabled = false;
+                lblPlcMode.Text = "PLC Mode: Stop";
+            }
+            else
+            {
+                runToolStripMenuItem.Enabled = true;
+                stopToolStripMenuItem.Enabled = true;
+                lblPlcMode.Text = "PLC Mode: Unknown";
+            }
+
+        }
+
         private void btnConnect_Click(object sender, EventArgs e)
         {
             if (plcConnected == false && cmbPlc.SelectedIndex >= 0)
             {
                 try
                 {
-                    MyCpu.connect(plcListing[cmbPlc.SelectedIndex].ipAddress);
-                    wCpuRunMode rm = MyCpu.getCpuRunMode();
+                    MyCpu.connect(plcListing[cmbPlc.SelectedIndex].ipAddress);         
                     plcConnected = true;
-                    progressBar.Visible = true;
-                    Thread uploadThread = new Thread(new ThreadStart(MyCpu.upload));
-                    uploadThread.Start();
-                    //TODO: The UI is being blocked here and the progress bar wont animate :(
-                    uploadThread.Join();
+                    MyCpu.upload();
+                    refreshCpuInformation();
                     enableControls();
-                    lblModel.Text = ("Model\n" + MyCpu.orderCode);
-                    lblSerialNumber.Text = ("Serial Number\n" + MyCpu.serialNumber);
-                    lblModuleTypeName.Text = ("Module Type Name\n" + MyCpu.moduleTypeName);
-                    lblModuleName.Text = ("Module Name\n" + MyCpu.moduleName);
-                    populateBlockList(MyCpu);
-
-                    if (rm == wCpuRunMode.Run)
-                    {
-                        runToolStripMenuItem.Enabled = false;
-                    }
-                    else if (rm == wCpuRunMode.Stop)
-                    {
-                        stopToolStripMenuItem.Enabled = false;
-                    }
-
                 }
                 catch (wPlcException ex)
                 {
@@ -322,10 +356,7 @@ namespace Tungsten
                         MyCpu.disconnect();
                     disableControls();
                 }
-                finally
-                {
-                    progressBar.Visible = false;
-                }
+
             }
             else
             {
@@ -343,8 +374,7 @@ namespace Tungsten
             try
             {
                 MyCpu.setCpuRunMode(wCpuRunMode.Run);
-                stopToolStripMenuItem.Enabled = true;
-                runToolStripMenuItem.Enabled = false;
+                refreshCpuInformation();
             }
             catch (wPlcException ex)
             {
@@ -360,8 +390,7 @@ namespace Tungsten
             try
             {
                 MyCpu.setCpuRunMode(wCpuRunMode.Stop);
-                runToolStripMenuItem.Enabled = true;
-                stopToolStripMenuItem.Enabled = false;
+                refreshCpuInformation();
             }
             catch (wPlcException ex)
             {
@@ -374,11 +403,12 @@ namespace Tungsten
 
         private void reset()
         {
-            this.lblModel.Text = "Model";
-            this.lblModuleName.Text = "Module Name";
-            this.lblModuleTypeName.Text = "Module Type Name";
-            this.lblSerialNumber.Text = "Serial Number";
-            this.lstBlockList.Items.Clear();
+            lblModel.Text = "Model";
+            lblModuleName.Text = "Module Name";
+            lblModuleTypeName.Text = "Module Type Name";
+            lblSerialNumber.Text = "Serial Number";
+            lblPlcMode.Text = "PLC Mode:";
+            lstBlockList.Items.Clear();
             MyCpu = new wCpu();
         }
 
@@ -599,6 +629,25 @@ namespace Tungsten
 
         private void eraseMemoryToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            DialogResult dr = MessageBox.Show("Are you sure you want to erase the PLC program?", "Erase PLC?", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                try
+                {
+                    MyCpu.erase();
+                    MessageBox.Show("PLC program has been erased");
+                }
+                catch (wPlcException ex)
+                {
+                    showErrorForException(ex);
+                    MyCpu.disconnect();
+                    disableControls();
+                }
+            }
+        }
+
+        private void downloadToPlcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
             try
             {
                 MyCpu.erase();
@@ -606,29 +655,13 @@ namespace Tungsten
             catch (wPlcException ex)
             {
                 showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
             }
-        }
-
-        private void downloadToPLCToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string title = "Erase PLC?";
-            string message = "Would you like to erase the existing PLC program before download?";
-            DialogResult dr = MessageBox.Show(message, title, MessageBoxButtons.YesNo);
-            bool eraseCpu = false;
-            if (dr == DialogResult.Yes)
-            {
-                eraseCpu = true;
-            }
-
-            //Todo: fix this broken download method
-            //MyCpu.download(plcListing[cmbPlc.SelectedIndex].ipAddress);
-        }
-
-        private void downloadToPlcToolStripMenuItem_Click(object sender, EventArgs e)
-        {
             openWld();
+        }
+
+        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://tungsten-app.xyz/document/manual/");
         }
 
     }
