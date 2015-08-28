@@ -82,12 +82,12 @@ namespace Tungsten
             int clientErrorCode = (ex.errorCode >> 20) & 0xFFF;
             string clientError = String.Empty;
             if (clientErrorCode != 0)
-                clientError = clientErrorCodes[clientErrorCode] + System.Environment.NewLine;
+                clientError = wDictionary.clientErrorCodes[clientErrorCode] + System.Environment.NewLine;
 
             int isoErrorCode = (ex.errorCode >> 16) & 0xF;
             string isoError = String.Empty;
             if (isoErrorCode != 0)
-                isoError = isoTcpErrorCodes[isoErrorCode] + System.Environment.NewLine;
+                isoError = wDictionary.isoTcpErrorCodes[isoErrorCode] + System.Environment.NewLine;
 
             int tcpErrorCode = (ex.errorCode) & 0xFFFF;
             string tcpError = String.Empty;
@@ -106,205 +106,6 @@ namespace Tungsten
             //TODO Center this dialog in parent
             MessageBox.Show(error);
         }
-
-        /*
-         * File Methods
-         */
-
-        private void saveWld(wCpu cpu)
-        {
-            wldFile w = new wldFile(cpu);
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "WLD files (*.wld)|*.wld|All files (*.*)|*.*";
-            dialog.FileName = "S7PROG.wld";
-            dialog.FilterIndex = 1;
-            dialog.RestoreDirectory = true;
-
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.Stream fs;
-                if ((fs = dialog.OpenFile()) != null)
-                {
-                    fs.Write(w.data, 0, w.data.Length);
-                    fs.Close();
-                }
-            }
-
-        }
-
-        //TODO Implement openWldFile Method
-        private wCpu openWld()
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "WLD files (*.WLD)|*.WLD|All files (*.*)|*.*";
-            dialog.FileName = "S7PROG.wld";
-            dialog.FilterIndex = 1;
-            dialog.RestoreDirectory = true;
-
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.Stream fs;
-                fs = dialog.OpenFile();
-
-                int b = fs.ReadByte();
-
-                List<byte> bytes = new List<byte>();
-
-                while (b != -1)
-                {
-                    bytes.Add((byte)b);
-                    b = fs.ReadByte();
-                }
-                try
-                {
-                    decodeWld(bytes);
-                }
-                catch (wPlcException ex)
-                {
-                    showErrorForException(ex);
-                }
-            }
-            return new wCpu();
-        }
-
-        private void decodeWld(List<byte> bytes)
-        {
-            const int BLOCK_TYPE_OFFSET = 5;
-            const int BLOCK_NUMBER_OFFSET_HIGH = 6;
-            const int BLOCK_NUMBER_OFFSET_LOW = 7;
-            const int BLOCK_LENGTH_OFFSET_HIGH = 10;
-            const int BLOCK_LENGTH_OFFSET_LOW = 11;
-            int currentOffset = 0;
-
-            wCpuRunMode rm = MyCpu.getCpuRunMode();
-            bool downloadSdb = true;
-
-            while (currentOffset < bytes.Count)
-            {
-                wSubBlockType blockType = (wSubBlockType)bytes[currentOffset + BLOCK_TYPE_OFFSET];
-                int blockNumber = 256 * bytes[currentOffset + BLOCK_NUMBER_OFFSET_HIGH] +
-                                    bytes[currentOffset + BLOCK_NUMBER_OFFSET_LOW];
-                int blockLength = 256 * bytes[currentOffset + BLOCK_LENGTH_OFFSET_HIGH] +
-                                    bytes[currentOffset + BLOCK_LENGTH_OFFSET_LOW];
-
-                Console.WriteLine("Found " + blockType + blockNumber + " with length " + blockLength);
-
-                if ((blockType == wSubBlockType.SDB) && (rm != wCpuRunMode.Stop) && (downloadSdb == true))
-                {
-                    DialogResult dr = MessageBox.Show("The PLC will need to be stopped to download System Blocks, would you like to stop the PLC?",
-                                                        "Block Download", MessageBoxButtons.YesNo);
-                    if (dr == DialogResult.Yes)
-                    {
-                        MyCpu.setCpuRunMode(wCpuRunMode.Stop);
-                    }
-                    else
-                    {
-                        downloadSdb = false;
-                    }
-                }
-
-                if ((blockType != wSubBlockType.SFB) && (blockType != wSubBlockType.SFC) &&
-                    ((blockType != wSubBlockType.SDB) || ((blockType == wSubBlockType.SDB) && downloadSdb)))
-                {
-                    try
-                    {
-                        MyCpu.downloadBlock(bytes.GetRange(currentOffset, blockLength));
-                    }
-                    catch (wPlcException ex)
-                    {
-                        showErrorForException(ex);
-                        throw new wPlcException("Failed to download " + blockType + blockNumber + System.Environment.NewLine +
-                                                ex.Message, ex);
-                    }
-                   
-                }
-                currentOffset += blockLength;
-            }
-
-            MessageBox.Show("PLC program successfully downloaded to PLC");
-        }
-
-        private void saveVs7(wCpu cpu)
-        {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(wCpu));
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "VS7 files (*.VS7)|*.VS7|All files (*.*)|*.*";
-            dialog.FileName = "S7PROG.VS7";
-            dialog.FilterIndex = 1;
-            dialog.RestoreDirectory = true;
-
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.StreamWriter file = new System.IO.StreamWriter(dialog.OpenFile());
-                writer.Serialize(file, MyCpu);
-                file.Close();
-            }
-        }
-
-        private wCpu openVs7()
-        {
-            wCpu cpu;
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(wCpu));
-
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "VS7 files (*.VS7)|*.VS7|All files (*.*)|*.*";
-            dialog.FileName = "S7PROG.VS7";
-            dialog.FilterIndex = 1;
-            dialog.RestoreDirectory = true;
-
-            if (dialog.ShowDialog() == DialogResult.OK)
-            {
-                System.IO.StreamReader file = new System.IO.StreamReader(dialog.OpenFile());
-                cpu = (wCpu)reader.Deserialize(file);
-                file.Close();
-                return cpu;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        /*
-         * Menu Strip Event Methods
-         */
-
-        private void newToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MyCpu = new wCpu();
-            //txtCpuInfo.Text = "";
-        }
-
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MyCpu = openVs7();
-            printCpuInfo(MyCpu);
-        }
-
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            saveVs7(MyCpu);
-        }
-
-        private void saveToDiskToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            saveWld(MyCpu);
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void aboutTungstenToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            About a = new About();
-            a.ShowDialog();
-        }
-
-        /*
-         * Button Event Methods
-         */
 
         private void refreshCpuInformation()
         {
@@ -369,38 +170,6 @@ namespace Tungsten
 
         }
 
-        private void runToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MyCpu.setCpuRunMode(wCpuRunMode.Run);
-                refreshCpuInformation();
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
-            }
-
-        }
-
-        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MyCpu.setCpuRunMode(wCpuRunMode.Stop);
-                refreshCpuInformation();
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-                MyCpu.disconnect();
-                disableControls();
-            }
-
-        }
-
         private void reset()
         {
             lblModel.Text = "Model";
@@ -409,75 +178,7 @@ namespace Tungsten
             lblSerialNumber.Text = "Serial Number";
             lblPlcMode.Text = "PLC Mode:";
             lstBlockList.Items.Clear();
-            MyCpu = new wCpu();
         }
-
-        /*
-         * Error Codes Dictionaries
-         */
-
-        private static Dictionary<int, string> isoTcpErrorCodes = new Dictionary<int, string>
-        {
-            {0x01, "ISO Connection Error"},
-            {0x02, "ISO Disconnection Error"},
-            {0x03, "Malformed PDU supplied"},
-            {0x04, "Bad data size supplied to Send/Recieve function"},
-            {0x05, "Null pointer supplied"},
-            {0x06, "Short packet recieved"},
-            {0x07, "Too many packets without EoT flag"},
-            {0x08, "The sum of fragmented data exceeds the maximum packet size"},
-            {0x09, "A send error occured"},
-            {0x0A, "A recieve error occured"},
-            {0x0B, "Invalid TSAP parameters supplied"},
-            {0x0C, "Reserved"},
-            {0x0D, "Reserved"},
-            {0x0E, "Reserved"},
-            {0x0F, "Reserved"}
-        };
-
-        private static Dictionary<int, string> clientErrorCodes = new Dictionary<int, string>
-        {
-            {0x01, "Error during PDU negogiation"},
-            {0x02, "Invalid parameter supplied to the current function"},
-            {0x03, "A job is pending, there is an asynchronous function in progress"},
-            {0x04, "More than 20 items were passed to a multi read/write function"},
-            {0x05, "Invalid word length parameter supplied to the current function"},
-            {0x06, "Partial data was written, the target area is smaller than the data size supplied"},
-            {0x07, "A multi read/write functions has a data size that exceeds the PDU size"},
-            {0x08, "Invalid answer from the PLC"},
-            {0x09, "An out of range address was specified"},
-            {0x0A, "Invalid transport size parameter supplied to the current function"},
-            {0x0B, "Invalid data size parameter supplied to the current fucntion"},
-            {0x0C, "Item requested was not found in the PLC"},
-            {0x0D, "Invalid value supplied to the current function"},
-            {0x0E, "PLC cannot be started"},
-            {0x0F, "PLC is already in Run"},
-            {0x10, "PLC cannot be stopped"},
-            {0x11, "Cannot copy RAM to ROM. The PLC is running or doesn't support this function"},
-            {0x12, "Cannot compress memory. The PLC is running or doesn't support this function"},
-            {0x13, "PLC is already in Stop"},
-            {0x14, "Function not available"},
-            {0x15, "Block upload sequence failed"},
-            {0x16, "Invalid data size recieved from the PLC"},
-            {0x17, "Invalid block type suppplied to the current function"},
-            {0x18, "Invalid block supplied to the current function"},
-            {0x19, "Invalid block size supplied to the current function"},
-            {0x1A, "Block download sequence failed"},
-            {0x1B, "Block Insert command refused"},
-            {0x1C, "Block Delete command refused"},
-            {0x1D, "This operation is password protected"},
-            {0x1E, "Invalid password supplied"},
-            {0x1F, "There is no password to set or clear"},
-            {0x20, "Job timeout"},
-            {0x21, "Partial data was read, the souce areas is greater than the data size supplied"},
-            {0x22, "The buffer supplied is too small"},
-            {0x23, "Function refused by PLC"},
-            {0x24, "Invalid parameter value supplied to Get/Set parameter"},
-            {0x25, "Cannot perform. The client is destroying"},
-            {0x26, "Cannot change parameter while connected"}
-        };
-
-        private List<plcBookmark> plcListing = new List<plcBookmark>();
 
         private void cmbPlc_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -493,7 +194,7 @@ namespace Tungsten
                 }
                 cmbPlc.Items.Insert(cmbPlc.Items.Count - 1, title);
                 cmbPlc.SelectedIndex = cmbPlc.Items.Count - 2;
-                plcBookmark bp = new plcBookmark(cmbPlc.SelectedIndex, addPlc.bookmarkName, addPlc.ipAddress);
+                wPlcBookmark bp = new wPlcBookmark(cmbPlc.SelectedIndex, addPlc.bookmarkName, addPlc.ipAddress);
                 plcListing.Add(bp);
                 savePlcBookmarks();
             }
@@ -522,6 +223,32 @@ namespace Tungsten
             wCpuBlock block = MyCpu.blocks.Find(b => b.ToString() == blockName);
             BlockInfo bi = new BlockInfo(block);
             bi.Show();
+        }
+
+        /*
+         * Menu Strip Event Methods
+         */
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MyCpu = new wCpu();
+            //txtCpuInfo.Text = "";
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MyCpu = vs7File.open();
+            printCpuInfo(MyCpu);
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            vs7File.save(MyCpu);
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
 
         private void copyRAMToROMToolStripMenuItem_Click(object sender, EventArgs e)
@@ -582,9 +309,120 @@ namespace Tungsten
             }
         }
 
+        private void eraseMemoryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = MessageBox.Show("Are you sure you want to erase the PLC program?", "Erase PLC?", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
+            {
+                try
+                {
+                    MyCpu.erase();
+                    MessageBox.Show("PLC program has been erased");
+                    reset();
+                    MyCpu.upload();
+                    refreshCpuInformation();
+                }
+                catch (wPlcException ex)
+                {
+                    showErrorForException(ex);
+                    MyCpu.disconnect();
+                    disableControls();
+                }
+                
+            }
+        }
+
+        private void runToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MyCpu.setCpuRunMode(wCpuRunMode.Run);
+                refreshCpuInformation();
+            }
+            catch (wPlcException ex)
+            {
+                showErrorForException(ex);
+                MyCpu.disconnect();
+                disableControls();
+            }
+
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MyCpu.setCpuRunMode(wCpuRunMode.Stop);
+                refreshCpuInformation();
+            }
+            catch (wPlcException ex)
+            {
+                showErrorForException(ex);
+                MyCpu.disconnect();
+                disableControls();
+            }
+
+        }
+
+        private void downloadToPlcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                MyCpu.erase();
+            }
+            catch (wPlcException ex)
+            {
+                showErrorForException(ex);
+            }
+            
+            wldFile w = new wldFile();
+            bool result = w.openFromFile();
+            
+            if (result == true)
+            {
+                List<Tuple<wSubBlockType, int, List<byte>>> blockList = w.decode();
+                try
+                {
+                    foreach (Tuple<wSubBlockType, int, List<byte>> b in blockList)
+                    {
+                        MyCpu.downloadBlock(b.Item3);
+                    }
+                }
+                catch (wPlcException ex)
+                {
+                    showErrorForException(ex);
+                }
+                MessageBox.Show("Program sucessfullly downloaded to PLC");
+            }
+            else
+            {
+                MessageBox.Show("Error opening WLD file");
+            }
+            refreshCpuInformation();
+        }
+
+        private void saveToDiskToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            wldFile w = new wldFile(MyCpu);
+            w.save();
+        }
+
+        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://tungsten-app.xyz/document/manual/");
+        }
+
+        private void aboutTungstenToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About a = new About();
+            a.ShowDialog();
+        }
+
+        private List<wPlcBookmark> plcListing = new List<wPlcBookmark>();
+
         private void savePlcBookmarks()
         {
-            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<plcBookmark>));
+            System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(List<wPlcBookmark>));
 
             System.IO.StreamWriter file = new System.IO.StreamWriter(appDataPath + "bookmarks.config");
             SaveFileDialog dialog = new SaveFileDialog();
@@ -594,19 +432,19 @@ namespace Tungsten
 
         private void loadPlcBookmarks()
         {
-            List<plcBookmark> list = new List<plcBookmark>();
-            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<plcBookmark>));
-            
+            List<wPlcBookmark> list = new List<wPlcBookmark>();
+            System.Xml.Serialization.XmlSerializer reader = new System.Xml.Serialization.XmlSerializer(typeof(List<wPlcBookmark>));
+
             try
             {
                 System.IO.StreamReader file = new System.IO.StreamReader(appDataPath + "bookmarks.config");
 
                 try
                 {
-                    list = (List<plcBookmark>)reader.Deserialize(file);
+                    list = (List<wPlcBookmark>)reader.Deserialize(file);
                     file.Close();
                     plcListing = list;
-                    foreach (plcBookmark b in plcListing)
+                    foreach (wPlcBookmark b in plcListing)
                     {
                         string title = b.ipAddress;
                         if (b.bookmarkName != "")
@@ -627,58 +465,6 @@ namespace Tungsten
             }
         }
 
-        private void eraseMemoryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DialogResult dr = MessageBox.Show("Are you sure you want to erase the PLC program?", "Erase PLC?", MessageBoxButtons.YesNo);
-            if (dr == DialogResult.Yes)
-            {
-                try
-                {
-                    MyCpu.erase();
-                    MessageBox.Show("PLC program has been erased");
-                }
-                catch (wPlcException ex)
-                {
-                    showErrorForException(ex);
-                    MyCpu.disconnect();
-                    disableControls();
-                }
-            }
-        }
-
-        private void downloadToPlcToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                MyCpu.erase();
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
-            }
-            openWld();
-        }
-
-        private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://tungsten-app.xyz/document/manual/");
-        }
-
-    }
-
-    [Serializable]
-    public class plcBookmark
-    {
-        public plcBookmark() { }
-        public plcBookmark(int index, string bookmarkName, string ipAddress)
-        {
-            this.index = index;
-            this.bookmarkName = bookmarkName;
-            this.ipAddress = ipAddress;
-        }
-        public int index;
-        public string bookmarkName;
-        public string ipAddress;
     }
 
 }

@@ -100,8 +100,13 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="vs7File.cs" />
     <Compile Include="wCpu.cs" />
     <Compile Include="snap7.net.cs" />
+    <Compile Include="wCpuBlock.cs" />
+    <Compile Include="wDictionary.cs" />
+    <Compile Include="wldFile.cs" />
+    <Compile Include="wPlcBookmark.cs" />
     <Compile Include="wSsl.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>

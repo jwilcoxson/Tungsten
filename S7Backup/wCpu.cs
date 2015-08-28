@@ -41,7 +41,6 @@ namespace Tungsten
         SFB = 0x0F,
         SDB = 0x0B
     }
-
     public enum wCpuRunMode {
         Unknown = 0x00,
         Stop = 0x04,
@@ -91,7 +90,6 @@ namespace Tungsten
         {
             blocks = new List<wCpuBlock>();
         }
-        //TODO: Deconstruct WLD file in to CPU
         public wCpu(wldFile w)
         {
             blocks = new List<wCpuBlock>();
@@ -162,12 +160,6 @@ namespace Tungsten
                 throw new wPlcException(error, result);
             }
         }
-
-        public void resetConnection()
-        {
-            this.disconnect();
-            this.connect(this.ipAddress);
-        }
         
         public void upload()
         {
@@ -204,6 +196,8 @@ namespace Tungsten
             Dictionary<wBlockType, ushort[]> blockList = new Dictionary<wBlockType, ushort[]>();
             Dictionary<wBlockType, int> blockCount = new Dictionary<wBlockType, int>();
             int totalBlockCount = 0;
+
+            blockList = new Dictionary<wBlockType, ushort[]>();
 
             foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
             {
@@ -571,91 +565,5 @@ namespace Tungsten
         }
         
     }
-    [Serializable]
-    public class wCpuBlock : IComparable<wCpuBlock>
-    {
-        public wCpuBlock() { }
-        public wCpuBlock(S7Client.S7BlockInfo info, byte[] data)
-        {
-            if (info.BlkType == (int)wSubBlockType.OB)
-                this.blockType = wBlockType.OB;
-            else if (info.BlkType == (int)wSubBlockType.FC)
-                this.blockType = wBlockType.FC;
-            else if (info.BlkType == (int)wSubBlockType.FB)
-                this.blockType = wBlockType.FB;
-            else if (info.BlkType == (int)wSubBlockType.DB)
-                this.blockType = wBlockType.DB;
-            else if (info.BlkType == (int)wSubBlockType.SFC)
-                this.blockType = wBlockType.SFC;
-            else if (info.BlkType == (int)wSubBlockType.SFB)
-                this.blockType = wBlockType.SFB;
-            else if (info.BlkType == (int)wSubBlockType.SDB)
-                this.blockType = wBlockType.SDB;
-            this.language = (wLanguage) info.BlkLang;
-            this.name = wCpu.cleanString(info.Header);
-            this.family = wCpu.cleanString(info.Family);
-            this.author = wCpu.cleanString(info.Author);
-            this.codeDate = wCpu.cleanString(info.CodeDate);
-            this.interfaceDate = wCpu.cleanString(info.IntfDate);
-            this.loadSize = info.LoadSize;
-            this.MC7Size = info.MC7Size;
-            this.blockNumber = info.BlkNumber;
-            this.blockFlags = info.BlkFlags;
-            this.localData = info.LocalData;
-            this.SBBLength = info.SBBLength;
-            this.checksum = info.CheckSum;
-            this.data = data;
-        }
 
-        public int CompareTo(wCpuBlock b)
-        {
-            if (this.blockType == b.blockType)
-            {
-                return this.blockNumber.CompareTo(b.blockNumber);
-            }
-            else
-            {
-                return this.blockType.CompareTo(b.blockType);
-            }
-        }
-
-        public override string ToString()
-        {
-            return blockType.ToString() + blockNumber.ToString();
-        }
-
-        public wLanguage language;
-        public wBlockType blockType;
-        public string name,
-                       family,
-                       author,
-                       codeDate,
-                       interfaceDate;
-        public int  loadSize, 
-                    MC7Size,
-                    blockNumber,
-                    blockFlags,
-                    localData,
-                    SBBLength,
-                    checksum,
-                    version;
-        public byte[] data;
-    }
-    public class wldFile
-    {
-        public wldFile(wCpu cpu)
-        {
-            List<wCpuBlock> blocks = cpu.blocks;
-            blocks.Sort();
-            data = new byte[0];
-
-            foreach (wCpuBlock block in blocks)
-            {
-                if ((block.data != null) && (block.blockType != wBlockType.SFC) && (block.blockType != wBlockType.SFB))
-                    data = data.Concat(block.data).ToArray();
-            }
-        }
-
-         public byte[] data {get; private set;}
-    }
 }
