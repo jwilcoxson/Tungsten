@@ -199,7 +199,35 @@ namespace Tungsten
 
             blockList = new Dictionary<wBlockType, ushort[]>();
 
-            foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
+            S7Client.S7BlocksList bl = new S7Client.S7BlocksList();
+
+            result = MyClient.ListBlocks(ref bl);
+            List<wBlockType> blockTypeList = new List<wBlockType>();
+
+            if (result == 0)
+            {
+                if (bl.OBCount > 0)
+                    blockTypeList.Add(wBlockType.OB);
+                if (bl.FBCount > 0)
+                    blockTypeList.Add(wBlockType.FB);
+                if (bl.FCCount > 0)
+                    blockTypeList.Add(wBlockType.FC);
+                if (bl.DBCount > 0)
+                    blockTypeList.Add(wBlockType.DB);
+                if (bl.SFBCount > 0)
+                    blockTypeList.Add(wBlockType.SFB);
+                if (bl.SFCCount > 0)
+                    blockTypeList.Add(wBlockType.SFC);
+                if (bl.SDBCount > 0)
+                    blockTypeList.Add(wBlockType.SDB);
+            }
+            else
+            {
+                string error = "Failed to list all blocks";
+                throw new wPlcException(error, result);
+            }
+
+            foreach (wBlockType blockType in blockTypeList)
             {
                 blockList.Add(blockType, new ushort[MAX_BLOCK]);
                 int resultBlockCount = blockList[blockType].Length;               
@@ -211,14 +239,14 @@ namespace Tungsten
                 }
                 else
                 {
-                    string error = "Failed to list blocks";
+                    string error = "Failed to list blocks of type " + blockType;
                     throw new wPlcException(error, result);
                 }
             }
 
             int uploadedBlockCount = 0;
 
-            foreach (wBlockType blockType in Enum.GetValues(typeof(wBlockType)))
+            foreach (wBlockType blockType in blockTypeList)
             {
 
                 for (int i = 0; i < blockCount[blockType]; i++)
@@ -229,7 +257,7 @@ namespace Tungsten
                         
                     if (result == 0)
                     {
-                        byte[] buffer = new byte[4096];
+                        byte[] buffer = new byte[16384];
                         int bufferSize = buffer.Length;
 
                         if (blockType != wBlockType.SFC && blockType != wBlockType.SFB)
@@ -382,6 +410,51 @@ namespace Tungsten
 
             }
             Console.WriteLine("Done!");
+        }
+
+        public byte[] readI(int location, int length)
+        {
+            byte[] b = new byte[length];
+            int result = MyClient.EBRead(location, length, b);
+            if (result == 0)
+            {
+                return b;
+            }
+            else
+            {
+                string error = "Problem reading I, " + location + ", " + length;
+                throw new wPlcException(error, result);
+            }
+        }
+
+        public byte[] readQ(int location, int length)
+        {
+            byte[] b = new byte[length];
+            int result = MyClient.ABRead(location, length, b);
+            if (result == 0)
+            {
+                return b;
+            }
+            else
+            {
+                string error = "Problem reading Q, " + location + ", " + length;
+                throw new wPlcException(error, result);
+            }
+        }
+
+        public byte[] readM(int location, int length)
+        {
+            byte[] b = new byte[length];
+            int result = MyClient.MBRead(location, length, b);
+            if (result == 0)
+            {
+                return b;
+            }
+            else
+            {
+                string error = "Problem reading M, " + location + ", " + length;
+                throw new wPlcException(error, result);
+            }
         }
 
         public wCpuRunMode getCpuRunMode()

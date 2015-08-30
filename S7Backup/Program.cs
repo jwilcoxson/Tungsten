@@ -17,8 +17,11 @@ namespace Tungsten
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            DateTime buildDate = new DateTime(2000, 1, 1).AddDays(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build);
+            DateTime expireDate = buildDate + new TimeSpan(21, 0, 0, 0);
+
             //Killswitch
-            if (System.DateTime.Now > new DateTime(2015, 9, 13))
+            if (System.DateTime.Now > expireDate)
             {
                 MessageBox.Show("Sorry, this version of Tungsten Beta has expired. " +
                                 "Please visit tungsten-app.xyz to download a new version.");

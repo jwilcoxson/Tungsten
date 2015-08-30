@@ -53,6 +53,8 @@
             this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadToPlcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToDiskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.monitorValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutTungstenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +62,7 @@
             this.cmbPlc = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.grpPlcInformation = new System.Windows.Forms.GroupBox();
+            this.lblPlcMode = new System.Windows.Forms.Label();
             this.lblModuleName = new System.Windows.Forms.Label();
             this.lblModuleTypeName = new System.Windows.Forms.Label();
             this.lblSerialNumber = new System.Windows.Forms.Label();
@@ -72,7 +75,6 @@
             this.loadSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.codeDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.interfaceDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.lblPlcMode = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.grpPlcInformation.SuspendLayout();
             this.SuspendLayout();
@@ -82,6 +84,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.pLCToolStripMenuItem,
+            this.dataToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -231,6 +234,22 @@
             this.saveToDiskToolStripMenuItem.Text = "Save to Disk";
             this.saveToDiskToolStripMenuItem.Click += new System.EventHandler(this.saveToDiskToolStripMenuItem_Click);
             // 
+            // dataToolStripMenuItem
+            // 
+            this.dataToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.monitorValuesToolStripMenuItem});
+            this.dataToolStripMenuItem.Name = "dataToolStripMenuItem";
+            this.dataToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.dataToolStripMenuItem.Text = "Data";
+            // 
+            // monitorValuesToolStripMenuItem
+            // 
+            this.monitorValuesToolStripMenuItem.Enabled = false;
+            this.monitorValuesToolStripMenuItem.Name = "monitorValuesToolStripMenuItem";
+            this.monitorValuesToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.monitorValuesToolStripMenuItem.Text = "Monitor Values";
+            this.monitorValuesToolStripMenuItem.Click += new System.EventHandler(this.monitorValuesToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -302,6 +321,15 @@
             this.grpPlcInformation.TabIndex = 21;
             this.grpPlcInformation.TabStop = false;
             this.grpPlcInformation.Text = "PLC Information";
+            // 
+            // lblPlcMode
+            // 
+            this.lblPlcMode.AutoSize = true;
+            this.lblPlcMode.Location = new System.Drawing.Point(9, 220);
+            this.lblPlcMode.Name = "lblPlcMode";
+            this.lblPlcMode.Size = new System.Drawing.Size(60, 13);
+            this.lblPlcMode.TabIndex = 28;
+            this.lblPlcMode.Text = "PLC Mode:";
             // 
             // lblModuleName
             // 
@@ -411,15 +439,6 @@
             // 
             this.interfaceDate.Text = "Interface Date";
             // 
-            // lblPlcMode
-            // 
-            this.lblPlcMode.AutoSize = true;
-            this.lblPlcMode.Location = new System.Drawing.Point(9, 220);
-            this.lblPlcMode.Name = "lblPlcMode";
-            this.lblPlcMode.Size = new System.Drawing.Size(60, 13);
-            this.lblPlcMode.TabIndex = 28;
-            this.lblPlcMode.Text = "PLC Mode:";
-            // 
             // Tungsten
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -485,6 +504,8 @@
         private System.Windows.Forms.ToolStripMenuItem downloadToPlcToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToDiskToolStripMenuItem;
         private System.Windows.Forms.Label lblPlcMode;
+        private System.Windows.Forms.ToolStripMenuItem dataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem monitorValuesToolStripMenuItem;
     }
 }
 

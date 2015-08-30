@@ -72,5 +72,12 @@ namespace Tungsten
             {0x25, "Cannot perform. The client is destroying"},
             {0x26, "Cannot change parameter while connected"}
         };
+
+        public static readonly Dictionary<wAddressLengthType, int> addressLengths = new Dictionary<wAddressLengthType, int>
+        {
+            {wAddressLengthType.Byte, 1},
+            {wAddressLengthType.Word, 2},
+            {wAddressLengthType.Double, 4}
+        };
     }
 }

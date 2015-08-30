@@ -45,6 +45,7 @@ namespace Tungsten
             downloadToPlcToolStripMenuItem.Enabled = true;
             saveToDiskToolStripMenuItem.Enabled = true;
             viewDiagnosticBufferToolStripMenuItem.Enabled = true;
+            monitorValuesToolStripMenuItem.Enabled = true;
         }
 
         private void disableControls()
@@ -57,6 +58,7 @@ namespace Tungsten
             downloadToPlcToolStripMenuItem.Enabled = false;
             saveToDiskToolStripMenuItem.Enabled = false;
             viewDiagnosticBufferToolStripMenuItem.Enabled = false;
+            monitorValuesToolStripMenuItem.Enabled = false;
         }
 
         private void printCpuInfo(wCpu cpu)
@@ -366,13 +368,17 @@ namespace Tungsten
 
         private void downloadToPlcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
+            DialogResult dr = MessageBox.Show("Do you want to erase the existing PLC program first?", "Erase PLC?", MessageBoxButtons.YesNo);
+            if (dr == DialogResult.Yes)
             {
-                MyCpu.erase();
-            }
-            catch (wPlcException ex)
-            {
-                showErrorForException(ex);
+                try
+                {
+                    MyCpu.erase();
+                }
+                catch (wPlcException ex)
+                {
+                    showErrorForException(ex);
+                }
             }
             
             wldFile w = new wldFile();
@@ -463,6 +469,12 @@ namespace Tungsten
             {
 
             }
+        }
+
+        private void monitorValuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Monitor m = new Monitor(MyCpu);
+            m.Show();
         }
 
     }
