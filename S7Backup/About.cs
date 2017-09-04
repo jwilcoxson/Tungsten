@@ -15,14 +15,12 @@ namespace Tungsten
         {
             InitializeComponent();
             DateTime buildDate = new DateTime(2000, 1, 1).AddDays(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Build);
-            DateTime expireDate = buildDate + new TimeSpan(21, 0, 0, 0);
             this.Text = String.Format("About {0}", AssemblyTitle);
             this.labelProductName.Text = AssemblyProduct;
             this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
             this.labelCopyright.Text = AssemblyCopyright;
             this.labelCompanyName.Text = AssemblyCompany;
-            this.textBoxDescription.Text = AssemblyDescription + System.Environment.NewLine +
-                                            "This build will expire on " + expireDate.ToShortDateString();
+            this.textBoxDescription.Text = AssemblyDescription;
         }
 
         #region Assembly Attribute Accessors

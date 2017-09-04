@@ -415,7 +415,7 @@ namespace Tungsten
 
         private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://tungsten-app.xyz/document/manual/");
+           ;
         }
 
         private void aboutTungstenToolStripMenuItem_Click(object sender, EventArgs e)

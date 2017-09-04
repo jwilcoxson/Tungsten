@@ -3,3 +3,6 @@
 ################################################################################
 
 /S7Backup/bin/Debug
+/S7Backup/obj/Debug
+/.vs/Tungsten/v15/sqlite3
+/.vs/Tungsten/v15/.suo
